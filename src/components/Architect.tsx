@@ -11,7 +11,7 @@ const Architect = () => {
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-     <div className="mx-auto container py-20 rounded-3xl lg:max-w-6xl">
+     <div className="mx-auto container py-20 overflow-hidden rounded-3xl lg:max-w-6xl">
           <div className="relative lg:hidden mb-8   rounded-lg  aspect-video bg-black z-10">
             {!mobileIsPlaying ? (
               <>
@@ -74,7 +74,7 @@ const Architect = () => {
               <>
                 {/* Thumbnail overlay with play button */}
                 <img
-                  src="https://img.youtube.com/vi/Q3BJUyA9OI/maxresdefault.jpg"
+                 src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg"
                   alt="GLC 2024 Thumbnail"
                   className="w-full h-full object-cover rounded-3xl"
                 />
@@ -101,7 +101,7 @@ const Architect = () => {
             ) : (
               <iframe
                 className="w-full h-full rounded-3xl"
-                src="https://www.youtube.com/embed/Q3BJUyA9OI?autoplay=1&rel=0"
+              src="https://www.youtube.com/embed/-Q3BJUyA9OI?autoplay=1&rel=0"
                 title="GLC 2024 Experience"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

@@ -25,7 +25,7 @@ export default function Home() {
       <LegacyPictures/>
       <Awards/>
       <Iframe/>
-      {/* <Footer/> */}
+      <Footer/>
     </main>
   );
 }
