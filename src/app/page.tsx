@@ -9,6 +9,7 @@ import InstagramReels from "@/components/InstagramReels";
 import LegacyPictures from "@/components/LegacyPictures";
 import TributeSection from "@/components/TributeSection";
 import TwitterSection from "@/components/TwiterSection";
+import WishCounterComponent from "@/components/WishCounterComponent";
 
 export default function Home() {
   return (
@@ -40,6 +41,7 @@ export default function Home() {
       <LegacyPictures/></section>
       <Awards/>
       <Iframe/>
+      <WishCounterComponent/>
       <Footer/>
     </main>
   );
