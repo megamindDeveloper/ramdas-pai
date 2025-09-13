@@ -26,7 +26,7 @@ const TributeSection = () => {
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-    <div className=" py-20 ">
+    <div className=" py-20">
       <div className=" mx-auto">
         {/* Top Video Slider Section */}
       <Swiper

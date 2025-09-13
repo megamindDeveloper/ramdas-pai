@@ -19,10 +19,18 @@ export default function Home() {
 
       {/* The HeroSection now fills the main container */}
       <HeroSection />
+      <section style={{ 
+    backgroundImage: "url('/images/backgroundImage/bg1.png')" 
+  }}>
+
       <TributeSection />
       <Architect/>
+      </section>
       <DoyenSection />
-      <LegacyPictures/>
+      <section style={{ 
+    backgroundImage: "url('/images/backgroundImage/bg1.png')" 
+  }}>
+      <LegacyPictures/></section>
       <Awards/>
       <Iframe/>
       <Footer/>
