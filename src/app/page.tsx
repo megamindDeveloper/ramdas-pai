@@ -19,21 +19,37 @@ export default function Home() {
 
       {/* The HeroSection now fills the main container */}
       <HeroSection />
-      <section style={{ 
-    backgroundImage: "url('/images/backgroundImage/bg1.png')" 
-  }}>
-
-      <TributeSection />
-      <Architect/>
+      <section
+        style={{
+          backgroundImage: `
+            linear-gradient(to top, rgba(255, 255, 255, 1) 0%, transparent 40%),
+            linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, transparent 40%),
+            url('/images/backgroundImage/bg1.png')
+          `,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <TributeSection />
+        <Architect />
       </section>
       <DoyenSection />
-      <section style={{ 
-    backgroundImage: "url('/images/backgroundImage/bg1.png')" 
-  }}>
-      <LegacyPictures/></section>
-      <Awards/>
-      <Iframe/>
-      <Footer/>
+      <section
+  style={{
+    backgroundImage: `
+      linear-gradient(to top, rgba(255, 255, 255, 1) 0%, transparent 40%),
+      linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, transparent 40%),
+      url('/images/backgroundImage/bg1.png')
+    `,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+>
+        <LegacyPictures />
+      </section>
+      <Awards />
+      <Iframe />
+      <Footer />
     </main>
   );
 }
