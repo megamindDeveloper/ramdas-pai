@@ -16,7 +16,7 @@ import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import { useInView } from "framer-motion";
 
 // YouTube video IDs for the top slider
-const sliderVideoIds = ["S-hG7x42Y4E", "dQw4w9WgXcQ", "3JZ_D3ELwOQ", "S-hG7x42Y4E", "dQw4w9WgXcQ", "3JZ_D3ELwOQ"];
+const sliderVideoIds = ["08DCoUv-RQM", "08DCoUv-RQM", "08DCoUv-RQM", "08DCoUv-RQM", "08DCoUv-RQM", "08DCoUv-RQM"];
 // YouTube video ID for the main video at the bottom
 const mainVideoId = "a-S2EVkP0zM";
 
