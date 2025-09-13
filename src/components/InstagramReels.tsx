@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
+import { useOutsideClick } from "./UseOutsideClick";
 import Link from "next/link";
 
 // Framer-motion variants
@@ -23,25 +23,35 @@ const contentVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } },
 };
 
-// Example full YouTube URLs (replace with backend data in future)
-const sliderVideos = [
-  "https://youtu.be/08DCoUv-RQM?si=pl7Bah6meMFO9jlv",
-  "https://youtu.be/T5M1QHonSVc?si=roHCHWGpY7hwI0XR",
-  "https://youtu.be/DltFQbqdRs0?si=DrKNYSVBKF2XEKjf",
+// Instagram reel data
+const reels = [
+  {
+    id: "1",
+    thumbnail: "/images/reels/1.jpg",
+    videoUrl: "https://www.instagram.com/reel/DOdaiD0EsUo/embed",
+  },
+  {
+    id: "2",
+    thumbnail: "/images/reels/2.jpg",
+    videoUrl: "https://www.instagram.com/reel/DOYx1jsk-oQ/embed",
+  },
+  {
+    id: "3",
+    thumbnail: "/images/reels/3.jpg",
+    videoUrl: "https://www.instagram.com/reel/DOVlpTJgHbG/embed",
+  },
+  {
+    id: "4",
+    thumbnail: "/images/reels/1.jpg",
+    videoUrl: "https://www.instagram.com/reel/DOQ-0YUCTK4/embed",
+  },
 ];
 
-// Helper to extract YouTube video ID from full URL
-const getYouTubeVideoId = (url: string) => {
-  const regex = /(?:youtube\.com\/.*v=|youtu\.be\/)([^?&]+)/;
-  const match = url.match(regex);
-  return match ? match[1] : null;
-};
-
-const TributeSection: React.FC = () => {
+const InstagramReels: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [currentVideo, setCurrentVideo] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+ const [isMobile, setIsMobile] = useState(false);
 
   // Detect mobile screen
   useEffect(() => {
@@ -50,24 +60,23 @@ const TributeSection: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   const openModal = (videoUrl: string) => {
-    setCurrentVideoUrl(videoUrl);
+    setCurrentVideo(videoUrl);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setCurrentVideoUrl(null);
+    setCurrentVideo(null);
   };
 
   useOutsideClick(containerRef, () => {
     if (isModalOpen) closeModal();
   });
 
-  // Disable scroll when modal open + Esc key
-  useEffect(() => {
-    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
+  React.useEffect(() => {
+    if (isModalOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
 
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) closeModal();
@@ -75,50 +84,37 @@ const TributeSection: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
-
-  const videosToShow = isMobile ? sliderVideos.slice(0, 1) : sliderVideos;
-
+const videosToShow = isMobile ? reels.slice(0, 1) : reels;
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {videosToShow.map((videoUrl) => {
-          const id = getYouTubeVideoId(videoUrl);
-          if (!id) return null;
-          return (
-            <div
-              key={id}
-              className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
-              onClick={() => openModal(videoUrl)}
-            >
-              <img
-                src={`https://img.youtube.com/vi/${id}/hqdefault.jpg`}
-                alt="YouTube Thumbnail"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-black bg-opacity-50 rounded-full p-4">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
-        {/* View More button */}
-        <div className="col-span-1 md:col-span-3 flex justify-center mt-8">
-          <Link href="/video">
-            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-              View more
-            </button>
-          </Link>
-        </div>
+      {/* Reels Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {videosToShow.map((reel) => (
+          <div
+            key={reel.id}
+            className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 aspect-[9/16]"
+            onClick={() => openModal(reel.videoUrl)}
+          >
+            <img
+              src={reel.thumbnail}
+              alt="Reel Thumbnail"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+        
       </div>
+      <div className=" flex justify-center mt-8">
+           <Link href="/reels"> <button
+            className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold"
+          >
+            View more
+          </button></Link>
+        </div>
 
-      {/* Video Modal */}
+      {/* Modal */}
       <AnimatePresence>
-        {isModalOpen && currentVideoUrl && (
+        {isModalOpen && currentVideo && (
           <motion.div
             className="fixed inset-0 z-[9999] flex items-center justify-center overflow-auto"
             initial="hidden"
@@ -136,7 +132,7 @@ const TributeSection: React.FC = () => {
             <motion.div
               ref={containerRef}
               variants={modalVariants}
-              className="relative w-full max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
+              className="relative w-full max-w-md mx-auto bg-black rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
             >
               {/* Close Button */}
               <motion.button
@@ -149,16 +145,14 @@ const TributeSection: React.FC = () => {
                 <IconX className="text-white w-5 h-5" />
               </motion.button>
 
-              {/* YouTube iframe */}
-              <motion.div variants={contentVariants} className="aspect-video p-10 w-full mt-2">
+              {/* Instagram Reel Embed */}
+              <motion.div variants={contentVariants} className="w-full mt-2 flex justify-center">
                 <iframe
-                  width="100%"
-                  height="100%"
-                  style={{ borderRadius: "12px" }}
-                  src={`https://www.youtube.com/embed/${getYouTubeVideoId(currentVideoUrl)}?autoplay=1&rel=0`}
-                  title="YouTube video player"
+                  className="w-full max-h-[80vh] aspect-[9/16] rounded-2xl"
+                  src={currentVideo}
+                  title="Instagram Reel"
                   frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
                   allowFullScreen
                 />
               </motion.div>
@@ -170,4 +164,4 @@ const TributeSection: React.FC = () => {
   );
 };
 
-export default TributeSection;
+export default InstagramReels;

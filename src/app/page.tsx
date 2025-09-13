@@ -4,8 +4,11 @@ import DoyenSection from "@/components/DoyenSection";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Iframe from "@/components/Iframe";
+import ImageGallery from "@/components/ImageSection";
+import InstagramReels from "@/components/InstagramReels";
 import LegacyPictures from "@/components/LegacyPictures";
 import TributeSection from "@/components/TributeSection";
+import TwitterSection from "@/components/TwiterSection";
 
 export default function Home() {
   return (
@@ -25,6 +28,9 @@ export default function Home() {
   }}>
 
       <TributeSection />
+      <ImageGallery/>
+      <InstagramReels/>
+      <TwitterSection/>
       <Architect/>
       </section>
       <DoyenSection />
