@@ -1,5 +1,10 @@
+import Architect from "@/components/Architect";
+import Awards from "@/components/Awards";
 import DoyenSection from "@/components/DoyenSection";
+import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
+import Iframe from "@/components/Iframe";
+import LegacyPictures from "@/components/LegacyPictures";
 import TributeSection from "@/components/TributeSection";
 
 export default function Home() {
@@ -15,7 +20,12 @@ export default function Home() {
       {/* The HeroSection now fills the main container */}
       <HeroSection />
       <TributeSection />
+      <Architect/>
       <DoyenSection />
+      <LegacyPictures/>
+      <Awards/>
+      <Iframe/>
+      {/* <Footer/> */}
     </main>
   );
 }

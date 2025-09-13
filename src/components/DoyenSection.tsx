@@ -9,7 +9,7 @@ const DoyenSection = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Content Area */}
         <div className="text-center md:text-left">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+          <h2 className="ttext-[36px] leading-[1.1] font-helvetica  sm:text-3xl md:text-5xl lg:text-6xl font-medium text-black mb-6 md:mb-8">
             Doyen of Medical & Healthcare Education
           </h2>
           <p className="text-lg text-black max-w-xl mx-auto md:mx-0">
