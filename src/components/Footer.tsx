@@ -542,16 +542,16 @@ const Footer = () => {
         <div className="flex space-x-4 mt-4 md:mt-0">
           {/* Dummy Icons */}
        <div className="flex gap-3 items-center">
-              <a href="https://www.instagram.com/tapmibengaluru/" target="_blank">
+              <a href="https://www.instagram.com/mahe_manipal/?hl=en" target="_blank">
                 <Instagram />
               </a>
-              <a href="https://www.facebook.com/people/TAPMI-Bengaluru/61556082347769/" target="_blank">
+              <a href="https://www.facebook.com/mahemanipal" target="_blank">
                 <Facebook />
               </a>
-              <a href="https://www.linkedin.com/company/tapmibengaluru/" target="_blank">
+              <a href="https://www.linkedin.com/in/manipal-academy-of-higher-education-mahe-79b42019b/" target="_blank">
                 <LinkedIn />
               </a>
-              <a href="https://www.youtube.com/@TAPMIBengaluru" target="_blank">
+              <a href="https://www.youtube.com/@mahe_manipal" target="_blank">
                 <Youtube />
               </a>
             </div>
