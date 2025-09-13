@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import HTMLFlipBook from "react-pageflip"
+import AnimatedTextCharacter from "./AnimatedTextCharacter"
 
 function Book() {
   const pokemonData = [
@@ -36,7 +37,16 @@ function Book() {
 
   return (
     <section className="container mx-auto py-20 px-5 lg:px-0">
-    <div className="w-full h-[70vh] flex justify-center items-center ">
+       <h2 className="font-helvetica text-center hidden lg:block font-medium leading-none text-[32px] lg:text-[64px]">
+        <AnimatedTextCharacter text="A Journey of Vision & Leadership" />
+      </h2>
+        <h2 className="font-helvetica lg:hidden text-center mb-3 font-medium leading-none text-[32px] lg:text-[64px]">
+        <AnimatedTextCharacter text="A Journey of " />
+      </h2>
+        <h2 className="font-helvetica text-center lg:hidden font-medium leading-none text-[32px] lg:text-[64px]">
+        <AnimatedTextCharacter text="Vision & Leadership" />
+      </h2>
+    <div className="w-full h-[60vh] lg:h-[70vh] flex justify-center items-center ">
       <HTMLFlipBook
         width={600}
         height={400}
