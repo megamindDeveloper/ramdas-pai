@@ -3,8 +3,9 @@ import { Facebook, Instagram, LinkedIn, Youtube } from "./Svgs";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#1E1E1E] text-gray-300 py-6">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-6 md:px-12">
+    <footer className="bg-[#202428] text-gray-300 py-6">
+      <div className="container mx-auto">
+      <div className=" flex flex-col md:flex-row justify-between items-center px-6 md:px-12">
         {/* Left Side Logo & Text */}
         <div className="flex flex-col md:flex-row items-center md:space-x-6 text-center md:text-left">
           {/* Dummy Logo */}
@@ -556,10 +557,11 @@ const Footer = () => {
               </a>
             </div>
         </div>
+           
       </div>
-
+<div className="border-t border-[#585b5e] mt-4 pt-4 text-center text-sm text-[#585b5e]">©2025 Manipal Academy of Higher Education</div>
       {/* Bottom Text */}
-      <div className="border-t border-gray-600 mt-4 pt-4 text-center text-sm text-gray-400">©2025 Manipal Academy of Higher Education</div>
+    </div>
     </footer>
   );
 };

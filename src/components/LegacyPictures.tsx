@@ -79,7 +79,7 @@ const LegacyPictures = () => {
   return (
     <section className="relative">
     <div className=" relative lg:py-28 px-5 lg:px-10 lg:max-w-6xl mx-auto xl:max-w-[70%]">
-       <h2 className="font-helvetica text-center font-medium leading-none text-[36px] lg:text-[64px]">
+       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[64px]">
         <AnimatedTextCharacter text="A Legacy in Pictures" />
       </h2>
 
@@ -103,7 +103,7 @@ const LegacyPictures = () => {
           navigation={true}
           
           loop={true}
-          className="mySwiper"
+          className="mySwipers"
         >
           {speakerData.map((speaker, index) => (
             <SwiperSlide key={"speaker" + index}>

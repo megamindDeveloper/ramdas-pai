@@ -53,13 +53,13 @@ const Architect = () => {
 </div>
 
       <div className="">
-        <p className="text-[#E8590C]  font-helvetica text-2xl lg:text-center mb-5">The Architect of Modern Manipal</p>
-        <h2 className="font-helvetica text-black font-bold lg:text-center lg:font-medium leading-none text-3xl  lg:text-[64px]">
+        <p className="text-[#E8590C]  font-helvetica text-xl lg:text-2xl text-center mb-5">The Architect of Modern Manipal</p>
+        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[64px]">
           <AnimatedTextCharacter text="Dr. Ramdas M. Pai" />
         </h2>
         <p
           ref={textAnimation1}
-          className={`font-helvetica  text-black text-start lg:text-[18px] leading-tight mx-auto lg:text-center max-w-6xl mt-4 ${
+          className={`font-helvetica  text-lg  text-black  lg:text-[18px]  mx-auto text-center max-w-6xl mt-4 ${
             text1InView ? "text-slide-in" : ""
           }`}
         >

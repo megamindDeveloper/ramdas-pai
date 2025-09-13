@@ -35,10 +35,11 @@ function Book() {
   ]
 
   return (
-    <div className="w-full h-screen flex justify-center items-center ">
+    <section className="container mx-auto py-20 px-5 lg:px-0">
+    <div className="w-full h-[70vh] flex justify-center items-center ">
       <HTMLFlipBook
         width={600}
-        height={600}
+        height={400}
         maxShadowOpacity={0.5}
         drawShadow={true}
         showCover={true}
@@ -87,6 +88,9 @@ function Book() {
         ))}
       </HTMLFlipBook>
     </div>
+      <p className="text-black font-helvetica text-center px-10 text-lg">This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.</p>
+
+    </section>
   )
 }
 
