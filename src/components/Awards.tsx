@@ -63,7 +63,7 @@ export default function Awards() {
   );
 
   return (
-    <section className="py-16">
+    <section className="pt-16 lg:py-16">
       <h2 className="font-helvetica text-center font-medium leading-none text-[36px] lg:text-[64px]">
         <AnimatedTextCharacter text="Awards & Recognitions" />
       </h2>

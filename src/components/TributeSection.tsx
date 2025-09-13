@@ -26,7 +26,7 @@ const TributeSection = () => {
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-    <div className=" py-20 ">
+    <div className=" pt-16 lg:py-20 px-5 lg:px-0 ">
       <div className=" mx-auto">
         {/* Top Video Slider Section */}
       <Swiper
@@ -46,8 +46,8 @@ const TributeSection = () => {
           modules={[Autoplay]}
           className="mySwiper mb-12"
         >
-          {sliderVideoIds.map((id) => (
-            <SwiperSlide key={id}>
+          {sliderVideoIds.map((id,index) => (
+            <SwiperSlide key={index}>
               <div className="aspect-video bg-gray-300 rounded-lg overflow-hidden shadow-lg">
                 <iframe
                   width="100%"
