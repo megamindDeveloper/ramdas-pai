@@ -4,6 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
 import Link from "next/link";
+import AnimatedTextCharacter from "./AnimatedTextCharacter";
+
+// Firebase
+import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
+import { db } from "@/app/lib/firebase";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -23,19 +28,38 @@ const contentVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } },
 };
 
-// Replace YouTube IDs with image URLs
-const images = [
-  "/images/twitterImages/1.jpg",
-  "/images/twitterImages/2.jpg",
-  "/images/twitterImages/3.jpg",
-  "/images/twitterImages/4.jpg",
-];
+type ScreenshotItem = {
+  id: string;
+  name: string;
+  screenshotUrl: string;
+};
 
 const TwitterSection: React.FC = () => {
+  const [screenshots, setScreenshots] = useState<ScreenshotItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
- const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Fetch latest 8 screenshots from Firestore
+  useEffect(() => {
+    const colRef = collection(db, "Screenshots");
+    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const items: ScreenshotItem[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name || "",
+          screenshotUrl: data.screenshotUrl || "",
+        };
+      });
+      setScreenshots(items);
+    });
+
+    return () => unsub();
+  }, []);
 
   // Detect mobile screen
   useEffect(() => {
@@ -44,6 +68,7 @@ const TwitterSection: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const openModal = (image: string) => {
     setCurrentImage(image);
     setIsModalOpen(true);
@@ -58,9 +83,8 @@ const TwitterSection: React.FC = () => {
     if (isModalOpen) closeModal();
   });
 
-  React.useEffect(() => {
-    if (isModalOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "auto";
+  useEffect(() => {
+    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
 
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) closeModal();
@@ -68,59 +92,54 @@ const TwitterSection: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
-const videosToShow = isMobile ? images.slice(0, 1) : images.slice(0, 3);
+
+  const itemsToShow = isMobile ? screenshots.slice(0, 1) : screenshots;
+
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {videosToShow.map((img) => (
+      <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
+        <AnimatedTextCharacter text="Greetings" />
+      </h2>
+
+      <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {itemsToShow.map((item) => (
           <div
-            key={img}
+            key={item.id}
             className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
-            onClick={() => openModal(img)}
+            onClick={() => openModal(item.screenshotUrl)}
           >
-            <img
-              src={img}
-              alt="Gallery Thumbnail"
-              className="w-full h-full object-cover"
-            />
+            <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
+           
           </div>
         ))}
 
-        <div className="col-span-1 md:col-span-3 flex justify-center mt-8">
-         <Link href="twitter"> <button
-            className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold"
-          >
-            View more
-          </button></Link>
+        <div className="col-span-1 md:col-span-4 flex justify-center mt-8">
+          <Link href="/tweets">
+            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+              View more
+            </button>
+          </Link>
         </div>
       </div>
 
-      {/* Image Modal */}
+      {/* Modal */}
       <AnimatePresence>
-        {isModalOpen && currentImage && (
+      {isModalOpen && currentImage && (
           <motion.div
-            className="fixed inset-0 z-[9999] overflow-hidden flex items-center justify-center "
+            className="fixed  md:h-[90vh]  h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {/* Backdrop */}
-            <motion.div
-              variants={backdropVariants}
-              className="fixed inset-0 bg-black/80 backdrop-blur-lg"
-              onClick={closeModal}
-            />
-
-            {/* Modal content */}
+            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
             <motion.div
               ref={containerRef}
               variants={modalVariants}
-              className="relative w-full max-w-5xl mx-auto  rounded-3xl shadow-2xl "
+              className="relative my-10 w-full md:h-[90vh]  h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
             >
-              {/* Close Button */}
               <motion.button
                 variants={contentVariants}
-                className="absolute top-4 right-4 h-8 w-8 rounded-full bg-black  flex items-center justify-center cursor-pointer"
+                className="absolute top-4 right-4 h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
                 onClick={closeModal}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -128,13 +147,8 @@ const videosToShow = isMobile ? images.slice(0, 1) : images.slice(0, 3);
                 <IconX className="text-white w-5 h-5" />
               </motion.button>
 
-              {/* Full Image */}
-              <motion.div variants={contentVariants} className="w-full ">
-                <img
-                  src={currentImage}
-                  alt="Full View"
-                  className="max-h-[80vh] w-full rounded-2xl overflow-hidden object-cover"
-                />
+              <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[90%] mt-2">
+                <img src={currentImage} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
               </motion.div>
             </motion.div>
           </motion.div>
