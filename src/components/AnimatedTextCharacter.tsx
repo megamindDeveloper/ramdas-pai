@@ -2,12 +2,15 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { style } from "framer-motion/client";
+
 
 // Define the component's props to include an optional className
 type AnimatedTextCharacterProps = {
   text: string;
   className?: string; // Optional className prop
 };
+
 
 const AnimatedTextCharacter = ({ text, className }: AnimatedTextCharacterProps) => {
   const ref = useRef(null);
@@ -49,24 +52,28 @@ const AnimatedTextCharacter = ({ text, className }: AnimatedTextCharacterProps) 
   };
 
   return (
-    <motion.div
-      ref={ref}
-      variants={container}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      className="flex overflow-hidden" // Use flex to keep characters inline
-    >
-      {letters.map((letter, index) => (
-        <motion.span
-          variants={child}
-          key={index}
-          // Apply the passed className to each character
-          className={className}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.div>
+    <>
+      <motion.div
+        ref={ref}
+        variants={container}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className={`hidden sm:block   ${style} `}
+      >
+        {letters.map((letter, index) => (
+          <motion.span variants={child} key={index}>
+            {letter === " " ? "\u00A0" : letter}
+          </motion.span>
+        ))}
+      </motion.div>
+      <span
+        ref={ref2}
+        className={`sm:hidden ${style}  ${isInView2 ? "text-slide-in" : ""}`}
+      >
+        {text}
+      </span>
+    </>
+
   );
 };
 
