@@ -60,9 +60,8 @@ export default function WishCounterComponent({
           {count.toFixed(0).toLocaleString()}
         </p>
         <p className="text-xl md:text-2xl text-slate-700">
-          Amazing people have already shared their warm wishes with{" "}
-          <span className="font-semibold">Dr. Ramdas Pai</span>.  
-           Would you like to add yours too?
+        Countless warm wishes have already made this celebration special ! Celebrate the journey of <span className="font-semibold"> Dr. Ramdas M. Pai </span> with your message.
+        
         </p>
       </div>
     </div>
