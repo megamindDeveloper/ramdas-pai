@@ -35,7 +35,7 @@ interface BirthdayGreetingCardProps {
 
   return (
     // Main container with background, border, and relative positioning for decorations
-    <div className="relative font-sans bg-[#fdf3de] text-[#4a2e20] max-w-4xl mx-auto my-8 p-8 pt-12 rounded-lg border-2 border-[#a98e71] shadow-2xl overflow-hidden">
+    <div className="relative font-sans bg-[#fdf3de] text-[#4a2e20] max-w-3xl  mx-auto my-8 p-8 pt-12 rounded-lg border-2 border-[#a98e71] shadow-2xl overflow-hidden">
       
       {/* Decorative inner frame */}
       <div className="absolute inset-2 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
@@ -46,10 +46,10 @@ interface BirthdayGreetingCardProps {
       </button>
 
       {/* Decorative Corner Stars */}
-      <div className="absolute top-6 left-6 text-3xl text-[#002c5a] opacity-80 -rotate-12">✦</div>
-      <div className="absolute top-6 right-6 text-3xl text-[#9a2a3c] opacity-80 rotate-12">✦</div>
-      <div className="absolute bottom-6 left-6 text-3xl text-[#002c5a] opacity-80 rotate-12">✦</div>
-      <div className="absolute bottom-6 right-6 text-3xl text-[#9a2a3c] opacity-80 -rotate-12">✦</div>
+      <div className="absolute md:top-6 top-8 left-6 text-3xl text-[#002c5a] opacity-80 -rotate-12">✦</div>
+      <div className="absolute md:top-6 top-8 right-6 text-3xl text-[#9a2a3c] opacity-80 rotate-12">✦</div>
+      <div className="absolute md:bottom-6 bottom-8 left-6 text-3xl text-[#002c5a] opacity-80 rotate-12">✦</div>
+      <div className="absolute md:bottom-6 bottom-8 right-6 text-3xl text-[#9a2a3c] opacity-80 -rotate-12">✦</div>
       
       {/* Faint background sparkles */}
       <div className="absolute top-1/3 left-1/4 text-gray-300 text-2xl">✧</div>
@@ -61,13 +61,13 @@ interface BirthdayGreetingCardProps {
         <img 
           src="/images/backgroundImage/popupImage.png" // IMPORTANT: Replace with the actual path to your image
           alt="Happy 90th Birthday Dr. Ramdas M Pai" 
-          className="w-48 h-auto" 
+          className="md:w-48 w-33 h-auto" 
         />
       </header>
 
       {/* --- Message Section --- */}
       <main className="text-center mb-8 px-4 z-10">
-        <p className="text-xl leading-relaxed text-gray-800">
+        <p className="text-md md:text-xl leading-relaxed text-gray-800">
          
           Wishing a very <strong> happy 90<sup>th</sup> birthday</strong> to the
 visionary leader who placed Manipal on the global map.
@@ -82,7 +82,7 @@ Thank you for your constant inspiration.
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full max-w-xs bg-[#f5e6c4] rounded-lg px-4 py-3 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
+          className="w-full max-w-xs bg-[#f5e6c4] rounded-lg  md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
           required
         />
         <input
@@ -90,12 +90,12 @@ Thank you for your constant inspiration.
           placeholder="Phone Number"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          className="w-full max-w-xs bg-[#f5e6c4] rounded-lg px-4 py-3 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
+          className="w-full max-w-xs bg-[#f5e6c4] rounded-lg md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
           required
         />
         <button
           type="submit"
-          className="bg-[#6d282c] text-white font-semibold px-12 py-3 mt-2 rounded-lg hover:bg-[#5a2124] transition-colors duration-300 shadow-md"
+          className="bg-[#6d282c] text-white font-semibold md:px-12 md:py-3 py-2 px-12  mt-2 rounded-lg hover:bg-[#5a2124] transition-colors duration-300 shadow-md"
         >
           Send your Greetings
         </button>
