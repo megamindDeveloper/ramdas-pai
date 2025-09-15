@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 
-const Architect = () => {
+const   Architect = () => {
   const textAnimation1 = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
