@@ -13,6 +13,7 @@ import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestor
 import { db } from "@/app/lib/firebase";
 import { useOutsideClick } from "@/components/UseOutsideClick";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -120,14 +121,14 @@ const SecondGreetingsSection: React.FC = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
 
-  const itemsToShow = isMobile ? greetings.slice(0, 1) : greetings;
+  const itemsToShow = isMobile ? greetings : greetings;
   console.log(itemsToShow);
   return (
     <>
       <header className=" top-0 left-0 right-0 z-10 flex justify-center lg:justify-between  py-6 mx-auto container">
-        <img src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
-        <img src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
-        <img src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
+        <Image src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
+        <Image src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
+        <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
       </header>
       <div className="py-20 px-4 max-w-7xl mx-auto">
         <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
@@ -142,7 +143,9 @@ const SecondGreetingsSection: React.FC = () => {
               onClick={() => openModal(item.greetingsImageUrl)}
             >
               {/* Image */}
-              <img
+              <Image
+              width={1000}
+              height={1000}
                 src={item.coverImageUrl}
                 alt="Cover"
                 className="w-full object-cover rounded-lg aspect-[3/3]" // maintain square aspect
@@ -175,7 +178,7 @@ const SecondGreetingsSection: React.FC = () => {
               <motion.div
                 ref={containerRef}
                 variants={modalVariants}
-                className="relative my-10 w-full md:h-[90vh]  h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
+                className="relative my-10 w-full md:h-[90vh]  h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-13"
               >
                 <motion.button
                   variants={contentVariants}
@@ -187,8 +190,8 @@ const SecondGreetingsSection: React.FC = () => {
                   <IconX className="text-white w-5 h-5" />
                 </motion.button>
 
-                <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[90%] mt-2">
-                  <img src={currentImageUrl} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
+                <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-full mt-2">
+                  <Image width={1000} height={1000} src={currentImageUrl} alt="Selected" className="md:h-full max-h-[85vh] w-auto object-cover rounded-lg" />
                 </motion.div>
               </motion.div>
             </motion.div>

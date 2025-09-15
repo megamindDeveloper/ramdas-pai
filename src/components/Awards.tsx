@@ -63,7 +63,7 @@ export default function Awards() {
   );
 
   return (
-    <section className="pt-16 lg:py-16">
+    <section className=" lg:py-10">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[64px]">
         <AnimatedTextCharacter text="Awards & Recognitions" />
       </h2>
@@ -72,29 +72,29 @@ export default function Awards() {
       <div className="w-full flex justify-center items-center max-w-6xl xl:max-w-7xl px-4 mx-auto py-10">
         <div className="grid lg:hidden grid-cols-1 md:grid-cols-3 gap-6 items-center w-full">
            <div className="flex justify-center">
-            <Image src="/images/awards/2.png" alt="Award Center" width={500} height={700} className="rounded-lg shadow-lg object-contain h-full" />
+            <Image loading="lazy" src="/images/awards/2.png" alt="Award Center" width={500} height={700} className="rounded-lg shadow-lg object-contain h-full" />
           </div>
           <div className="flex justify-center items-center">
-            <Image src="/images/awards/1.png" alt="Award Left" width={500} height={350} className="rounded-lg shadow-lg object-contain" />
+            <Image loading="lazy" src="/images/awards/1.png" alt="Award Left" width={500} height={350} className="rounded-lg shadow-lg object-contain" />
           </div>
 
          
 
           <div className="flex justify-center items-center">
-            <Image src="/images/awards/3.png" alt="Award Right" width={500} height={350} className="rounded-lg shadow-lg object-contain" />
+            <Image loading="lazy" src="/images/awards/3.png" alt="Award Right" width={500} height={350} className="rounded-lg shadow-lg object-contain" />
           </div>
         </div>
         <div className="hidden lg:grid grid-cols-1 md:grid-cols-3 gap-6 items-center w-full">
           <div className="flex justify-center items-center">
-            <Image src="/images/awards/1.png" alt="Award Left" width={350} height={350} className="rounded-lg shadow-lg object-contain" />
+            <Image loading="lazy" src="/images/awards/1.png" alt="Award Left" width={350} height={350} className="rounded-lg shadow-lg object-contain" />
           </div>
 
           <div className="flex justify-center">
-            <Image src="/images/awards/2.png" alt="Award Center" width={500} height={700} className="rounded-lg shadow-lg object-contain h-full" />
+            <Image loading="lazy" src="/images/awards/2.png" alt="Award Center" width={500} height={700} className="rounded-lg shadow-lg object-contain h-full" />
           </div>
 
           <div className="flex justify-center items-center">
-            <Image src="/images/awards/3.png" alt="Award Right" width={350} height={350} className="rounded-lg shadow-lg object-contain" />
+            <Image loading="lazy" src="/images/awards/3.png" alt="Award Right" width={350} height={350} className="rounded-lg shadow-lg object-contain" />
           </div>
         </div>
       </div>

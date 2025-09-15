@@ -1,6 +1,7 @@
 "use client"
 
 import { IconX } from '@tabler/icons-react';
+import Image from 'next/image';
 import React, { useState } from 'react';
 
 // --- Component ---
@@ -58,8 +59,10 @@ interface BirthdayGreetingCardProps {
       {/* --- Header Section --- */}
       <header className="flex justify-center mb-6 z-10">
         {/* The emblem is treated as a single image for simplicity */}
-        <img 
-          src="/images/backgroundImage/popupImage.png" // IMPORTANT: Replace with the actual path to your image
+        <Image
+        width={1000}
+        height={1000} 
+          src="/images/backgroundImage/popupImage.webp" // IMPORTANT: Replace with the actual path to your image
           alt="Happy 90th Birthday Dr. Ramdas M Pai" 
           className="md:w-48 w-33 h-auto" 
         />

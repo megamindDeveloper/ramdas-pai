@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import { Pagination, Autoplay } from "swiper/modules";
+import Image from "next/image";
 
 
 // Framer-motion variants
@@ -61,12 +62,12 @@ const contentVariants = {
 // Example data
 const slider = [
   {
-    thumbNailImage: "/thumbnails/president.png",
-    wishesImage: "/thumbnails/pmWishLetter.png",
+    thumbNailImage: "/thumbnails/president.webp",
+    wishesImage: "/thumbnails/pmWishLetter.webp",
   },
   {
-    thumbNailImage: "/thumbnails/primeMinister.png",
-    wishesImage: "/thumbnails/pmWishLetter.png",
+    thumbNailImage: "/thumbnails/primeMinister.webp",
+    wishesImage: "/thumbnails/pmWishLetter.webp",
   },
 ];
 
@@ -134,10 +135,13 @@ const FirsrGreetingsSection: React.FC = () => {
                 className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
                 onClick={() => openModal(item.wishesImage)}
               >
-                <img
+                <Image
                   src={item.thumbNailImage}
                   alt="Thumbnail"
                   className="w-full h-full object-cover"
+                  width={1000}
+                  height={1000}
+                  loading="lazy"
                 />
               </div>
             </SwiperSlide>
@@ -152,10 +156,13 @@ const FirsrGreetingsSection: React.FC = () => {
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.wishesImage)}
             >
-              <img
+              <Image
                 src={item.thumbNailImage}
                 alt="Thumbnail"
                 className="w-full h-full object-cover"
+                width={1000}
+                height={1000}
+                loading="lazy"
               />
             </div>
           ))}
@@ -200,10 +207,13 @@ const FirsrGreetingsSection: React.FC = () => {
                 variants={contentVariants}
                 className="flex items-center justify-center w-full h-full mt-2"
               >
-                <img
+                <Image
                   src={currentimageUrl}
                   alt="Selected"
                   className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg"
+                  width={1000}
+                  height={1000}
+                  loading="lazy"
                 />
               </motion.div>
             </motion.div>

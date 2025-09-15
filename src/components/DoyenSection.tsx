@@ -4,7 +4,7 @@ import src from "../../public/images/Doyen.png";
 
 const DoyenSection = () => {
   return (
-    <section className="text-black py-16 md:py-24 lg:py-32 px-5 sm:px-6 lg:px-8">
+    <section className="text-black py-16 md:py-20 lg:py-20 px-5 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Content Area */}
 
@@ -15,11 +15,12 @@ const DoyenSection = () => {
           <div className=" mb-6 lg:hidden justify-center md:justify-end">
             <div className="relative w-full max-w-md md:max-w-lg aspect-[16/9]">
               <Image
+              loading="lazy"
                 src={src}
                 alt="Dr. Ramdas M. Pai, Doyen of Medical & Healthcare Education"
                 fill
                 className="rounded-lg  object-cover"
-                priority
+               
               />
             </div>
           </div>
@@ -39,7 +40,7 @@ const DoyenSection = () => {
               alt="Dr. Ramdas M. Pai, Doyen of Medical & Healthcare Education"
               fill
               className="rounded-lg shadow-2xl object-cover"
-              priority
+             loading="lazy"
             />
           </div>
         </div>

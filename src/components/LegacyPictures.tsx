@@ -7,6 +7,7 @@ import "swiper/css";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import Link from "next/link";
 import { Navigation, Autoplay } from "swiper/modules";
+import Image from "next/image";
 
 // ------------------ Dummy Data -------------------
 // const speakerData = [
@@ -184,7 +185,7 @@ const LegacyPictures = () => {
 
   return (
     <section className="relative" >
-      <div className=" relative lg:py-28 px-5 lg:px-10 lg:max-w-6xl mx-auto xl:max-w-[70%]">
+      <div className=" relative lg:py-10 px-5 lg:px-10 lg:max-w-6xl mx-auto xl:max-w-[70%]">
         <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[64px]">
           <AnimatedTextCharacter text="A Legacy in Pictures" />
         </h2>
@@ -229,7 +230,7 @@ const LegacyPictures = () => {
           ))}
       </div> */}
 
-        <button
+        {/* <button
           onClick={() => {
             setShowSpeakers(speakerData.filter((item) => !item?.blank));
           }}
@@ -237,10 +238,17 @@ const LegacyPictures = () => {
             } uppercase hidden cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold mt-8 mx-auto`}
         >
           View more
-        </button>
+        </button> */}
+        <div className="flex justify-center ">
+        <Link href="/glimpses-of-dr">
+          <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            View more
+          </button>
+        </Link>
+      </div>
       </div>
       <div
-        className="absolute  -right-0 xl:-right-0 bg-[#E85B25] p-4  2xl:-right-0 top-1/2 z-50 -translate-y-1/2 cursor-pointer hidden lg:block"
+        className="absolute  -right-0 xl:-right-0 bg-[#E85B25] p-4  2xl:-right-0 top-1/2 z-50 -translate-y-1/2 cursor-pointer "
         onClick={() => {
           swiper.slideNext();
         }}
@@ -260,7 +268,7 @@ const LegacyPictures = () => {
         onClick={() => {
           swiper.slidePrev();
         }}
-        className="absolute  -left-0 xl:-left-0 2xl:-left-0 bg-[#E85B25]   p-4  top-1/2 z-50 -translate-y-1/2 cursor-pointer hidden lg:block"
+        className="absolute  -left-0 xl:-left-0 2xl:-left-0 bg-[#E85B25]   p-4  top-1/2 z-50 -translate-y-1/2 cursor-pointer "
       >
         <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
           <mask id="mask0_10_633" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="29">
@@ -273,13 +281,7 @@ const LegacyPictures = () => {
 
       </div>
 
-      <div className="flex justify-center ">
-        <Link href="/glimpses-of-dr">
-          <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-            View more
-          </button>
-        </Link>
-      </div>
+     
     </section>
   );
 };
@@ -310,7 +312,9 @@ function SpeakerCard({
         {!blank && (
           <>
             {/* Mobile Image */}
-            <img
+            <Image
+            height={1000}
+            width={1000}
               src={imageWhite}
               alt="speaker"
               className="object-cover w-full h-full absolute top-0 left-0 sm:object-contain lg:hidden object-top bg-white"
@@ -320,11 +324,14 @@ function SpeakerCard({
             {/* Desktop Images */}
 
             {imageWhite && (
-              <img
+              <Image
                 src={imageWhite}
                 alt="speaker white"
                 className="object-cover w-full h-full absolute top-0 left-0 sm:object-contain lg:object-cover object-top transition-opacity duration-500 ease-in-out  hidden lg:block "
                 loading="lazy"
+                width={1000}
+                height={1000}
+               
               />
             )}
           </>
