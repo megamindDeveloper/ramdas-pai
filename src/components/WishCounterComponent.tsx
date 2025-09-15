@@ -28,7 +28,7 @@ export default function WishCounterComponent({
       }
     } catch (e) {}
 
-    const duration = 2000; // 2s counter run
+    const duration = 5000; // 2s counter run
     const step = (now: number) => {
       if (!startTimeRef.current) startTimeRef.current = now;
       const elapsed = now - startTimeRef.current;
