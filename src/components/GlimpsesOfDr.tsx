@@ -110,6 +110,7 @@ const GlimpsesOfDr = () => {
               src={src}
               alt={`Glimpse ${index + 1}`}
               fill
+              
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>

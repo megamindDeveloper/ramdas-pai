@@ -4,9 +4,11 @@ import React, { useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+// import "swiper/css/lazy";
+
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import Link from "next/link";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay,  } from "swiper/modules";
 
 // ------------------ Dummy Data -------------------
 // const speakerData = [
@@ -192,7 +194,9 @@ const LegacyPictures = () => {
         {/* Swiper for Desktop */}
         <div className="mt-8 lg:mt-12 relative ">
           <Swiper
-            modules={[Navigation, Autoplay]}
+            modules={[Navigation, Autoplay,]}  // ✅ add Lazy
+            lazy={true}                             // ✅ enable lazy loading
+            preloadImages={false}                   // ✅ don't preload all images
             spaceBetween={40}
             slidesPerView={1}
             slidesPerGroup={1}
@@ -207,8 +211,8 @@ const LegacyPictures = () => {
             navigation={true}
             loop={true}
             autoplay={{
-              delay: 3000, // 3 seconds per slide
-              disableOnInteraction: false, // keeps autoplay running even after user interaction
+              delay: 3000,
+              disableOnInteraction: false,
             }}
             className="mySwipers"
           >
