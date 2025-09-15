@@ -3,19 +3,19 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const AnimatedTextCharacter = ({ text }: { text: string }) => {
-  // Reference to the container
+// Define the component's props to include an optional className
+type AnimatedTextCharacterProps = {
+  text: string;
+  className?: string; // Optional className prop
+};
+
+const AnimatedTextCharacter = ({ text, className }: AnimatedTextCharacterProps) => {
   const ref = useRef(null);
-  const ref2 = useRef(null);
-
-  // Trigger animation when the element is in view
   const isInView = useInView(ref, { once: true });
-  const isInView2 = useInView(ref2, { once: true });
 
-  // Splitting text into letters
   const letters = Array.from(text);
 
-  // Variants for Container
+  // Variants for the container
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
@@ -49,27 +49,24 @@ const AnimatedTextCharacter = ({ text }: { text: string }) => {
   };
 
   return (
-    <>
-      <motion.div
-        ref={ref}
-        variants={container}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="hidden sm:block"
-      >
-        {letters.map((letter, index) => (
-          <motion.span variants={child} key={index}>
-            {letter === " " ? "\u00A0" : letter}
-          </motion.span>
-        ))}
-      </motion.div>
-      <span
-        ref={ref2}
-        className={`sm:hidden ${isInView2 ? "text-slide-in" : ""}`}
-      >
-        {text}
-      </span>
-    </>
+    <motion.div
+      ref={ref}
+      variants={container}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="flex overflow-hidden" // Use flex to keep characters inline
+    >
+      {letters.map((letter, index) => (
+        <motion.span
+          variants={child}
+          key={index}
+          // Apply the passed className to each character
+          className={className}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.div>
   );
 };
 

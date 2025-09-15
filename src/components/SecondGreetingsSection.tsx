@@ -3,55 +3,42 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "./UseOutsideClick";
-import { IconX } from "@tabler/icons-react";
-import Link from "next/link";
+import { IconArrowRight, IconX } from "@tabler/icons-react";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 
 // Firebase
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 
-// ✅ Swiper
+// Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import "swiper/css/pagination";
 
 import { Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 
-// Framer-motion variants
+// (Framer-motion variants remain the same)
 const backdropVariants = {
-  hidden: { opacity: 0, backdropFilter: "blur(0px)" },
-  visible: {
-    opacity: 1,
-    backdropFilter: "blur(8px)",
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-  exit: {
-    opacity: 0,
-    backdropFilter: "blur(0px)",
-    transition: { duration: 0.2, ease: "easeIn" },
-  },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
 };
-
+const cardTransitionVariants = {
+  initial: { opacity: 0, x: 20 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeIn" } },
+};
 const modalVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 50 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.9,
-    y: 50,
-    transition: { duration: 0.25, ease: "easeIn" },
-  },
+  hidden: { scale: 0.95, opacity: 0, y: 50 },
+  visible: { scale: 1, opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeInOut" } },
+  exit: { scale: 0.95, opacity: 0, y: 50, transition: { duration: 0.2, ease: "easeIn" } },
 };
 
 const contentVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } },
+  visible: { opacity: 1, y: 0, transition: { delay: 0.1, duration: 0.3 } },
+  exit: { opacity: 0, y: 20 },
 };
 
 type GreetingItem = {
@@ -62,17 +49,112 @@ type GreetingItem = {
   name: string;
 };
 
+// This is the new, reusable card component
+const MinisterCard = ({ item, onClick }: { item: GreetingItem; onClick: () => void }) => {
+  const positionWords = item.position.split(" ");
+  const wordsOnFirstLine = 2;
+
+  const requiresSplitting = positionWords.length > wordsOnFirstLine;
+
+  const line1 = requiresSplitting ? positionWords.slice(0, wordsOnFirstLine).join(" ") : item.position;
+
+  const line2 = requiresSplitting ? positionWords.slice(wordsOnFirstLine).join(" ") : null;
+
+  return (
+    <div className="relative cursor-pointer overflow-hidden group shadow-md" onClick={onClick}>
+      <Image
+        src={item.coverImageUrl}
+        alt={`Portrait of ${item.name}`}
+        className="w-full h-full object-cover aspect-[2.8/4]"
+        width={800}
+        height={1067}
+        loading="lazy"
+      />
+      {/* --- THIS IS THE MODIFIED LINE --- */}
+      <div
+        className="absolute bottom-0 left-0 right-0 p-6 bg-[#919191] text-white 
+                   group-hover:bg-[#F37032] transition-colors duration-300 ease-in-out"
+      >
+        <p className="font-bold font-sans text-2xl leading-tight">{item.name}</p>
+
+        <div className="text-sm font-light mt-4">
+          <span>{line1}</span>
+          {line2 && (
+            <>
+              <br />
+              <span>{line2}</span>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+const MinisterCardModel = ({ item, onClick }: { item: GreetingItem; onClick: () => void }) => {
+  const positionWords = item.position.split(" ");
+  const wordsOnFirstLine = 2;
+
+  const requiresSplitting = positionWords.length > wordsOnFirstLine;
+
+  const line1 = requiresSplitting ? positionWords.slice(0, wordsOnFirstLine).join(" ") : item.position;
+
+  const line2 = requiresSplitting ? positionWords.slice(wordsOnFirstLine).join(" ") : null;
+
+  return (
+    <div
+      className="relative cursor-pointer overflow-hidden group  shadow-md" // Added rounded-lg and shadow-md for card appearance
+      onClick={onClick}
+    >
+      <Image
+        src={item.coverImageUrl}
+        alt={`Portrait of ${item.name}`}
+        className="w-full h-full object-cover aspect-[2.8/4]"
+        width={800}
+        height={1067}
+        loading="lazy"
+      />
+      <div className="absolute bottom-0 left-0 right-0 p-6 bg-[#F37032]  text-white ">
+        <p className="font-bold font-sans text-2xl  leading-tight">{item.name}</p>
+
+        {/* Display the position text */}
+        <div className="text-sm font-light mt-4">
+          <span>{line1}</span>
+          {/* Only show the second line if it exists */}
+          {line2 && (
+            <>
+              <br />
+              <span>{line2}</span>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SecondGreetingsSection: React.FC = () => {
   const [greetings, setGreetings] = useState<GreetingItem[]>([]);
+  const [allGreetings, setAllGreetings] = useState<GreetingItem[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch greetings from Firestore
+  const [isViewMoreModalOpen, setIsViewMoreModalOpen] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const singleImageModalRef = useRef<HTMLDivElement>(null);
+  const viewMoreModalRef = useRef<HTMLDivElement>(null);
+  const handleNext = () => {
+    if (allGreetings.length > 1) {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % allGreetings.length);
+    }
+  };
+  // Fetch LIMITED (3) greetings for the main page
   useEffect(() => {
     const colRef = collection(db, "Greetings");
-    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
+    const q = query(colRef, orderBy("createdAt", "desc"), limit(3));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const items: GreetingItem[] = snapshot.docs.map((doc) => {
@@ -91,6 +173,28 @@ const SecondGreetingsSection: React.FC = () => {
     return () => unsub();
   }, []);
 
+  // Fetch ALL greetings for the modal
+  useEffect(() => {
+    const colRef = collection(db, "Greetings");
+    const q = query(colRef, orderBy("createdAt", "desc"));
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const items: GreetingItem[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          coverImageUrl: data.coverImageUrl || "",
+          greetingsImageUrl: data.greetingsImageUrl || "",
+          name: data.name || "",
+          position: data.position || "",
+        };
+      });
+      setAllGreetings(items);
+    });
+
+    return () => unsub();
+  }, []);
+
   // Detect mobile
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -99,104 +203,190 @@ const SecondGreetingsSection: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Functions for single image modal
   const openModal = (imageUrl: string) => {
     setCurrentImageUrl(imageUrl);
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentImageUrl(null);
   };
 
-  useOutsideClick(containerRef, () => {
+  const closeViewMoreModal = () => setIsViewMoreModalOpen(false);
+
+  const handleGreetingClick = (imageUrl: string) => {
+    closeViewMoreModal();
+    openModal(imageUrl);
+  };
+
+  useOutsideClick(singleImageModalRef, () => {
     if (isModalOpen) closeModal();
+  });
+  useOutsideClick(viewMoreModalRef, () => {
+    if (isViewMoreModalOpen) closeViewMoreModal();
   });
 
   useEffect(() => {
-    document.body.style.overflow = isModalOpen ? "hidden" : "auto";
+    const isAnyModalOpen = isModalOpen || isViewMoreModalOpen;
+    document.body.style.overflow = isAnyModalOpen ? "hidden" : "auto";
 
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isModalOpen) closeModal();
+      if (e.key === "Escape") {
+        if (isModalOpen) {
+          closeModal();
+        } else if (isViewMoreModalOpen) {
+          closeViewMoreModal();
+        }
+      }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-  }, [isModalOpen]);
+  }, [isModalOpen, isViewMoreModalOpen]);
 
-
+  const featuredMinister = allGreetings[activeIndex];
+  // The small cards show everyone *except* the featured one, limited to 5
+  const otherMinisters = allGreetings.filter((_, index) => index !== activeIndex).slice(0, 5);
   return (
     <div className="pb-10 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter text="Messages from the Ministers" />
+        <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+        <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
       </h2>
 
-      {/* ✅ Mobile: Swiper */}
+      {/* Mobile: Swiper */}
       {isMobile ? (
         <Swiper
           modules={[Pagination, Autoplay]}
           spaceBetween={20}
+          slidesPerView={1.2}
+          centeredSlides={true}
           pagination={{ clickable: true }}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
           loop={true}
-          className="mt-8"
+          className="mt-8 !pb-10"
         >
           {greetings.map((item) => (
             <SwiperSlide key={item.id}>
-              <div
-                className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-                onClick={() => openModal(item.greetingsImageUrl)}
-              >
-                <Image
-                  src={item.coverImageUrl}
-                  alt="Cover"
-                  className="w-full object-cover rounded-lg aspect-[3/3]"
-                  width={1000}
-                  height={1000}
-                  loading="lazy"
-                />
-                <div className="mt-2 text-center text-black">
-                  <p className="font-semibold text-md">{item.name}</p>
-                  <p className="text-sm">{item.position}</p>
-                </div>
-              </div>
+              <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
             </SwiperSlide>
           ))}
         </Swiper>
       ) : (
-        // ✅ Desktop: Grid
-        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        // Desktop: Grid
+        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {greetings.map((item) => (
-            <div
-              key={item.id}
-              className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
-              onClick={() => openModal(item.greetingsImageUrl)}
-            >
-              <Image
-                src={item.coverImageUrl}
-                alt="Cover"
-                className="w-full object-cover rounded-lg aspect-[3/3]"
-                width={1000}
-                height={1000}
-                loading="lazy"
-              />
-              <div className="mt-2 text-center text-black">
-                <p className="font-semibold text-md">{item.name}</p>
-                <p className="text-sm">{item.position}</p>
-              </div>
-            </div>
+            <MinisterCard key={item.id} item={item} onClick={() => openModal(item.greetingsImageUrl)} />
           ))}
         </div>
       )}
 
-      <div className="flex justify-center mt-10">
-        <Link href="/greetings">
-          <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-            View more
-          </button>
-        </Link>
+      <div className="flex j mt-10">
+        {/* Reset activeIndex to 0 when opening the modal */}
+        <button
+          onClick={() => {
+            setIsViewMoreModalOpen(true);
+            setActiveIndex(0);
+          }}
+          className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]"
+        >
+          View more
+        </button>
       </div>
 
-      {/* Modal */}
+      {/* The NEW "View More" Modal */}
+      <AnimatePresence>
+        {isViewMoreModalOpen && (
+          <motion.div
+            className="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeViewMoreModal} />
+            <motion.div
+              ref={viewMoreModalRef}
+              variants={modalVariants}
+              className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-4 flex-shrink-0">
+                <h3 className="text-xl font-bold font-sans text-gray-800">Wishes from Ministers</h3>
+                <motion.button
+                  className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
+                  onClick={closeViewMoreModal}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <IconX className="text-white w-5 h-5" />
+                </motion.button>
+              </div>
+
+              <motion.div variants={contentVariants} className="flex-grow overflow-hidden">
+                <div className="grid grid-cols-12 grid-rows-3 gap-4 h-full">
+                  {/* Left Side: Featured Minister with Animation */}
+                  <div className="col-span-12 md:col-span-6 row-span-3">
+                    {/* --- CHANGE 5: AnimatePresence for smooth transitions --- */}
+                    <AnimatePresence mode="wait">
+                      {featuredMinister && (
+                        <motion.div
+                          key={activeIndex} // Key change triggers animation
+                          variants={cardTransitionVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className="w-full h-full"
+                        >
+                          <MinisterCardModel item={featuredMinister} onClick={() => handleGreetingClick(featuredMinister.greetingsImageUrl)} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Right Side: Other Ministers & Next Button */}
+                  <div className="hidden md:grid col-span-6 row-span-3 grid-cols-2 grid-rows-3 gap-4">
+                    {otherMinisters.map((item) => (
+                      <div
+                        key={item.id}
+                        className="cursor-pointer group overflow-hidden  shadow-md"
+                        onClick={() => handleGreetingClick(item.greetingsImageUrl)}
+                      >
+                        <Image
+                          src={item.coverImageUrl}
+                          alt={item.name}
+                          width={400}
+                          height={533}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ))}
+                    {/* --- CHANGE 6: The "Next" Button in the last grid slot --- */}
+                    {allGreetings.length > 1 && (
+                      <div className="flex items-center justify-center  ">
+                        <button
+                          onClick={handleNext}
+                          className="flex flex-col items-center justify-center w-full h-full transition-colors duration-300 "
+                          aria-label="Next Minister"
+                        >
+                          <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M4.82378 -4.68472e-07L32 28L4.82378 56L-3.20993e-06 51.03L22.3524 28L8.16768e-07 4.97L4.82378 -4.68472e-07Z"
+                              fill="#EF2700"
+                            />
+                          </svg>
+
+                          {/* <span className="mt-2 font-semibold">NEXT</span> */}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Original Modal for single image view */}
       <AnimatePresence>
         {isModalOpen && currentImageUrl && (
           <motion.div
@@ -205,13 +395,9 @@ const SecondGreetingsSection: React.FC = () => {
             animate="visible"
             exit="exit"
           >
+            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
             <motion.div
-              variants={backdropVariants}
-              className="fixed inset-0 bg-black/80 backdrop-blur-lg"
-              onClick={closeModal}
-            />
-            <motion.div
-              ref={containerRef}
+              ref={singleImageModalRef}
               variants={modalVariants}
               className="relative my-10 w-full md:h-[80vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-14"
             >
@@ -225,10 +411,7 @@ const SecondGreetingsSection: React.FC = () => {
                 <IconX className="text-white w-5 h-5" />
               </motion.button>
 
-              <motion.div
-                variants={contentVariants}
-                className="flex items-center justify-center w-full h-[100%] "
-              >
+              <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[100%] ">
                 <Image
                   src={currentImageUrl}
                   alt="Selected"

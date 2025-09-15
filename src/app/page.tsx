@@ -53,7 +53,7 @@ export default function Home() {
       <HeroSection />
       <FirsrGreetingsSection />
       <SecondGreetingsSection />
-      <WishCounterComponent />
+      {/* <WishCounterComponent /> */}
       <InstagramReels />
       <section
         style={{
