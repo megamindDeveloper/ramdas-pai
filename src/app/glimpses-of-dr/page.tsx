@@ -70,9 +70,9 @@ const SecondGreetingsSection: React.FC = () => {
   return (
     <>
       <header className=" top-0 left-0 right-0 z-10 flex justify-center lg:justify-between  py-6 mx-auto container">
-        <img src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
-        <img src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
-        <img src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
+        <Image src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
+        <Image src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
+        <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
       </header>
 
       <GlimpsesOfDr/>

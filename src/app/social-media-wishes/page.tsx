@@ -10,6 +10,7 @@ import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 // Firebase
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
+import Image from "next/image";
 
 // Framer-motion variants (same as your code)
 const backdropVariants = {
@@ -39,14 +40,19 @@ const InstagramReels: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  
+  
+
   // Fetch latest 8 reels from Firestore
   useEffect(() => {
     const colRef = collection(db, "Reels");
-    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
+    const q = query(colRef, orderBy("createdAt", "desc"));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const items: ReelItem[] = snapshot.docs.map((doc) => {
         const data = doc.data();
+      
+        
         return {
           id: doc.id,
           name: data.name || "",
@@ -69,10 +75,12 @@ const InstagramReels: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const openModal = (videoUrl: string) => {
-    setCurrentVideo(videoUrl);
-    setIsModalOpen(true);
-  };
+const openModal = (videoUrl: string) => {
+  const embedUrl = getYouTubeEmbedUrl(videoUrl);
+  setCurrentVideo(embedUrl);
+  setIsModalOpen(true);
+};
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -91,15 +99,42 @@ const InstagramReels: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
+function getYouTubeEmbedUrl(url: string): string {
+  try {
+    // 1️⃣ Shorts URL: https://youtube.com/shorts/{videoId}
+    const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (shortsMatch && shortsMatch[1]) {
+      return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1`;
+    }
 
-  const videosToShow = isMobile ? reels.slice(0, 1) : reels;
+    // 2️⃣ Watch URL: https://youtube.com/watch?v={videoId}
+    const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    if (watchMatch && watchMatch[1]) {
+      return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1`;
+    }
+
+    // 3️⃣ Already an embed URL: https://www.youtube.com/embed/{videoId}
+    const embedMatch = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+    if (embedMatch && embedMatch[1]) {
+      return url.includes("?") ? url : `${url}?autoplay=1`;
+    }
+
+    // 4️⃣ Fallback: return original URL (may not work in iframe)
+    return url;
+  } catch {
+    return url;
+  }
+}
+
+
+  const videosToShow = isMobile ? reels : reels;
 
   return (
 <>
 <header className=" top-0 left-0 right-0 z-10 flex justify-center lg:justify-between  py-6 mx-auto container">
-        <img src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
-        <img src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
-        <img src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
+        <Image src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
+        <Image src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
+        <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
       </header>
 
     <div className="py-20 px-4 max-w-7xl mx-auto">
@@ -115,7 +150,7 @@ const InstagramReels: React.FC = () => {
             className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 aspect-auto flex flex-col"
             onClick={() => openModal(reel.reelsUrl)}
           >
-            <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
+            <Image width={1000} height={1000} src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
             <div
               className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
                 bg-gradient-to-t from-black/70 via-black/30 to-transparent"

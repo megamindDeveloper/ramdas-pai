@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import { Pagination, Autoplay } from "swiper/modules";
-
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -61,12 +61,12 @@ const contentVariants = {
 // Example data
 const slider = [
   {
-    thumbNailImage: "/thumbnails/president.png",
-    wishesImage: "/thumbnails/pmWishLetter.png",
+    thumbNailImage: "/thumbnails/primeMinister.webp",
+    wishesImage: "/thumbnails/pmWishLetter.webp",
   },
   {
-    thumbNailImage: "/thumbnails/primeMinister.png",
-    wishesImage: "/thumbnails/pmWishLetter.png",
+    thumbNailImage: "/thumbnails/president.webp",
+    wishesImage: "/thumbnails/pmWishLetter.webp",
   },
 ];
 
@@ -111,34 +111,31 @@ const FirsrGreetingsSection: React.FC = () => {
 
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter text="Prime Minister & President’s Greetings" />
+      <h2 className="font-helvetica  font-medium leading-none text-[32px] lg:text-[44px]">
+        <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Greetings from" />
+        <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Prime Minister & President" />
       </h2>
 
       {/* ✅ Mobile: Swiper */}
       {isMobile ? (
-      <Swiper
-    modules={[Pagination, Autoplay]}
-    spaceBetween={20}
-    pagination={{ clickable: true }}
-    autoplay={{
-      delay: 1000, // 3s delay
-      disableOnInteraction: false, // keep autoplay after user swipes
-    }}
-    loop={true} // makes it infinite
-    className="mt-8"
-  >
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          spaceBetween={20}
+          pagination={{ clickable: true }}
+          autoplay={{
+            delay: 1000, // 3s delay
+            disableOnInteraction: false, // keep autoplay after user swipes
+          }}
+          loop={true} // makes it infinite
+          className="mt-8"
+        >
           {slider.map((item, index) => (
             <SwiperSlide key={index}>
               <div
-                className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+                className="relative cursor-pointer overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
                 onClick={() => openModal(item.wishesImage)}
               >
-                <img
-                  src={item.thumbNailImage}
-                  alt="Thumbnail"
-                  className="w-full h-full object-cover"
-                />
+                <Image src={item.thumbNailImage} alt="Thumbnail" className="w-full h-full object-cover" width={1000} height={1000} loading="lazy" />
               </div>
             </SwiperSlide>
           ))}
@@ -149,14 +146,10 @@ const FirsrGreetingsSection: React.FC = () => {
           {slider.map((item, index) => (
             <div
               key={index}
-              className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+              className="relative cursor-pointer overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.wishesImage)}
             >
-              <img
-                src={item.thumbNailImage}
-                alt="Thumbnail"
-                className="w-full h-full object-cover"
-              />
+              <Image src={item.thumbNailImage} alt="Thumbnail" className="w-full h-full object-cover" width={1000} height={1000} loading="lazy" />
             </div>
           ))}
         </div>
@@ -172,11 +165,7 @@ const FirsrGreetingsSection: React.FC = () => {
             exit="exit"
           >
             {/* Backdrop */}
-            <motion.div
-              variants={backdropVariants}
-              className="fixed inset-0 bg-black/80 backdrop-blur-lg"
-              onClick={closeModal}
-            />
+            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
 
             {/* Modal content */}
             <motion.div
@@ -196,14 +185,14 @@ const FirsrGreetingsSection: React.FC = () => {
               </motion.button>
 
               {/* Modal Image */}
-              <motion.div
-                variants={contentVariants}
-                className="flex items-center justify-center w-full h-full mt-2"
-              >
-                <img
+              <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-full mt-2">
+                <Image
                   src={currentimageUrl}
                   alt="Selected"
                   className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg"
+                  width={1000}
+                  height={1000}
+                  loading="lazy"
                 />
               </motion.div>
             </motion.div>

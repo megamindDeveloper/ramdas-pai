@@ -3,21 +3,29 @@
 import React, { useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
+import Image from "next/image";
 
-const   Architect = () => {
+const Architect = () => {
   const textAnimation1 = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-    <div className="mx-auto container lg:py-20 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-6xl">
-      <div className="relative  hidden mb-8 rounded-lg aspect-video bg-black z-10">
+    <div className="mx-auto container lg:py-16 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-7xl">
+      <div className="relative  hidden mb-8 rounded-lg aspect-video bg-black z-10 cursor-pointer">
         {!mobileIsPlaying ? (
           <>
             {/* Thumbnail overlay with play button */}
-            <img src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover" />
+            <Image
+              loading="lazy"
+              width={1000}
+              height={1000}
+              src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg"
+              alt="GLC 2024 Thumbnail"
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer">
-              <button onClick={() => setMobileIsPlaying(true)} className="flex items-center justify-center">
+              <button onClick={() => setMobileIsPlaying(true)} className="flex items-center justify-center cursor-pointer">
                 <svg
                   className="h-10 w-10 lg:w-[80px] lg:h-[80px]"
                   width="104"
@@ -38,7 +46,7 @@ const   Architect = () => {
           </>
         ) : (
           <iframe
-            className="w-full h-full "
+            className="w-full h-full cursor-pointer"
             src="https://www.youtube.com/embed/-Q3BJUyA9OI?autoplay=1&rel=0"
             title="GLC 2024 Experience"
             frameBorder="0"
@@ -49,13 +57,15 @@ const   Architect = () => {
       </div>
 
       <div className="">
-        <p className="text-[#E8590C]  font-helvetica text-xl lg:text-2xl text-center mb-5">The Architect of Modern Manipal</p>
-        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[64px]">
-          <AnimatedTextCharacter text="Dr. Ramdas M. Pai" />
+        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+          <AnimatedTextCharacter text="The Architect of Modern Manipal" className="font-sans" />
+        </h2>
+        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[44px] my-4">
+          <AnimatedTextCharacter text="Dr. Ramdas M. Pai" className="text-[#EF4123] font-serif" />
         </h2>
         <p
           ref={textAnimation1}
-          className={`font-helvetica  text-lg  text-black  lg:text-[18px]  mx-auto text-center max-w-6xl mt-4 ${text1InView ? "text-slide-in" : ""}`}
+          className={`font-sans  text-lg  text-black  lg:text-[18px]  mx-auto text- max-w-7xl mt-4 ${text1InView ? "text-slide-in" : ""}`}
         >
           Dr. Ramdas M. Pai, Chancellor of Manipal Academy of Higher Education (MAHE) and recipient of the Padma Bhushan (2011), envisions a future
           where Manipal stands among the world’s premier educational institutions. With his tireless dedication, Dr. Pai’s extraordinary leadership,
@@ -63,13 +73,20 @@ const   Architect = () => {
           with the noblest of ideals.
         </p>
       </div>
-      <div className="relative  mt-8 overflow-hidden rounded-lg  aspect-video bg-black z-10">
+      <div className="relative  mt-8 overflow-hidden aspect-video bg-black z-10">
         {!isPlaying ? (
           <>
             {/* Thumbnail overlay with play button */}
-            <img src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover " />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer">
-              <button onClick={() => setIsPlaying(true)} className="flex items-center justify-center">
+            <Image
+              loading="lazy"
+              width={1000}
+              height={1000}
+              src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg"
+              alt="GLC 2024 Thumbnail"
+              className="w-full h-full object-cover "
+            />
+            <div onClick={() => setIsPlaying(true)} className="absolute inset-0 flex items-center justify-center cursor-pointer">
+              <button onClick={() => setIsPlaying(true)} className="flex items-center justify-center cursor-pointer">
                 <svg
                   className="h-10 w-10 lg:w-[80px] lg:h-[80px]"
                   width="104"

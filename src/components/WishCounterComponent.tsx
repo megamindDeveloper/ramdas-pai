@@ -1,5 +1,6 @@
 "use client";
 
+import { useInView } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function WishCounterComponent({
@@ -14,8 +15,12 @@ export default function WishCounterComponent({
   const [count, setCount] = useState<number>(base);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(containerRef, { once: true }); // triggers only once when in view
 
-  useEffect(() => {
+useEffect(() => {
+    if (!isInView) return; // only start counting when visible
+
     let finalValue = initial;
 
     try {
@@ -28,12 +33,12 @@ export default function WishCounterComponent({
       }
     } catch (e) {}
 
-    const duration = 5000; // 2s counter run
+    const duration = 3000; // 5 seconds animation
     const step = (now: number) => {
       if (!startTimeRef.current) startTimeRef.current = now;
       const elapsed = now - startTimeRef.current;
       const t = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
       const value = base + (finalValue - base) * eased;
       setCount(value);
 
@@ -51,10 +56,9 @@ export default function WishCounterComponent({
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [initial, base, storageKey]);
-
+  }, [isInView, initial, base, storageKey]);
   return (
-    <div className="min-h-[260px] flex items-center justify-center p-6">
+    <div ref={containerRef} className="min-h-[260px] flex items-center justify-center p-6">
       <div className="max-w-2xl w-full text-center rounded-2xl p-8">
         <p className="text-5xl md:text-6xl font-bold text-[#E85B25] mb-4">
           {count.toFixed(0).toLocaleString()}

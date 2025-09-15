@@ -5,6 +5,7 @@ import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -68,7 +69,7 @@ const ImageGallery: React.FC = () => {
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
        <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter text="Glimpses Of Dr.Ramdas Pai" />
+        <AnimatedTextCharacter text="Glorious Journey of Dr. Ramdas M. Pai" />
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6  mt-8 lg:mt-12">
         {videosToShow.map((img,index) => (
@@ -77,14 +78,14 @@ const ImageGallery: React.FC = () => {
             className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
             onClick={() => openModal(img)}
           >
-            <img src={img} alt="Gallery Thumbnail" className="w-full h-full object-cover" />
+            <Image height={1000} width={1000} src={img} alt="Gallery Thumbnail" className="w-full h-full object-cover" />
           </div>
         ))}
 
         <div className="col-span-1 md:col-span-3 flex justify-center mt-8">
           <Link href="/glimpses-of-dr">
             {" "}
-            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
+            <button className="uppercase border-[2px] cursor-pointer border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
           </Link>
         </div>
       </div>
@@ -116,7 +117,7 @@ const ImageGallery: React.FC = () => {
 
               {/* Full Image */}
               <motion.div variants={contentVariants} className="w-full ">
-                <img src={currentImage} alt="Full View" className="max-h-[80vh] w-full rounded-2xl overflow-hidden object-cover" />
+                <Image width={1000} height={1000} src={currentImage} alt="Full View" className="max-h-[80vh] w-full rounded-2xl overflow-hidden object-cover" />
               </motion.div>
             </motion.div>
           </motion.div>

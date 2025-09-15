@@ -178,6 +178,7 @@ export default function Awards() {
                 className="shadow-lg object-cover h-[400px]"
               />
             </div>
+
           </div>
         </div>
 
@@ -227,6 +228,7 @@ export default function Awards() {
             {awards.map((award, i) => (
               <Card key={i} award={award} />
             ))}
+
           </div>
         )}
 

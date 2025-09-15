@@ -105,7 +105,7 @@ const GlimpsesOfDr = () => {
            <div className="w-full max-w-7xl xl:max-w-9xl  mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-4">
         {images.map((src, index) => (
-          <div key={index} className="relative w-full xl:h-[70vh] lg2:h-[70vh] md:h-[65vh] h-[60vh] overflow-hidden rounded-lg shadow-md">
+          <div key={index} className="relative w-full aspect-square overflow-hidden rounded-lg shadow-md">
             <Image
               src={src}
               alt={`Glimpse ${index + 1}`}

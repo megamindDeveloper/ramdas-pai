@@ -4,26 +4,21 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { style } from "framer-motion/client";
 
-interface AnimatedTextCharacterProps {
+
+// Define the component's props to include an optional className
+type AnimatedTextCharacterProps = {
   text: string;
-  style?:string;
- 
-}
+  className?: string; // Optional className prop
+};
 
 
-const AnimatedTextCharacter = ({ text, style }: AnimatedTextCharacterProps) => {
-  // Reference to the container
+const AnimatedTextCharacter = ({ text, className }: AnimatedTextCharacterProps) => {
   const ref = useRef(null);
-  const ref2 = useRef(null);
-
-  // Trigger animation when the element is in view
   const isInView = useInView(ref, { once: true });
-  const isInView2 = useInView(ref2, { once: true });
 
-  // Splitting text into letters
   const letters = Array.from(text);
 
-  // Variants for Container
+  // Variants for the container
   const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
@@ -78,6 +73,7 @@ const AnimatedTextCharacter = ({ text, style }: AnimatedTextCharacterProps) => {
         {text}
       </span>
     </>
+
   );
 };
 
