@@ -58,6 +58,7 @@ export default function Home() {
         {/* <TributeSection /> */}
         <ImageGallery />
         <TwitterSection />
+
         <Architect />
       </section>
       <DoyenSection />
@@ -66,6 +67,7 @@ export default function Home() {
           backgroundImage: "url('/images/backgroundImage/bg1.png')",
         }}
       >
+
         <LegacyPictures />
       </section>
       <Awards />
