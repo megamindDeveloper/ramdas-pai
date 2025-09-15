@@ -57,12 +57,12 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
       loading="lazy"
     />
     <div
-      className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out p-4 ${
+      className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out p-6 ${
         isFeatured ? "bg-[#F37032]" : "bg-[#919191] group-hover:bg-[#F37032]"
       }`}
     >
       <p className={`font-bold font-sans leading-tight ${isFeatured ? "text-2xl" : "text-lg"}`}>{item.name}</p>
-      <div className={`font-light mt-1 ${isFeatured ? "text-sm" : "text-xs"}`}>
+      <div className={`font-light mt-4 ${isFeatured ? "text-sm" : "text-xs"}`}>
         <span>{item.designation}</span>
       </div>
     </div>
@@ -131,7 +131,7 @@ const InstagramReels: React.FC = () => {
       if (embedMatch && embedMatch[1]) {
         return url.includes("?") ? url : `${url}?autoplay=1`;
       }
-      
+
       return url;
     } catch {
       return url;
@@ -181,14 +181,23 @@ const InstagramReels: React.FC = () => {
 
   return (
     <div className="py-10 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
+      <h2 className="font-helvetica text-center  font-medium leading-none text-[32px] lg:text-[44px] ">
         <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-        <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="MAHE Leadership" />
+        <AnimatedTextCharacter className="text-[#EF4123] font-serif mb-1 font-normal" text="MAHE Leadership" />
       </h2>
 
       {/* Main page display */}
       {isMobile ? (
-        <Swiper modules={[Autoplay, Pagination]} loop autoplay={{ delay: 3000 }} pagination={{ clickable: true }} spaceBetween={16} slidesPerView={1.2} centeredSlides={true} className="mt-8 !pb-8">
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          loop
+          autoplay={{ delay: 3000 }}
+          pagination={{ clickable: true }}
+          spaceBetween={16}
+          slidesPerView={1.2}
+          centeredSlides={true}
+          className="mt-8 !pb-8"
+        >
           {reels.map((item) => (
             <SwiperSlide key={item.id}>
               <ReelCard item={item} onClick={() => openVideoModal(item.reelsUrl)} />
@@ -226,7 +235,13 @@ const InstagramReels: React.FC = () => {
               className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 flex flex-col"
             >
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <h3 className="text-xl font-bold font-sans text-gray-800">MAHE Leadership</h3>
+                <h2 className="font-helvetica text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+                  <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+                  <AnimatedTextCharacter
+                    className="text-[#EF4123] font-serif mt-1 font-normal"
+                    text="MAHE Leadership"
+                  />
+                </h2>
                 <motion.button
                   onClick={closeViewMoreModal}
                   whileHover={{ scale: 1.1 }}

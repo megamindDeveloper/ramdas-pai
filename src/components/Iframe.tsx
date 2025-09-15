@@ -21,13 +21,12 @@ function Book() {
   return (
     <>
       <div className="relative">
-        <section className="lg:ml-32 lg:max-w-[70%] pt-10 pb-20 px-5 lg:px-0">
-          <h2 className="text-[32px] leading-[1.1] font-helvetica sm:text-3xl md:text-5xl lg:text-6xl font-medium text-black mb-6 md:mb-8">
-            A Legacy in Pictures
+        <section className="lg:ml-32 lg:max-w-7xl pt-10 pb-20 px-5 lg:px-0">
+          <h2  style={{ color: '#EF4123' }} className="text-[32px] leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-[#FF2400] mb-6 md:mb-8">
+          A Journey of <br/>  Vision & Leadership
           </h2>
-          <p className="text-lg text-black font-helvetica lg:max-w-xl mx-auto md:mx-0">
-            This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs
-            and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.
+          <p className="text-lg text-black font-sans lg:max-w-xl mx-auto md:mx-0">
+          This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.
           </p>
           <div className="hidden lg:block relative">
             <div className="flex relative flex-col lg:flex-row gap-6 mt-12">

@@ -56,31 +56,20 @@ export default function Home() {
       <SecondGreetingsSection />
       {/* <WishCounterComponent /> */}
       <InstagramReels />
-      <section
-        style={{
-          backgroundImage: "url('/images/backgroundImage/bg1.webp')",
-        }}
-      >
-        {/* <TributeSection /> */}
-        {/* <ImageGallery /> */}
 
-        <LegacyPictures />
+      {/* <TributeSection /> */}
+      {/* <ImageGallery /> */}
 
-        <TwitterSection />
+      {/* <LegacyPictures /> */}
 
-        <Architect />
-      </section>
+      <TwitterSection />
+
+      <Architect />
+
       <DoyenSection />
-      <section
-        style={{
-          backgroundImage: "url('/images/backgroundImage/bg1.webp')",
-        }}
-      >
 
-      </section>
-      
       <Awards />
-      <LegacySection/>
+      <LegacySection />
       <Iframe />
 
       <Footer />
