@@ -2,8 +2,16 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { style } from "framer-motion/client";
 
-const AnimatedTextCharacter = ({ text }: { text: string }) => {
+interface AnimatedTextCharacterProps {
+  text: string;
+  style?:string;
+ 
+}
+
+
+const AnimatedTextCharacter = ({ text, style }: AnimatedTextCharacterProps) => {
   // Reference to the container
   const ref = useRef(null);
   const ref2 = useRef(null);
@@ -55,7 +63,7 @@ const AnimatedTextCharacter = ({ text }: { text: string }) => {
         variants={container}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="hidden sm:block"
+        className={`hidden sm:block   ${style} `}
       >
         {letters.map((letter, index) => (
           <motion.span variants={child} key={index}>
@@ -65,7 +73,7 @@ const AnimatedTextCharacter = ({ text }: { text: string }) => {
       </motion.div>
       <span
         ref={ref2}
-        className={`sm:hidden ${isInView2 ? "text-slide-in" : ""}`}
+        className={`sm:hidden ${style}  ${isInView2 ? "text-slide-in" : ""}`}
       >
         {text}
       </span>
