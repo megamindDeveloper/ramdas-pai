@@ -1,11 +1,21 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import AnimatedTextCharacter from "./AnimatedTextCharacter"
 import { motion, AnimatePresence } from "framer-motion"
 import { IconX } from "@tabler/icons-react"
 
 function Book() {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+     document.body.style.overflow = open ? "hidden" : "auto";
+ 
+     const handleEsc = (e: KeyboardEvent) => {
+       if (e.key === "Escape" && open) setOpen(false);
+     };
+     window.addEventListener("keydown", handleEsc);
+     return () => window.removeEventListener("keydown", handleEsc);
+   }, [open]);
 
   return (
     <> 
@@ -47,7 +57,7 @@ function Book() {
       {/* Modal */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <motion.div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
