@@ -3,8 +3,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
-import Link from "next/link";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
+
+// ✅ Import Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+import { Pagination, Autoplay } from "swiper/modules";
+
 
 // Framer-motion variants
 const backdropVariants = {
@@ -52,7 +58,7 @@ const contentVariants = {
   },
 };
 
-// Example data (replace with backend data later)
+// Example data
 const slider = [
   {
     thumbNailImage: "/thumbnails/president.png",
@@ -103,48 +109,74 @@ const FirsrGreetingsSection: React.FC = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
 
-  const videosToShow = isMobile ? slider.slice(0, 1) : slider;
-
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="Wishes from the President and Prime Minister" />
       </h2>
 
-      <div className="grid grid-cols-1 mt-8 lg:mt-12  sm:grid-cols-2 md:grid-cols-2 gap-6">
-        {videosToShow.map((item, index) => {
-          return (
+      {/* ✅ Mobile: Swiper */}
+      {isMobile ? (
+      <Swiper
+    modules={[Pagination, Autoplay]}
+    spaceBetween={20}
+    pagination={{ clickable: true }}
+    autoplay={{
+      delay: 1000, // 3s delay
+      disableOnInteraction: false, // keep autoplay after user swipes
+    }}
+    loop={true} // makes it infinite
+    className="mt-8"
+  >
+          {slider.map((item, index) => (
+            <SwiperSlide key={index}>
+              <div
+                className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+                onClick={() => openModal(item.wishesImage)}
+              >
+                <img
+                  src={item.thumbNailImage}
+                  alt="Thumbnail"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        // ✅ Desktop: Grid
+        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-2 gap-6">
+          {slider.map((item, index) => (
             <div
               key={index}
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.wishesImage)}
             >
-              <img src={item.thumbNailImage} alt="Thumbnail" className="w-full h-full object-cover" />
+              <img
+                src={item.thumbNailImage}
+                alt="Thumbnail"
+                className="w-full h-full object-cover"
+              />
             </div>
-          );
-        })}
-
-        {/* View More button */}
-        {/* <div className="col-span-1 md:col-span-3 flex justify-center mt-8">
-          <Link href="/video">
-            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-              View more
-            </button>
-          </Link>
-        </div> */}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Modal */}
       <AnimatePresence>
         {isModalOpen && currentimageUrl && (
           <motion.div
-            className="fixed md:h-[90vh]  my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
+            className="fixed md:h-[90vh] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
             initial="hidden"
             animate="visible"
             exit="exit"
           >
             {/* Backdrop */}
-            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
+            <motion.div
+              variants={backdropVariants}
+              className="fixed inset-0 bg-black/80 backdrop-blur-lg"
+              onClick={closeModal}
+            />
 
             {/* Modal content */}
             <motion.div
@@ -164,7 +196,7 @@ const FirsrGreetingsSection: React.FC = () => {
               </motion.button>
 
               {/* Modal Image */}
-               <motion.div
+              <motion.div
                 variants={contentVariants}
                 className="flex items-center justify-center w-full h-full mt-2"
               >
