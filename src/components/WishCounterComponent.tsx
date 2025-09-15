@@ -62,7 +62,7 @@ export default function WishCounterComponent({
         <p className="text-xl md:text-2xl text-slate-700">
           Amazing people have already shared their warm wishes with{" "}
           <span className="font-semibold">Dr. Ramdas Pai</span>.  
-          🌸 Would you like to add yours too?
+           Would you like to add yours too?
         </p>
       </div>
     </div>
