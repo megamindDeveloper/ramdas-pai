@@ -42,7 +42,7 @@ const InstagramReels: React.FC = () => {
   // Fetch latest 8 reels from Firestore
   useEffect(() => {
     const colRef = collection(db, "Reels");
-    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
+    const q = query(colRef, orderBy("createdAt", "desc"));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const items: ReelItem[] = snapshot.docs.map((doc) => {
