@@ -11,7 +11,7 @@ const Architect = () => {
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-    <div className="mx-auto container lg:py-16 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-7xl">
+    <div className="mx-auto container pt-12 lg:py-16 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-7xl">
       <div className="relative  hidden mb-8 rounded-lg aspect-video bg-black z-10 cursor-pointer">
         {!mobileIsPlaying ? (
           <>
@@ -57,10 +57,10 @@ const Architect = () => {
       </div>
 
       <div className="">
-        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+        <h2 className="font-helvetica text-black  t font-medium leading-none text-[32px]  lg:text-[44px]">
           <AnimatedTextCharacter text="The Architect of Modern Manipal" className="font-sans" />
         </h2>
-        <h2 className="font-helvetica text-black  text-center font-medium leading-none text-[32px]  lg:text-[44px] my-4">
+        <h2 className="font-helvetica text-black  tfont-medium leading-none text-[32px]  lg:text-[44px] my-4">
           <AnimatedTextCharacter text="Dr. Ramdas M. Pai" className="text-[#EF4123] font-serif" />
         </h2>
         <p

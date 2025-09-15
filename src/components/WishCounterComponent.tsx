@@ -15,10 +15,10 @@ export default function WishCounterComponent({
   const [count, setCount] = useState<number>(base);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(containerRef, { once: true }); // triggers only once when in view
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true }); // triggers only once when in view
 
-useEffect(() => {
+  useEffect(() => {
     if (!isInView) return; // only start counting when visible
 
     let finalValue = initial;
@@ -60,12 +60,10 @@ useEffect(() => {
   return (
     <div ref={containerRef} className="min-h-[260px] flex items-center justify-center p-6">
       <div className="max-w-2xl w-full text-center rounded-2xl p-8">
-        <p className="text-5xl md:text-6xl font-bold text-[#E85B25] mb-4">
-          {count.toFixed(0).toLocaleString()}
-        </p>
+        <p className="text-5xl md:text-6xl font-bold text-[#E85B25] mb-4">{count.toFixed(0).toLocaleString()}</p>
         <p className="text-xl md:text-2xl text-slate-700">
-        Countless warm wishes have already made this celebration special ! Celebrate the journey of <span className="font-semibold"> Dr. Ramdas M. Pai </span> with your message.
-        
+          Countless warm wishes have already made this celebration special ! Celebrate the journey of{" "}
+          <span className="font-semibold"> Dr. Ramdas M. Pai </span> with your message.
         </p>
       </div>
     </div>

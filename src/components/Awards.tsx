@@ -140,10 +140,10 @@ export default function Awards() {
 
   return (
     <>
-      <section className="lg:pt-[7rem] pt-16  bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] h-[90vh] flex flex-col justify-between">
+      <section className="lg:pt-[3rem] pt-16  bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023]  flex flex-col justify-between">
         <div className="max-w-7xl mx-auto px-6 w-full text-white">
           {/* Heading aligned left */}
-          <h1 className="font-sans  !text-white text-start font-bold tracking-wider leading-none text-[32px] lg:text-[44px]">
+          <h1 className="font-sans lg:pb-[3rem] pb-12  !text-white text-start font-bold tracking-wider leading-none text-[32px] lg:text-[44px]">
            Awards and <br /> Accolades
           </h1>
         </div>
@@ -222,7 +222,7 @@ export default function Awards() {
       <div className="mt-8">
         {/* Awards: full rows in grid */}
         {awards.length > 0 && (
-          <div className="md:grid  hidden  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl xl:max-w-[95%] px-4 py-6 mx-auto justify-items-center"
+          <div className="md:grid  hidden  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl lg:max-w-7xl px-4 py-6 mx-auto justify-items-center"
           >
 
             {awards.map((award, i) => (

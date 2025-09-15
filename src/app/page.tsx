@@ -22,16 +22,12 @@ export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const hasShownPopup = sessionStorage.getItem("hasShownPopup");
+    const timer = setTimeout(() => {
+      setShowPopup(true);
+      // sessionStorage.setItem("hasShownPopup", "false"); // store in session
+    }, 1000);
 
-    if (!hasShownPopup) {
-      const timer = setTimeout(() => {
-        setShowPopup(true);
-        sessionStorage.setItem("hasShownPopup", "true"); // store in session
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   return (

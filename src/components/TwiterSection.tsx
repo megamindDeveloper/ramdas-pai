@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "./UseOutsideClick";
 import { IconX, IconBrandTwitter } from "@tabler/icons-react";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
-
+import { useInView } from "framer-motion";
 // Firebase
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
@@ -15,21 +15,29 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import Image from "next/image";
+import Link from "next/link";
 
 // Framer-motion variants
 const backdropVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, backdropFilter: "blur(8px)" },
+  visible: { opacity: 1 },
   exit: { opacity: 0 },
 };
-const modalVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1, transition: { type: "spring", damping: 20, stiffness: 100 } },
-  exit: { opacity: 0, scale: 0.9 },
+const cardTransitionVariants = {
+  initial: { opacity: 0, x: 20 },
+  animate: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeIn" } },
 };
+const modalVariants = {
+  hidden: { scale: 0.95, opacity: 0, y: 50 },
+  visible: { scale: 1, opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeInOut" } },
+  exit: { scale: 0.95, opacity: 0, y: 50, transition: { duration: 0.2, ease: "easeIn" } },
+};
+
 const contentVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { delay: 0.1 } },
+  visible: { opacity: 1, y: 0, transition: { delay: 0.1, duration: 0.3 } },
+  exit: { opacity: 0, y: 20 },
 };
 
 type ScreenshotItem = {
@@ -40,20 +48,46 @@ type ScreenshotItem = {
 
 // Card for displaying the tweet screenshot
 const TweetCard = ({ item, onClick }: { item: ScreenshotItem; onClick: () => void }) => (
-  <div className="bg-white rounded-full  text-black  flex flex-col cursor-pointer " onClick={onClick}>
+  <div className="  text-black  flex flex-col cursor-pointer " onClick={onClick}>
     <div className="flex-grow rounded-lg overflow-hidden">
       <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="w-full h-full object-contain" />
     </div>
   </div>
 );
+const MinisterCardModel = ({ item, onClick }: { item: GreetingItem; onClick: () => void }) => {
+  return (
+    <div
+      className="relative cursor-pointer overflow-hidden group   shadow-md" // Added rounded-lg and shadow-md for card appearance
+      onClick={onClick}
+    >
+      <Image
+        src={item.coverImageUrl}
+        alt={`Portrait of ${item.name}`}
+        className="w-full h-full object-cover "
+        width={800}
+        height={1067}
+        loading="lazy"
+      />
+    </div>
+  );
+};
 
-const TwitterSection: React.FC = () => {
+const TwitterSection: React.FC = ({
+  initial = 9384, // target value
+  base = 9296, // starting value for animation
+  storageKey = "wish_counter_value",
+}: {
+  initial?: number;
+  base?: number;
+  storageKey?: string;
+}) => {
   // State for main page display
   const [screenshots, setScreenshots] = useState<ScreenshotItem[]>([]);
   const [isMobile, setIsMobile] = useState(false);
-
+  const [allGreetings, setAllGreetings] = useState<GreetingItem[]>([]);
   // State for ALL screenshots for the "View More" modal
   const [allScreenshots, setAllScreenshots] = useState<ScreenshotItem[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // State for single image modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +99,11 @@ const TwitterSection: React.FC = () => {
   // Refs for closing modals on outside click
   const singleImageModalRef = useRef<HTMLDivElement>(null);
   const viewMoreModalRef = useRef<HTMLDivElement>(null);
-
+  const handleNext = () => {
+    if (allGreetings.length > 1) {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % allGreetings.length);
+    }
+  };
   // Fetch latest 3 screenshots for the main page
   useEffect(() => {
     const colRef = collection(db, "Screenshots");
@@ -87,7 +125,23 @@ const TwitterSection: React.FC = () => {
     });
     return () => unsub();
   }, []);
+  useEffect(() => {
+    const colRef = collection(db, "Screenshots");
+    const q = query(colRef, orderBy("createdAt", "desc"));
 
+    const unsub = onSnapshot(q, (snapshot) => {
+      const items: GreetingItem[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          coverImageUrl: data.screenshotUrl || "",
+        };
+      });
+      setAllGreetings(items);
+    });
+
+    return () => unsub();
+  }, []);
   // Detect mobile screen
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -103,7 +157,9 @@ const TwitterSection: React.FC = () => {
   };
   const closeModal = () => setIsModalOpen(false);
   const closeViewMoreModal = () => setIsViewMoreModalOpen(false);
-
+  const featuredMinister = allGreetings[activeIndex];
+  // The small cards show everyone *except* the featured one, limited to 5
+  const otherMinisters = allGreetings.filter((_, index) => index !== activeIndex).slice(0, 5);
   // Handles click from "View More" modal to open single image modal
   const handleScreenshotClick = (imageUrl: string) => {
     closeViewMoreModal();
@@ -127,16 +183,60 @@ const TwitterSection: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen, isViewMoreModalOpen]);
+  const [count, setCount] = useState<number>(base);
+  const rafRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true }); // triggers only once when in view
 
+  useEffect(() => {
+    if (!isInView) return; // only start counting when visible
+
+    let finalValue = initial;
+
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        if (!Number.isNaN(parsed)) {
+          finalValue = parsed;
+        }
+      }
+    } catch (e) {}
+
+    const duration = 3000; // 5 seconds animation
+    const step = (now: number) => {
+      if (!startTimeRef.current) startTimeRef.current = now;
+      const elapsed = now - startTimeRef.current;
+      const t = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      const value = base + (finalValue - base) * eased;
+      setCount(value);
+
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        try {
+          localStorage.setItem(storageKey, String(finalValue));
+        } catch (e) {}
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isInView]);
   return (
-    <div className="py-20 px-4 bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] text-white">
+    <div ref={containerRef} className="py-20 px-4 bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] text-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="font-helvetica text-center font-medium  leading-none text-[32px] lg:text-[44px]">
+        <h2 className="font-helvetica  font-medium  leading-none text-[32px] lg:text-[44px]">
           <AnimatedTextCharacter text="Greetings from Wellwishers" className="text-white mb-2 font-semibold font-sans" />
         </h2>
 
         <div className="flex flex-col md:flex-row items-center  gap-6 md:gap-10 my-6 text-center md:text-left">
-          <div className="font-bold text-7xl lg:text-8xl font-sans ">9384</div>
+          <div className="font-bold text-7xl lg:text-8xl font-sans "> {count.toFixed(0).toLocaleString()}</div>
           <div className="max-w-xl flex">
             <p className="font-light text-[16px]">Countless warm wishes have already made this celebration special!</p>
             <p className="m font-light">
@@ -163,61 +263,123 @@ const TwitterSection: React.FC = () => {
           </div>
         )}
 
-        <div className="flex  mt-12">
-          {/* UPDATED: Button now opens the modal */}
+        <div className="md:flex hidden  mt-10">
+          {/* Reset activeIndex to 0 when opening the modal */}
           <button
-            onClick={() => setIsViewMoreModalOpen(true)}
+            onClick={() => {
+              setIsViewMoreModalOpen(true);
+              setActiveIndex(0);
+            }}
             className="uppercase cursor-pointer border-2 border-white  text-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white"
           >
             View more
           </button>
         </div>
 
+        <div className="md:hidden flex mt-10">
+          {/* Reset activeIndex to 0 when opening the modal */}
+          <Link href="/tweets">
+            <button className="uppercase cursor-pointer border-2 border-white  text-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white">
+              View more
+            </button>
+          </Link>
+        </div>
+
         {/* --- NEW: "View More" Modal --- */}
+        {/* The NEW "View More" Modal */}
         <AnimatePresence>
           {isViewMoreModalOpen && (
-            <motion.div className="fixed inset-0 z-[9998] flex items-center justify-center p-4" initial="hidden" animate="visible" exit="exit">
-              <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80" onClick={closeViewMoreModal} />
+            <motion.div
+              className="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeViewMoreModal} />
               <motion.div
                 ref={viewMoreModalRef}
                 variants={modalVariants}
-                className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-xl shadow-2xl p-6 flex flex-col"
+                className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
               >
-                <div className="flex justify-between items-center mb-6 flex-shrink-0">
-                  <h3 className="text-2xl font-bold text-gray-800">Greetings from Wellwishers</h3>
+                <div className="flex justify-between items-center mb-4 flex-shrink-0">
+                  <h2 className="font-helvetica text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+                  </h2>
                   <motion.button
+                    className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
                     onClick={closeViewMoreModal}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center"
                   >
-                    <IconX className="text-white" />
+                    <IconX className="text-white w-5 h-5" />
                   </motion.button>
                 </div>
-                <div className="flex-grow overflow-y-auto pr-2">
-                  <motion.div variants={contentVariants} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                    {allScreenshots.map((item) => (
-                      <div
-                        key={item.id}
-                        className="cursor-pointer group overflow-hidden rounded-lg shadow-md"
-                        onClick={() => handleScreenshotClick(item.screenshotUrl)}
-                      >
-                        <Image
-                          src={item.screenshotUrl}
-                          alt="Tweet Screenshot"
-                          width={400}
-                          height={400}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                    ))}
-                  </motion.div>
-                </div>
+
+                <motion.div variants={contentVariants} className="flex-grow overflow-hidden">
+                  <div className="grid grid-cols-12 grid-rows-3 gap-4 h-full">
+                    {/* Left Side: Featured Minister with Animation */}
+                    <div className="col-span-12 md:col-span-6 row-span-3">
+                      {/* --- CHANGE 5: AnimatePresence for smooth transitions --- */}
+                      <AnimatePresence mode="wait">
+                        {featuredMinister && (
+                          <motion.div
+                            key={activeIndex} // Key change triggers animation
+                            variants={cardTransitionVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            className="w-full h-full"
+                          >
+                            <MinisterCardModel item={featuredMinister} onClick={() => handleGreetingClick(featuredMinister.greetingsImageUrl)} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Right Side: Other Ministers & Next Button */}
+                    <div className="hidden md:grid col-span-6 row-span-3 grid-cols-2 grid-rows-3 gap-4">
+                      {otherMinisters.map((item) => (
+                        <div
+                          key={item.id}
+                          className="cursor-pointer group overflow-hidden  shadow-md"
+                          onClick={() => handleGreetingClick(item.greetingsImageUrl)}
+                        >
+                          <Image
+                            src={item.coverImageUrl}
+                            alt={item.name}
+                            width={400}
+                            height={533}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                      {/* --- CHANGE 6: The "Next" Button in the last grid slot --- */}
+                      {allGreetings.length > 1 && (
+                        <div className="flex items-center justify-center  ">
+                          <button
+                            onClick={handleNext}
+                            className="flex flex-col items-center justify-center w-full h-full transition-colors duration-300 "
+                            aria-label="Next Minister"
+                          >
+                            <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M4.82378 -4.68472e-07L32 28L4.82378 56L-3.20993e-06 51.03L22.3524 28L8.16768e-07 4.97L4.82378 -4.68472e-07Z"
+                                fill="#EF2700"
+                              />
+                            </svg>
+
+                            {/* <span className="mt-2 font-semibold">NEXT</span> */}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
-
         {/* Single Image Modal */}
         <AnimatePresence>
           {isModalOpen && currentImage && (

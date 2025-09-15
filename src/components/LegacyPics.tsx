@@ -17,10 +17,10 @@ export default function LegacySection() {
   const reorderedImages = [images[currentIndex], ...images.slice(currentIndex + 1), ...images.slice(0, currentIndex)];
 
   return (
-    <section className="py-20 px-4 lg:px-0 lg:ml-32">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+    <section className="py-20 px-4 lg:px-0 lg:ml-16 xl:ml-[21rem] ">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 ">
         {/* Left Content */}
-        <div className="space-y-6 lg:col-span-4">
+        <div className="space-y-6 lg:col-span-4 ">
           <h2  className="text-[32px] leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-black mb-6 md:mb-8">
             A Legacy in <br/> Pictures
           </h2>

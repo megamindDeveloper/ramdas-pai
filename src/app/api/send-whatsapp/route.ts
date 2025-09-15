@@ -1,49 +1,95 @@
-import { NextResponse } from "next/server";
+// File: app/api/send-whatsapp/route.ts
 
-export async function POST(req: Request) {
+import { NextResponse } from 'next/server';
+
+// --- Configuration from Environment Variables ---
+const sfmc = {
+  clientId: process.env.SFMC_CLIENT_ID,
+  clientSecret: process.env.SFMC_CLIENT_SECRET,
+  authUrl: process.env.SFMC_AUTH_URL,
+  restUrl: process.env.SFMC_REST_URL,
+  definitionKey: process.env.SFMC_DEFINITION_KEY,
+};
+
+// --- In-memory cache for the Access Token ---
+let tokenCache = {
+  token: null as string | null,
+  expiresAt: 0,
+};
+
+// --- Function to Get a Valid Access Token ---
+async function getAccessToken(): Promise<string> {
+  // Use cached token if it's still valid (with a 60-second buffer)
+  if (tokenCache.token && Date.now() < tokenCache.expiresAt - 60000) {
+    return tokenCache.token;
+  }
+
+  // Fetch a new token
+  const response = await fetch(sfmc.authUrl!, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: sfmc.clientId!,
+      client_secret: sfmc.clientSecret!,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Could not authenticate with Marketing Cloud.');
+  }
+
+  const data = await response.json();
+  
+  // Update cache
+  tokenCache.token = data.access_token;
+  tokenCache.expiresAt = Date.now() + (data.expires_in * 1000); 
+
+  return tokenCache.token!;
+}
+
+// --- Main API Handler ---
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const { phoneNumber, name } = body;
+    const { phoneNumber } = await request.json();
 
-    // format number: remove spaces/dashes, ensure country code included
-    const formattedNumber = phoneNumber.replace(/\D/g, "");
+    if (!phoneNumber) {
+      return NextResponse.json({ success: false, error: "Phone number is required." }, { status: 400 });
+    }
 
-    // your permanent access token (store in .env.local)
-    const token = process.env.WHATSAPP_TOKEN!;
-    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID!; // from Meta dashboard
-console.log(formattedNumber)
-    // Example message: you can also use "template"
+    const accessToken = await getAccessToken();
+    const formattedPhoneNumber = phoneNumber.startsWith('91') ? phoneNumber : `91${phoneNumber}`;
+
+    // Construct the payload to send the message
     const payload = {
-      messaging_product: "whatsapp",
-      to: formattedNumber,
-      type: "text",
-      text: {
-        body: `Hi ${name}, thank you for sending your greetings! 🎉`
-      }
-    };
-
-    const res = await fetch(
-      `https://graph.facebook.com/v22.0/749853851553201/messages`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: 'Bearer EAALKl2Y9pAQBPbkAL6S1UbeVf3ZBofNnRgIMoAXkmuj2Ws84vc0qRdDGSZCMFw5fmUvC7UZAIXeVdKodQ5jZC592NUzQwGJbsLZAJD1hZBKEY0LTjzXCRdAuZCxzhSblWYsldlA4wimJXKm6pFpsjXYSdxqv7aqndkiLzjGoxkmcXjYme50OSkxmfJCxTiFRCWjnSgwT62Etlio9VZCQjwI0Upwy9IPfKN3OiuiXmUHj9dhmZBAZDZD',
-          "Content-Type": "application/json",
+      definitionKey: sfmc.definitionKey,
+      recipients: [
+        {
+          contactKey: formattedPhoneNumber,
+          to: formattedPhoneNumber,
         },
-        body: JSON.stringify({
-          messaging_product: "whatsapp",
-          to:formattedNumber,
-          type: "text",
-          text: { 
-            body: `Hi ${name}, thank you for sending your greetings! 🎉`,
-          },
-        }),
-      }
-    );
+      ],
+    };
+    
+    // Send the message using the Trigger API
+    const sendMessageResponse = await fetch(sfmc.restUrl!, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+    });
 
-    const data = await res.json();
-    return NextResponse.json(data);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (!sendMessageResponse.ok) {
+        console.error('SFMC API Error:', await sendMessageResponse.json());
+        throw new Error('Failed to send message via Marketing Cloud.');
+    }
+
+    return NextResponse.json({ success: true, message: 'Greeting sent successfully!' });
+
+  } catch (error) {
+    console.error('An error occurred:', error);
+    return NextResponse.json({ success: false, error: 'An internal server error occurred.' }, { status: 500 });
   }
 }

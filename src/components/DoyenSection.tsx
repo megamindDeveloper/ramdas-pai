@@ -8,12 +8,12 @@ const DoyenSection = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Content Area */}
 
-        <div className="text-center md:text-left">
+        <div className="md:text-left">
         <h2 style={{ color: '#EF4123' }} className="text-[32px] font-sans leading-[1.1]  sm:text-3xl md:text-5xl lg:text-[44px] font-medium mb-6 md:mb-8">
           Doyen of Education & Healthcare in India
           </h2>
           <div className=" mb-6 lg:hidden justify-center md:justify-end">
-            <div className="relative w-full max-w-md md:max-w-lg aspect-[16/9]">
+            <div className="relative w-full max-w-md md:max-w-lg aspect-[3/4]">
               <Image
               loading="lazy"
                 src={src}

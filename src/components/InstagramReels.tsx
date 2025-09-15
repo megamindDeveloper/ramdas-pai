@@ -14,6 +14,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import Image from "next/image";
+import Link from "next/link";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -58,7 +59,7 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
     />
     <div
       className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out p-6 ${
-        isFeatured ? "bg-[#F37032]" : "bg-[#919191] group-hover:bg-[#F37032]"
+        isFeatured ? "bg-[#F37032]" : "bg-[#F37032] md:bg-[#919191] group-hover:bg-[#F37032]"
       }`}
     >
       <p className={`font-bold font-sans leading-tight ${isFeatured ? "text-2xl" : "text-lg"}`}>{item.name}</p>
@@ -69,6 +70,28 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
   </div>
 );
 
+const ReelCard1 = ({ item, onClick, isFeatured = false }: { item: ReelItem; onClick: () => void; isFeatured?: boolean }) => (
+  <div className="relative cursor-pointer overflow-hidden group shadow-md " onClick={onClick}>
+     <Image
+        src={item.thumbnailUrl}
+        alt={`Portrait of ${item.name}`}
+        className="w-full h-full object-cover aspect-[3/4]"
+        width={800}
+        height={1067}
+        loading="lazy"
+      />
+    <div
+      className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out p-6 ${
+        isFeatured ? "bg-[#F37032]" : "bg-[#919191] group-hover:bg-[#F37032]"
+      }`}
+    >
+      <p className={`font-bold font-sans leading-tight ${isFeatured ? "text-2xl" : "text-lg"}`}>{item.name}</p>
+      <div className={`font-light mt-4 ${isFeatured ? "text-sm" : "text-xs"}`}>
+        <span>{item.designation}</span>
+      </div>
+    </div>
+  </div>
+);
 const InstagramReels: React.FC = () => {
   const [reels, setReels] = useState<ReelItem[]>([]);
   const [allReels, setAllReels] = useState<ReelItem[]>([]);
@@ -181,7 +204,7 @@ const InstagramReels: React.FC = () => {
 
   return (
     <div className="py-10 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica text-center  font-medium leading-none text-[32px] lg:text-[44px] ">
+      <h2 className="font-helvetica  font-medium leading-none text-[32px] lg:text-[44px] ">
         <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
         <AnimatedTextCharacter className="text-[#EF4123] font-serif mb-1 font-normal" text="MAHE Leadership" />
       </h2>
@@ -189,13 +212,15 @@ const InstagramReels: React.FC = () => {
       {/* Main page display */}
       {isMobile ? (
         <Swiper
-          modules={[Autoplay, Pagination]}
-          loop
-          autoplay={{ delay: 3000 }}
-          pagination={{ clickable: true }}
-          spaceBetween={16}
-          slidesPerView={1.2}
-          centeredSlides={true}
+        modules={[ Autoplay]}
+        spaceBetween={20}
+        slidesPerView={1.2}
+        pagination={{ clickable: true }}
+        autoplay={{
+          delay: 1000, // 3s delay
+          disableOnInteraction: false, // keep autoplay after user swipes
+        }}
+        loop={true} // makes it infinite
           className="mt-8 !pb-8"
         >
           {reels.map((item) => (
@@ -212,11 +237,12 @@ const InstagramReels: React.FC = () => {
         </div>
       )}
 
-      <div className="flex  mt-10">
+<div className="md:flex hidden  mt-10">
+        {/* Reset activeIndex to 0 when opening the modal */}
         <button
           onClick={() => {
-            setActiveIndex(0);
             setIsViewMoreModalOpen(true);
+            setActiveIndex(0);
           }}
           className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]"
         >
@@ -224,89 +250,95 @@ const InstagramReels: React.FC = () => {
         </button>
       </div>
 
+      <div className="md:hidden flex ">
+        {/* Reset activeIndex to 0 when opening the modal */}
+        <Link href="/social-media-wishes">
+          <button className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]">
+            View more
+          </button>
+        </Link>
+      </div>
+
       {/* "View More" Modal */}
       <AnimatePresence>
         {isViewMoreModalOpen && (
-          <motion.div className="fixed inset-0 z-[9998] flex items-center justify-center p-4" initial="hidden" animate="visible" exit="exit">
+          <motion.div
+            className="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
             <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeViewMoreModal} />
             <motion.div
               ref={viewMoreModalRef}
               variants={modalVariants}
-              className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 flex flex-col"
+              className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
             >
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <h2 className="font-helvetica text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+                <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
                   <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-                  <AnimatedTextCharacter
-                    className="text-[#EF4123] font-serif mt-1 font-normal"
-                    text="MAHE Leadership"
-                  />
+                  <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="MAHE Leadership" />
                 </h2>
                 <motion.button
+                  className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
                   onClick={closeViewMoreModal}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
                 >
                   <IconX className="text-white w-5 h-5" />
                 </motion.button>
               </div>
+
               <motion.div variants={contentVariants} className="flex-grow overflow-hidden">
                 <div className="grid grid-cols-12 grid-rows-3 gap-4 h-full">
-                  {/* Featured Reel */}
+                  {/* Left Side: Featured Minister with Animation */}
                   <div className="col-span-12 md:col-span-6 row-span-3">
+                    {/* --- CHANGE 5: AnimatePresence for smooth transitions --- */}
                     <AnimatePresence mode="wait">
                       {featuredReel && (
                         <motion.div
-                          key={activeIndex}
+                          key={activeIndex} // Key change triggers animation
                           variants={cardTransitionVariants}
                           initial="initial"
                           animate="animate"
                           exit="exit"
                           className="w-full h-full"
                         >
-                          <ReelCard item={featuredReel} onClick={() => handleReelClick(featuredReel.reelsUrl)} isFeatured={true} />
+                          <ReelCard1 item={featuredReel} onClick={() => handleReelClick(featuredReel.reelsUrl)} isFeatured={true} />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
-                  {/* Other Reels & Next Button */}
+
+                  {/* Right Side: Other Ministers & Next Button */}
                   <div className="hidden md:grid col-span-6 row-span-3 grid-cols-2 grid-rows-3 gap-4">
                     {otherReels.map((item) => (
-                      <div
-                        key={item.id}
-                        className="cursor-pointer group overflow-hidden rounded-lg shadow-md"
-                        onClick={() => handleReelClick(item.reelsUrl)}
-                      >
+                      <div key={item.id} className="cursor-pointer group overflow-hidden  shadow-md" onClick={() => handleReelClick(item.reelsUrl)}>
                         <Image
                           src={item.thumbnailUrl}
                           alt={item.name}
                           width={400}
                           height={533}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          className="w-full h-full object-cover object-top "
                         />
                       </div>
                     ))}
+                    {/* --- CHANGE 6: The "Next" Button in the last grid slot --- */}
                     {allReels.length > 1 && (
-                      <div className="flex items-center justify-center bg-gray-100 rounded-lg">
+                      <div className="flex items-center justify-center  ">
                         <button
                           onClick={handleNext}
-                          className="group flex flex-col items-center justify-center w-full h-full transition-colors duration-300 rounded-lg"
-                          aria-label="Next Reel"
+                          className="flex flex-col pl-4 justify-end w-full h-full transition-colors duration-300 "
+                          aria-label="Next Minister"
                         >
-                          <svg
-                            width="32"
-                            height="56"
-                            viewBox="0 0 32 56"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="transition-transform duration-300 group-hover:scale-110"
-                          >
+                          <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M4.82378 -4.68472e-07L32 28L4.82378 56L-3.20993e-06 51.03L22.3524 28L8.16768e-07 4.97L4.82378 -4.68472e-07Z"
                               fill="#EF2700"
                             />
                           </svg>
+
+                          {/* <span className="mt-2 font-semibold">NEXT</span> */}
                         </button>
                       </div>
                     )}

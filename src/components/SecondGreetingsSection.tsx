@@ -17,6 +17,7 @@ import "swiper/css/pagination";
 
 import { Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
+import Link from "next/link";
 
 // (Framer-motion variants remain the same)
 const backdropVariants = {
@@ -72,8 +73,8 @@ const MinisterCard = ({ item, onClick }: { item: GreetingItem; onClick: () => vo
       />
       {/* --- THIS IS THE MODIFIED LINE --- */}
       <div
-        className="absolute bottom-0 left-0 right-0 p-6 bg-[#919191] text-white 
-                   group-hover:bg-[#F37032] transition-colors duration-300 ease-in-out"
+        className="absolute bottom-0 left-0 right-0 p-6  text-white 
+                   group-hover:bg-[#F37032] bg-[#F37032] md:bg-[#919191] transition-colors duration-300 ease-in-out"
       >
         <p className="font-bold font-sans text-2xl leading-tight">{item.name}</p>
 
@@ -249,7 +250,7 @@ const SecondGreetingsSection: React.FC = () => {
   const otherMinisters = allGreetings.filter((_, index) => index !== activeIndex).slice(0, 5);
   return (
     <div className="pb-10 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
+      <h2 className="font-helvetica font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
         <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
       </h2>
@@ -257,13 +258,15 @@ const SecondGreetingsSection: React.FC = () => {
       {/* Mobile: Swiper */}
       {isMobile ? (
         <Swiper
-          modules={[Pagination, Autoplay]}
+          modules={[Autoplay]}
           spaceBetween={20}
           slidesPerView={1.2}
-          centeredSlides={true}
           pagination={{ clickable: true }}
-          autoplay={{ delay: 3500, disableOnInteraction: false }}
-          loop={true}
+          autoplay={{
+            delay: 1500, // 3s delay
+            disableOnInteraction: false, // keep autoplay after user swipes
+          }}
+          loop={true} // makes it infinite
           className="mt-8 !pb-10"
         >
           {greetings.map((item) => (
@@ -281,7 +284,7 @@ const SecondGreetingsSection: React.FC = () => {
         </div>
       )}
 
-      <div className="flex j mt-10">
+      <div className="md:flex hidden  mt-10">
         {/* Reset activeIndex to 0 when opening the modal */}
         <button
           onClick={() => {
@@ -292,6 +295,15 @@ const SecondGreetingsSection: React.FC = () => {
         >
           View more
         </button>
+      </div>
+
+      <div className="md:hidden flex ">
+        {/* Reset activeIndex to 0 when opening the modal */}
+        <Link href="/greetings">
+          <button className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]">
+            View more
+          </button>
+        </Link>
       </div>
 
       {/* The NEW "View More" Modal */}
@@ -310,7 +322,7 @@ const SecondGreetingsSection: React.FC = () => {
               className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
             >
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <h2 className="font-helvetica text-center font-medium leading-none text-[32px]  lg:text-[44px]">
+                <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
                   <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
                   <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
                 </h2>
@@ -367,7 +379,7 @@ const SecondGreetingsSection: React.FC = () => {
                       <div className="flex items-center justify-center  ">
                         <button
                           onClick={handleNext}
-                          className="flex flex-col items-center justify-center w-full h-full transition-colors duration-300 "
+                          className="flex flex-col pl-4 justify-end w-full h-full transition-colors duration-300 "
                           aria-label="Next Minister"
                         >
                           <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -119,11 +119,11 @@ const FirsrGreetingsSection: React.FC = () => {
       {/* ✅ Mobile: Swiper */}
       {isMobile ? (
         <Swiper
-          modules={[Pagination, Autoplay]}
+          modules={[ Autoplay]}
           spaceBetween={20}
           pagination={{ clickable: true }}
           autoplay={{
-            delay: 1000, // 3s delay
+            delay: 1500, // 3s delay
             disableOnInteraction: false, // keep autoplay after user swipes
           }}
           loop={true} // makes it infinite
@@ -132,7 +132,7 @@ const FirsrGreetingsSection: React.FC = () => {
           {slider.map((item, index) => (
             <SwiperSlide key={index}>
               <div
-                className="relative cursor-pointer overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+                className="relative cursor-pointer overflow-hidden shadow-lg  transition-transform duration-300"
                 onClick={() => openModal(item.wishesImage)}
               >
                 <Image src={item.thumbNailImage} alt="Thumbnail" className="w-full h-full object-cover" width={1000} height={1000} loading="lazy" />
@@ -146,7 +146,7 @@ const FirsrGreetingsSection: React.FC = () => {
           {slider.map((item, index) => (
             <div
               key={index}
-              className="relative cursor-pointer overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+              className="relative cursor-pointer overflow-hidden shadow-lg  transition-transform duration-300"
               onClick={() => openModal(item.wishesImage)}
             >
               <Image src={item.thumbNailImage} alt="Thumbnail" className="w-full h-full object-cover" width={1000} height={1000} loading="lazy" />
