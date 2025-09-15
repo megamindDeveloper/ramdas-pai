@@ -143,7 +143,7 @@ const TwitterSection: React.FC = () => {
 
       <div className="flex justify-center mt-8">
         <Link href="/tweets">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+          <button className="uppercase border-[2px] cursor-pointer border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
             View more
           </button>
         </Link>

@@ -44,7 +44,7 @@ const TwitterSection: React.FC = () => {
   // Fetch latest 8 screenshots from Firestore
   useEffect(() => {
     const colRef = collection(db, "Screenshots");
-    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
+    const q = query(colRef, orderBy("createdAt", "desc"));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const items: ScreenshotItem[] = snapshot.docs.map((doc) => {
@@ -120,7 +120,7 @@ const TwitterSection: React.FC = () => {
 
           <div className="col-span-1 md:col-span-4 flex justify-center mt-8">
             <Link href="/tweets">
-              <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
+              <button className="uppercase border-[2px] cursor-pointer border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
             </Link>
           </div>
         </div>

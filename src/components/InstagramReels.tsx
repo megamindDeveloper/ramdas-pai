@@ -15,10 +15,17 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 
-
 // Framer-motion variants
-const backdropVariants = { hidden: { opacity: 0, backdropFilter: "blur(0px)" }, visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } }, exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } } };
-const modalVariants = { hidden: { opacity: 0, scale: 0.8, y: 50 }, visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } }, exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } } };
+const backdropVariants = {
+  hidden: { opacity: 0, backdropFilter: "blur(0px)" },
+  visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } },
+  exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } },
+};
+const modalVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 50 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } },
+  exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } },
+};
 const contentVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } } };
 
 type ReelItem = {
@@ -67,7 +74,8 @@ const InstagramReels: React.FC = () => {
   }, []);
 
   const openModal = (videoUrl: string) => {
-    setCurrentVideo(videoUrl);
+    const embedUrl = getYouTubeEmbedUrl(videoUrl);
+    setCurrentVideo(embedUrl);
     setIsModalOpen(true);
   };
 
@@ -88,7 +96,32 @@ const InstagramReels: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
+  function getYouTubeEmbedUrl(url: string): string {
+    try {
+      // 1️⃣ Shorts URL: https://youtube.com/shorts/{videoId}
+      const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+      if (shortsMatch && shortsMatch[1]) {
+        return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1`;
+      }
 
+      // 2️⃣ Watch URL: https://youtube.com/watch?v={videoId}
+      const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+      if (watchMatch && watchMatch[1]) {
+        return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1`;
+      }
+
+      // 3️⃣ Already an embed URL: https://www.youtube.com/embed/{videoId}
+      const embedMatch = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+      if (embedMatch && embedMatch[1]) {
+        return url.includes("?") ? url : `${url}?autoplay=1`;
+      }
+
+      // 4️⃣ Fallback: return original URL (may not work in iframe)
+      return url;
+    } catch {
+      return url;
+    }
+  }
   return (
     <div className="py-20 px-10 lg:px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
@@ -108,13 +141,12 @@ const InstagramReels: React.FC = () => {
         >
           {reels.map((reel) => (
             <SwiperSlide key={reel.id}>
-              <div
-                className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg flex flex-col"
-                onClick={() => openModal(reel.reelsUrl)}
-              >
+              <div className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg flex flex-col" onClick={() => openModal(reel.reelsUrl)}>
                 <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-[50vh] object-cover rounded-lg" />
-                <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
-                    bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
+                    bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+                >
                   <p className="font-semibold text-sm">{reel.name}</p>
                   <p className="text-xs opacity-80">{reel.designation}</p>
                 </div>
@@ -132,8 +164,10 @@ const InstagramReels: React.FC = () => {
               onClick={() => openModal(reel.reelsUrl)}
             >
               <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
-              <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
-                  bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+              <div
+                className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
+                  bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+              >
                 <p className="font-semibold text-sm">{reel.name}</p>
                 <p className="text-xs opacity-80">{reel.designation}</p>
               </div>
@@ -144,7 +178,9 @@ const InstagramReels: React.FC = () => {
 
       <div className="flex justify-center mt-8">
         <Link href="/social-media-wishes">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
+          <button className="uppercase border-[2px] cursor-pointer border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            View more
+          </button>
         </Link>
       </div>
 

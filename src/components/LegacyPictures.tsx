@@ -234,7 +234,7 @@ const LegacyPictures = () => {
             setShowSpeakers(speakerData.filter((item) => !item?.blank));
           }}
           className={`${speakerData.length === showSpeakers.length ? "hidden" : "block"
-            } uppercase hidden border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold mt-8 mx-auto`}
+            } uppercase hidden cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold mt-8 mx-auto`}
         >
           View more
         </button>
@@ -275,7 +275,7 @@ const LegacyPictures = () => {
 
       <div className="flex justify-center ">
         <Link href="/glimpses-of-dr">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+          <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
             View more
           </button>
         </Link>
