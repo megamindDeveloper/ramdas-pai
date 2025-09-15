@@ -39,6 +39,9 @@ const InstagramReels: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  console.log(currentVideo,"cc");
+  
+
   // Fetch latest 8 reels from Firestore
   useEffect(() => {
     const colRef = collection(db, "Reels");
@@ -47,6 +50,8 @@ const InstagramReels: React.FC = () => {
     const unsub = onSnapshot(q, (snapshot) => {
       const items: ReelItem[] = snapshot.docs.map((doc) => {
         const data = doc.data();
+        console.log(data,"data");
+        
         return {
           id: doc.id,
           name: data.name || "",
@@ -69,10 +74,12 @@ const InstagramReels: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const openModal = (videoUrl: string) => {
-    setCurrentVideo(videoUrl);
-    setIsModalOpen(true);
-  };
+const openModal = (videoUrl: string) => {
+  const embedUrl = getYouTubeEmbedUrl(videoUrl);
+  setCurrentVideo(embedUrl);
+  setIsModalOpen(true);
+};
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -91,8 +98,35 @@ const InstagramReels: React.FC = () => {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
+function getYouTubeEmbedUrl(url: string): string {
+  try {
+    // 1️⃣ Shorts URL: https://youtube.com/shorts/{videoId}
+    const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (shortsMatch && shortsMatch[1]) {
+      return `https://www.youtube.com/embed/${shortsMatch[1]}?autoplay=1`;
+    }
 
-  const videosToShow = isMobile ? reels.slice(0, 1) : reels;
+    // 2️⃣ Watch URL: https://youtube.com/watch?v={videoId}
+    const watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    if (watchMatch && watchMatch[1]) {
+      return `https://www.youtube.com/embed/${watchMatch[1]}?autoplay=1`;
+    }
+
+    // 3️⃣ Already an embed URL: https://www.youtube.com/embed/{videoId}
+    const embedMatch = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/);
+    if (embedMatch && embedMatch[1]) {
+      return url.includes("?") ? url : `${url}?autoplay=1`;
+    }
+
+    // 4️⃣ Fallback: return original URL (may not work in iframe)
+    return url;
+  } catch {
+    return url;
+  }
+}
+
+
+  const videosToShow = isMobile ? reels : reels;
 
   return (
 <>

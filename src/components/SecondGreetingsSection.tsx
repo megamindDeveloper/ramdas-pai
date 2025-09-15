@@ -183,7 +183,7 @@ const SecondGreetingsSection: React.FC = () => {
 
       <div className="flex justify-center mt-10">
         <Link href="/greetings">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+          <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
             View more
           </button>
         </Link>

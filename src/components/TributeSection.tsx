@@ -109,7 +109,7 @@ const TributeSection: React.FC = () => {
         {/* View More button */}
         <div className="col-span-1 md:col-span-3 flex justify-center mt-8">
           <Link href="/video">
-            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            <button className="uppercase cursor-pointer border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
               View more
             </button>
           </Link>
