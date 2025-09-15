@@ -68,7 +68,7 @@ const ImageGallery: React.FC = () => {
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
        <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter text="Glimpses Of Dr.Ramdas Pai" />
+        <AnimatedTextCharacter text="Glorious Journey of Dr. Ramdas M. Pai" />
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6  mt-8 lg:mt-12">
         {videosToShow.map((img,index) => (

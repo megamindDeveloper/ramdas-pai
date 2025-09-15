@@ -11,8 +11,16 @@ import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestor
 import { db } from "@/app/lib/firebase";
 
 // Framer-motion variants (same as your code)
-const backdropVariants = { hidden: { opacity: 0, backdropFilter: "blur(0px)" }, visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } }, exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } } };
-const modalVariants = { hidden: { opacity: 0, scale: 0.8, y: 50 }, visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } }, exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } } };
+const backdropVariants = {
+  hidden: { opacity: 0, backdropFilter: "blur(0px)" },
+  visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } },
+  exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } },
+};
+const modalVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 50 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } },
+  exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } },
+};
 const contentVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } } };
 
 type ReelItem = {
@@ -88,7 +96,7 @@ const InstagramReels: React.FC = () => {
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter text="Wishes from MAHE Leadership" />
+        <AnimatedTextCharacter text="MAHE Leadership Tributes" />
       </h2>
 
       <div className="grid grid-cols-2 mt-8 lg:mt-12 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -99,21 +107,20 @@ const InstagramReels: React.FC = () => {
             onClick={() => openModal(reel.reelsUrl)}
           >
             <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
-            <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
-                bg-gradient-to-t from-black/70 via-black/30 to-transparent">
-  <p className="font-semibold text-sm">{reel.name}</p>
-  <p className="text-xs opacity-80">{reel.designation}</p>
-</div>
-
+            <div
+              className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
+                bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+            >
+              <p className="font-semibold text-sm">{reel.name}</p>
+              <p className="text-xs opacity-80">{reel.designation}</p>
+            </div>
           </div>
         ))}
       </div>
 
       <div className="flex justify-center mt-8">
         <Link href="/social-media-wishes">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-            View more
-          </button>
+          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
         </Link>
       </div>
 
