@@ -16,6 +16,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 import { Pagination, Autoplay } from "swiper/modules";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -124,7 +125,7 @@ const SecondGreetingsSection: React.FC = () => {
 
 
   return (
-    <div className="py-20 px-4 max-w-7xl mx-auto">
+    <div className="pb-10 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="Messages from the Ministers" />
       </h2>
@@ -145,10 +146,13 @@ const SecondGreetingsSection: React.FC = () => {
                 className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
                 onClick={() => openModal(item.greetingsImageUrl)}
               >
-                <img
+                <Image
                   src={item.coverImageUrl}
                   alt="Cover"
                   className="w-full object-cover rounded-lg aspect-[3/3]"
+                  width={1000}
+                  height={1000}
+                  loading="lazy"
                 />
                 <div className="mt-2 text-center text-black">
                   <p className="font-semibold text-md">{item.name}</p>
@@ -167,10 +171,13 @@ const SecondGreetingsSection: React.FC = () => {
               className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.greetingsImageUrl)}
             >
-              <img
+              <Image
                 src={item.coverImageUrl}
                 alt="Cover"
                 className="w-full object-cover rounded-lg aspect-[3/3]"
+                width={1000}
+                height={1000}
+                loading="lazy"
               />
               <div className="mt-2 text-center text-black">
                 <p className="font-semibold text-md">{item.name}</p>
@@ -206,7 +213,7 @@ const SecondGreetingsSection: React.FC = () => {
             <motion.div
               ref={containerRef}
               variants={modalVariants}
-              className="relative my-10 w-full md:h-[90vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
+              className="relative my-10 w-full md:h-[80vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-14"
             >
               <motion.button
                 variants={contentVariants}
@@ -220,12 +227,15 @@ const SecondGreetingsSection: React.FC = () => {
 
               <motion.div
                 variants={contentVariants}
-                className="flex items-center justify-center w-full h-[90%] mt-2"
+                className="flex items-center justify-center w-full h-[100%] "
               >
-                <img
+                <Image
                   src={currentImageUrl}
                   alt="Selected"
-                  className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg"
+                  className="md:h-full max-h-[85vh] w-full object-cover rounded-lg"
+                  height={1000}
+                  width={1000}
+                  loading="lazy"
                 />
               </motion.div>
             </motion.div>

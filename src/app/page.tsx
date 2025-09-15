@@ -6,38 +6,41 @@ import FirsrGreetingsSection from "@/components/FirstGreetingSection";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Iframe from "@/components/Iframe";
-import ImageGallery from "@/components/ImageSection";
+
 import BirthdayGreetingCard from "@/components/InitialPopup";
 import InstagramReels from "@/components/InstagramReels";
 import LegacyPictures from "@/components/LegacyPictures";
 import SecondGreetingsSection from "@/components/SecondGreetingsSection";
-import TributeSection from "@/components/TributeSection";
 import TwitterSection from "@/components/TwiterSection";
 import WishCounterComponent from "@/components/WishCounterComponent";
-import Link from "next/link";
+import Image from "next/image";
+
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
 
-  // 3. Effect to show the popup after 1 second
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPopup(true);
-    }, 1000); // 1000ms = 1 second
+    const hasShownPopup = sessionStorage.getItem("hasShownPopup");
 
-    // Cleanup function to clear the timer if the component unmounts
-    return () => clearTimeout(timer);
-  }, []); // Empty array ensures this runs only once on page load
+    if (!hasShownPopup) {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+        sessionStorage.setItem("hasShownPopup", "true"); // store in session
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     // Make this the main container
     <main className="relative h-screen w-screen overflow-x-hidden">
       {/* Position the header absolutely on top */}
       <header className=" top-0 left-0 right-0 z-10 flex justify-center lg:justify-between  py-6 mx-auto container">
-        <img src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
-        <img src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
-        <img src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
+        <Image src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
+        <Image src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
+        <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
       </header>
       {/* 4. Conditionally render the popup */}
       {showPopup && (
@@ -54,7 +57,7 @@ export default function Home() {
       <InstagramReels />
       <section
         style={{
-          backgroundImage: "url('/images/backgroundImage/bg1.png')",
+          backgroundImage: "url('/images/backgroundImage/bg1.webp')",
         }}
       >
         {/* <TributeSection /> */}
@@ -69,7 +72,7 @@ export default function Home() {
       <DoyenSection />
       <section
         style={{
-          backgroundImage: "url('/images/backgroundImage/bg1.png')",
+          backgroundImage: "url('/images/backgroundImage/bg1.webp')",
         }}
       ></section>
       <Awards />

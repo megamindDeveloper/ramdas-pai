@@ -14,6 +14,7 @@ import { db } from "@/app/lib/firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
+import Image from "next/image";
 
 
 // Framer-motion variants
@@ -121,7 +122,7 @@ const TwitterSection: React.FC = () => {
                 className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg"
                 onClick={() => openModal(item.screenshotUrl)}
               >
-                <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover rounded-lg" />
+                <Image loading="lazy" width={1000} height={1000} src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover rounded-lg" />
               </div>
             </SwiperSlide>
           ))}
@@ -135,7 +136,7 @@ const TwitterSection: React.FC = () => {
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.screenshotUrl)}
             >
-              <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
+              <Image loading="lazy" height={1000} width={1000} src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
             </div>
           ))}
         </div>
@@ -175,7 +176,7 @@ const TwitterSection: React.FC = () => {
               </motion.button>
 
               <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[90%] mt-2">
-                <img src={currentImage} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
+               <Image loading="lazy" width={1000} height={1000} src={currentImage} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
               </motion.div>
             </motion.div>
           </motion.div>

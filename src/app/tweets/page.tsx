@@ -10,6 +10,7 @@ import { db } from "@/app/lib/firebase";
 
 import { useOutsideClick } from "@/components/UseOutsideClick";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
+import Image from "next/image";
 // Framer-motion variants
 const backdropVariants = {
   hidden: { opacity: 0, backdropFilter: "blur(0px)" },
@@ -98,9 +99,9 @@ const TwitterSection: React.FC = () => {
   return (
     <>
       <header className=" top-0 left-0 right-0 z-10 flex justify-center lg:justify-between  py-6 mx-auto container">
-        <img src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
-        <img src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
-        <img src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
+        <Image src={"/images/logo.svg"} alt="logo" className="hidden lg:block" width={239} height={63} />
+        <Image src={"/images/logo.svg"} alt="logo" className="lg:hidden" width={159} height={63} />
+        <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className="hidden lg:block object-contain" />
       </header>
       <div className="py-20 px-4 max-w-7xl mx-auto">
         <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
@@ -114,15 +115,11 @@ const TwitterSection: React.FC = () => {
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(item.screenshotUrl)}
             >
-              <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
+              <Image width={1000} height={1000} src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
             </div>
           ))}
 
-          <div className="col-span-1 md:col-span-4 flex justify-center mt-8">
-            <Link href="/tweets">
-              <button className="uppercase border-[2px] cursor-pointer border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
-            </Link>
-          </div>
+          
         </div>
 
         {/* Modal */}
@@ -151,7 +148,7 @@ const TwitterSection: React.FC = () => {
                 </motion.button>
 
                 <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[90%] mt-2">
-                  <img src={currentImage} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
+                  <Image width={1000} height={1000} src={currentImage} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
                 </motion.div>
               </motion.div>
             </motion.div>

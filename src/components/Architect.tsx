@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
+import Image from "next/image";
 
 const   Architect = () => {
   const textAnimation1 = useRef(null);
@@ -10,12 +11,12 @@ const   Architect = () => {
   const [mobileIsPlaying, setMobileIsPlaying] = useState(false);
   const text1InView = useInView(textAnimation1, { once: true });
   return (
-    <div className="mx-auto container lg:py-20 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-6xl">
+    <div className="mx-auto container lg:py-10 px-5 lg:px-0 overflow-hidden rounded-3xl lg:max-w-6xl">
       <div className="relative  hidden mb-8 rounded-lg aspect-video bg-black z-10">
         {!mobileIsPlaying ? (
           <>
             {/* Thumbnail overlay with play button */}
-            <img src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover" />
+            <Image loading="lazy" width={1000} height={1000} src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer">
               <button onClick={() => setMobileIsPlaying(true)} className="flex items-center justify-center">
                 <svg
@@ -67,7 +68,7 @@ const   Architect = () => {
         {!isPlaying ? (
           <>
             {/* Thumbnail overlay with play button */}
-            <img src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover " />
+            <Image loading="lazy" width={1000} height={1000} src="https://img.youtube.com/vi/-Q3BJUyA9OI/maxresdefault.jpg" alt="GLC 2024 Thumbnail" className="w-full h-full object-cover " />
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 cursor-pointer">
               <button onClick={() => setIsPlaying(true)} className="flex items-center justify-center">
                 <svg

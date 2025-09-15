@@ -14,6 +14,7 @@ import { db } from "@/app/lib/firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -123,7 +124,7 @@ const InstagramReels: React.FC = () => {
     }
   }
   return (
-    <div className="py-20 px-10 lg:px-4 max-w-7xl mx-auto">
+    <div className="py-10 px-10 lg:px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="MAHE Leadership Tributes" />
       </h2>
@@ -142,7 +143,7 @@ const InstagramReels: React.FC = () => {
           {reels.map((reel) => (
             <SwiperSlide key={reel.id}>
               <div className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg flex flex-col" onClick={() => openModal(reel.reelsUrl)}>
-                <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-[50vh] object-cover rounded-lg" />
+                <Image src={reel.thumbnailUrl} width={1000} loading="lazy" height={1000} alt="Reel Thumbnail" className="w-full h-[50vh] object-cover rounded-lg" />
                 <div
                   className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
                     bg-gradient-to-t from-black/70 via-black/30 to-transparent"
@@ -163,7 +164,7 @@ const InstagramReels: React.FC = () => {
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 flex flex-col"
               onClick={() => openModal(reel.reelsUrl)}
             >
-              <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
+              <Image loading="lazy" width={1000} height={1000} src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
               <div
                 className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
                   bg-gradient-to-t from-black/70 via-black/30 to-transparent"

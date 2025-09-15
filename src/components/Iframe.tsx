@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import AnimatedTextCharacter from "./AnimatedTextCharacter"
 import { motion, AnimatePresence } from "framer-motion"
 import { IconX } from "@tabler/icons-react"
+import Image from "next/image"
 
 function Book() {
   const [open, setOpen] = useState(false)
@@ -19,7 +20,7 @@ function Book() {
 
   return (
     <> 
-      <section className="container mx-auto py-20 px-5 lg:px-0">
+      <section className="container mx-auto pt-10 pb-20 px-5 lg:px-0">
         <h2 className="font-helvetica text-center hidden lg:block font-medium leading-none text-[32px] lg:text-[64px]">
           <AnimatedTextCharacter text="A Journey of Vision & Leadership" />
         </h2>
@@ -32,13 +33,19 @@ function Book() {
 
         {/* Closed Books Display */}
         <div className="flex flex-col lg:flex-row lg:justify-evenly gap-12 mt-12">
-          <img
+          <Image
+          loading="lazy"
+          width={1000}
+          height={1000}
             src="/images/flipImage/3.png"
             alt="Book Cover 1"
             className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"
             onClick={() => setOpen(true)}
           />
-          <img
+          <Image
+          loading="lazy"
+            width={1000}
+          height={1000}
             src="/images/flipImage/3.png"
             alt="Book Cover 2"
             className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"

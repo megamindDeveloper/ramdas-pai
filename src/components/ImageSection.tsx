@@ -5,6 +5,7 @@ import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -77,7 +78,7 @@ const ImageGallery: React.FC = () => {
             className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
             onClick={() => openModal(img)}
           >
-            <img src={img} alt="Gallery Thumbnail" className="w-full h-full object-cover" />
+            <Image height={1000} width={1000} src={img} alt="Gallery Thumbnail" className="w-full h-full object-cover" />
           </div>
         ))}
 
@@ -116,7 +117,7 @@ const ImageGallery: React.FC = () => {
 
               {/* Full Image */}
               <motion.div variants={contentVariants} className="w-full ">
-                <img src={currentImage} alt="Full View" className="max-h-[80vh] w-full rounded-2xl overflow-hidden object-cover" />
+                <Image width={1000} height={1000} src={currentImage} alt="Full View" className="max-h-[80vh] w-full rounded-2xl overflow-hidden object-cover" />
               </motion.div>
             </motion.div>
           </motion.div>

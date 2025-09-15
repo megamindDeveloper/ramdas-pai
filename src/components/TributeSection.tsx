@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "./UseOutsideClick";
 import { IconX } from "@tabler/icons-react";
 import Link from "next/link";
+import Image from "next/image";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -90,7 +91,9 @@ const TributeSection: React.FC = () => {
               className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
               onClick={() => openModal(videoUrl)}
             >
-              <img
+              <Image
+              height={1000}
+              width={1000}
                 src={`https://img.youtube.com/vi/${id}/hqdefault.jpg`}
                 alt="YouTube Thumbnail"
                 className="w-full h-full object-cover"
