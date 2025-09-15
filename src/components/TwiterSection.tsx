@@ -10,6 +10,12 @@ import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 
+// ✅ Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+
+
 // Framer-motion variants
 const backdropVariants = {
   hidden: { opacity: 0, backdropFilter: "blur(0px)" },
@@ -85,7 +91,6 @@ const TwitterSection: React.FC = () => {
 
   useEffect(() => {
     document.body.style.overflow = isModalOpen ? "hidden" : "auto";
-
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isModalOpen) closeModal();
     };
@@ -93,40 +98,62 @@ const TwitterSection: React.FC = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
 
-  const itemsToShow = isMobile ? screenshots.slice(0, 1) : screenshots;
-
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="Greetings" />
       </h2>
 
-      <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {itemsToShow.map((item) => (
-          <div
-            key={item.id}
-            className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
-            onClick={() => openModal(item.screenshotUrl)}
-          >
-            <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
-           
-          </div>
-        ))}
-
-        <div className="col-span-1 md:col-span-4 flex justify-center mt-8">
-          <Link href="/tweets">
-            <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
-              View more
-            </button>
-          </Link>
+      {/* ✅ Mobile → Swiper */}
+      {isMobile ? (
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          spaceBetween={16}
+          slidesPerView={1}
+          loop
+          className="mt-8"
+        >
+          {screenshots.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div
+                className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg"
+                onClick={() => openModal(item.screenshotUrl)}
+              >
+                <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover rounded-lg" />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        // ✅ Desktop → Grid
+        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {screenshots.map((item) => (
+            <div
+              key={item.id}
+              className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300"
+              onClick={() => openModal(item.screenshotUrl)}
+            >
+              <img src={item.screenshotUrl} alt={item.name} className="w-full h-full object-cover" />
+            </div>
+          ))}
         </div>
+      )}
+
+      <div className="flex justify-center mt-8">
+        <Link href="/tweets">
+          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            View more
+          </button>
+        </Link>
       </div>
 
       {/* Modal */}
       <AnimatePresence>
-      {isModalOpen && currentImage && (
+        {isModalOpen && currentImage && (
           <motion.div
-            className="fixed  md:h-[90vh]  h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
+            className="fixed md:h-[90vh] h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -135,7 +162,7 @@ const TwitterSection: React.FC = () => {
             <motion.div
               ref={containerRef}
               variants={modalVariants}
-              className="relative my-10 w-full md:h-[90vh]  h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
+              className="relative my-10 w-full md:h-[90vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
             >
               <motion.button
                 variants={contentVariants}

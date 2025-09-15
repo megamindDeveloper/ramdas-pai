@@ -10,17 +10,15 @@ import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 
-// Framer-motion variants (same as your code)
-const backdropVariants = {
-  hidden: { opacity: 0, backdropFilter: "blur(0px)" },
-  visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } },
-  exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } },
-};
-const modalVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 50 },
-  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } },
-  exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } },
-};
+// Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+import "swiper/css";
+
+
+// Framer-motion variants
+const backdropVariants = { hidden: { opacity: 0, backdropFilter: "blur(0px)" }, visible: { opacity: 1, backdropFilter: "blur(8px)", transition: { duration: 0.3, ease: "easeOut" } }, exit: { opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: "easeIn" } } };
+const modalVariants = { hidden: { opacity: 0, scale: 0.8, y: 50 }, visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: "easeOut", type: "spring", damping: 20, stiffness: 100 } }, exit: { opacity: 0, scale: 0.9, y: 50, transition: { duration: 0.25, ease: "easeIn" } } };
 const contentVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut", delay: 0.1 } } };
 
 type ReelItem = {
@@ -91,32 +89,58 @@ const InstagramReels: React.FC = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
 
-  const videosToShow = isMobile ? reels.slice(0, 1) : reels;
-
   return (
-    <div className="py-20 px-4 max-w-7xl mx-auto">
+    <div className="py-20 px-10 lg:px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="MAHE Leadership Tributes" />
       </h2>
 
-      <div className="grid grid-cols-2 mt-8 lg:mt-12 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {videosToShow.map((reel) => (
-          <div
-            key={reel.id}
-            className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 aspect-auto flex flex-col"
-            onClick={() => openModal(reel.reelsUrl)}
-          >
-            <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
+      {/* ✅ Mobile → Swiper Carousel */}
+      {isMobile ? (
+        <Swiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{ delay: 2000, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          spaceBetween={16}
+          slidesPerView={1}
+          loop
+          className="mt-8"
+        >
+          {reels.map((reel) => (
+            <SwiperSlide key={reel.id}>
+              <div
+                className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg flex flex-col"
+                onClick={() => openModal(reel.reelsUrl)}
+              >
+                <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-[50vh] object-cover rounded-lg" />
+                <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
+                    bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                  <p className="font-semibold text-sm">{reel.name}</p>
+                  <p className="text-xs opacity-80">{reel.designation}</p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        // ✅ Desktop → Grid
+        <div className="grid grid-cols-2 mt-8 lg:mt-12 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {reels.map((reel) => (
             <div
-              className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
-                bg-gradient-to-t from-black/70 via-black/30 to-transparent"
+              key={reel.id}
+              className="relative cursor-pointer rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform duration-300 flex flex-col"
+              onClick={() => openModal(reel.reelsUrl)}
             >
-              <p className="font-semibold text-sm">{reel.name}</p>
-              <p className="text-xs opacity-80">{reel.designation}</p>
+              <img src={reel.thumbnailUrl} alt="Reel Thumbnail" className="w-full h-full object-cover rounded-lg" />
+              <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-white 
+                  bg-gradient-to-t from-black/70 via-black/30 to-transparent">
+                <p className="font-semibold text-sm">{reel.name}</p>
+                <p className="text-xs opacity-80">{reel.designation}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-center mt-8">
         <Link href="/social-media-wishes">
@@ -124,6 +148,7 @@ const InstagramReels: React.FC = () => {
         </Link>
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && currentVideo && (
           <motion.div
@@ -133,7 +158,6 @@ const InstagramReels: React.FC = () => {
             exit="exit"
           >
             <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
-
             <motion.div
               ref={containerRef}
               variants={modalVariants}
@@ -148,7 +172,6 @@ const InstagramReels: React.FC = () => {
               >
                 <IconX className="text-white w-5 h-5" />
               </motion.button>
-
               <motion.div variants={contentVariants} className="w-full mt-2 flex justify-center">
                 <iframe
                   className="w-full max-h-[80vh] aspect-[9/16] rounded-2xl"

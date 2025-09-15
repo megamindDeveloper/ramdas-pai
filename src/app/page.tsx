@@ -14,6 +14,7 @@ import SecondGreetingsSection from "@/components/SecondGreetingsSection";
 import TributeSection from "@/components/TributeSection";
 import TwitterSection from "@/components/TwiterSection";
 import WishCounterComponent from "@/components/WishCounterComponent";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -57,7 +58,11 @@ export default function Home() {
         }}
       >
         {/* <TributeSection /> */}
-        <ImageGallery />
+        {/* <ImageGallery /> */}
+        
+                <LegacyPictures />
+     
+
         <TwitterSection />
 
         <Architect />
@@ -69,7 +74,6 @@ export default function Home() {
         }}
       >
 
-        <LegacyPictures />
       </section>
       <Awards />
       <Iframe />
