@@ -9,6 +9,7 @@ import Iframe from "@/components/Iframe";
 
 import BirthdayGreetingCard from "@/components/InitialPopup";
 import InstagramReels from "@/components/InstagramReels";
+import LegacySection from "@/components/LegacyPics";
 import LegacyPictures from "@/components/LegacyPictures";
 import SecondGreetingsSection from "@/components/SecondGreetingsSection";
 import TwitterSection from "@/components/TwiterSection";
@@ -74,8 +75,12 @@ export default function Home() {
         style={{
           backgroundImage: "url('/images/backgroundImage/bg1.webp')",
         }}
-      ></section>
+      >
+
+      </section>
+      
       <Awards />
+      <LegacySection/>
       <Iframe />
 
       <Footer />
