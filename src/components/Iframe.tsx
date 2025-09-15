@@ -1,70 +1,103 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import AnimatedTextCharacter from "./AnimatedTextCharacter"
-import { motion, AnimatePresence } from "framer-motion"
-import { IconX } from "@tabler/icons-react"
-import Image from "next/image"
+"use client";
+import React, { useEffect, useState } from "react";
+import AnimatedTextCharacter from "./AnimatedTextCharacter";
+import { motion, AnimatePresence } from "framer-motion";
+import { IconX } from "@tabler/icons-react";
+import Image from "next/image";
 
 function Book() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-     document.body.style.overflow = open ? "hidden" : "auto";
- 
-     const handleEsc = (e: KeyboardEvent) => {
-       if (e.key === "Escape" && open) setOpen(false);
-     };
-     window.addEventListener("keydown", handleEsc);
-     return () => window.removeEventListener("keydown", handleEsc);
-   }, [open]);
+    document.body.style.overflow = open ? "hidden" : "auto";
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) setOpen(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [open]);
 
   return (
-    <> 
-      <section className="container mx-auto pt-10 pb-20 px-5 lg:px-0">
-        <h2 className="font-helvetica text-center hidden lg:block font-medium leading-none text-[32px] lg:text-[64px]">
-          <AnimatedTextCharacter text="A Journey of Vision & Leadership" />
-        </h2>
-        <h2 className="font-helvetica lg:hidden text-center mb-3 font-medium leading-none text-[32px] lg:text-[64px]">
-          <AnimatedTextCharacter text="A Journey of " />
-        </h2>
-        <h2 className="font-helvetica text-center lg:hidden font-medium leading-none text-[32px] lg:text-[64px]">
-          <AnimatedTextCharacter text="Vision & Leadership" />
-        </h2>
-
-        {/* Closed Books Display */}
-        <div className="flex flex-col lg:flex-row lg:justify-evenly gap-12 mt-12">
-          <Image
-          loading="lazy"
-          width={1000}
-          height={1000}
-            src="/images/flipImage/3.png"
-            alt="Book Cover 1"
-            className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"
-            onClick={() => setOpen(true)}
-          />
-          <Image
-          loading="lazy"
-            width={1000}
-          height={1000}
-            src="/images/flipImage/3.png"
-            alt="Book Cover 2"
-            className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"
-            onClick={() => setOpen(true)}
-          />
-        </div>
-
-        <p className="text-black font-helvetica text-center px-10 mt-12 text-lg">
-          This flipbook honours Dr. Ramdas M Pai and his invaluable contributions,
-          highlighting remarkable milestones through archival photographs and
-          heartfelt reflections that showcase his passion, vision, and dedication
-          to building the modern Manipal.
-        </p>
-      </section>
+    <>
+      <div className="relative">
+        <section className="lg:ml-32 lg:max-w-[70%] pt-10 pb-20 px-5 lg:px-0">
+          <h2 className="text-[32px] leading-[1.1] font-helvetica sm:text-3xl md:text-5xl lg:text-6xl font-medium text-black mb-6 md:mb-8">
+            A Legacy in Pictures
+          </h2>
+          <p className="text-lg text-black font-helvetica lg:max-w-xl mx-auto md:mx-0">
+            This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs
+            and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.
+          </p>
+          <div className="hidden lg:block relative">
+            <div className="flex relative flex-col lg:flex-row gap-6 mt-12">
+              <div className="w-[70%]">
+                <Image
+                  loading="lazy"
+                  width={1000}
+                  height={1000}
+                  src="/images/flipImage/3.png"
+                  alt="Book Cover 1"
+                  className="w-full h-full object-cover shadow-xl cursor-pointer  transition"
+                  onClick={() => setOpen(true)}
+                />
+              </div>
+              <div>
+                <Image
+                  loading="lazy"
+                  width={1000}
+                  height={1000}
+                  src="/images/flipImage/4.png"
+                  alt="Book Cover 2"
+                  className="w-full h-full object-cover shadow-xl cursor-pointer  transition"
+                  onClick={() => setOpen(true)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="relative lg:hidden">
+            <div className="flex relative flex-col lg:flex-row gap-6 mt-12">
+              <div className="">
+                <Image
+                  loading="lazy"
+                  width={1000}
+                  height={1000}
+                  src="/images/flipImage/3.png"
+                  alt="Book Cover 1"
+                  className="w-full h-[40vh] object-cover shadow-xl cursor-pointer  transition"
+                  onClick={() => setOpen(true)}
+                />
+              </div>
+              <div>
+                <Image
+                  loading="lazy"
+                  width={1000}
+                  height={1000}
+                  src="/images/flipImage/4.png"
+                  alt="Book Cover 2"
+                  className="w-full h-[40vh] object-cover shadow-xl cursor-pointer  transition"
+                  onClick={() => setOpen(true)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="absolute hidden lg:block -z-10 -bottom-20 -right-[400px] xl:-right-[300px]">
+            <Image
+              src="/images/flipImage/6.png"
+              alt="Overlay"
+              width={1000}
+              height={1000}
+              className="object-cover  cursor-pointer  "
+              onClick={() => setOpen(true)}
+            />
+          </div>
+        </section>
+      </div>
 
       {/* Modal */}
       <AnimatePresence>
         {open && (
-          <motion.div 
+          <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -77,26 +110,18 @@ function Book() {
               exit={{ scale: 0.8, opacity: 0 }}
             >
               {/* Close Button */}
-              <button
-                onClick={() => setOpen(false)}
-                className="absolute top-4 right-4 text-white bg-black p-2 rounded-full "
-              >
+              <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-white bg-black p-2 rounded-full ">
                 <IconX size={25} />
               </button>
 
               {/* Heyzine Flipbook Embed */}
-              <iframe
-                src="https://heyzine.com/flip-book/fc13ba6b09.html"
-                className="w-full h-full rounded-lg"
-                frameBorder="0"
-                allowFullScreen
-              />
+              <iframe src="https://heyzine.com/flip-book/fc13ba6b09.html" className="w-full h-full rounded-lg" frameBorder="0" allowFullScreen />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }
 
-export default Book
+export default Book;
