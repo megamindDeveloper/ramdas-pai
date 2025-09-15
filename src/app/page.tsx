@@ -49,6 +49,7 @@ export default function Home() {
       <HeroSection />
       <FirsrGreetingsSection/>
       <SecondGreetingsSection/>
+      <WishCounterComponent/>
       <InstagramReels />
       <section
         style={{
