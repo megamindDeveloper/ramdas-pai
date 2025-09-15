@@ -8,10 +8,14 @@ import Link from "next/link";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 
 // Firebase
-
-// Firebase
 import { collection, query, orderBy, onSnapshot, limit } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
+
+// ✅ Swiper
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
+import { Pagination, Autoplay } from "swiper/modules";
 
 // Framer-motion variants
 const backdropVariants = {
@@ -67,12 +71,11 @@ const SecondGreetingsSection: React.FC = () => {
   // Fetch greetings from Firestore
   useEffect(() => {
     const colRef = collection(db, "Greetings");
-    const q = query(colRef, orderBy("createdAt", "desc"), limit(8)); // <-- limit to 8
+    const q = query(colRef, orderBy("createdAt", "desc"), limit(8));
 
     const unsub = onSnapshot(q, (snapshot) => {
       const items: GreetingItem[] = snapshot.docs.map((doc) => {
         const data = doc.data();
-        console.log("data", data);
         return {
           id: doc.id,
           coverImageUrl: data.coverImageUrl || "",
@@ -119,56 +122,91 @@ const SecondGreetingsSection: React.FC = () => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen]);
 
-  const itemsToShow = isMobile ? greetings.slice(0, 1) : greetings;
-  console.log(itemsToShow);
+
   return (
     <div className="py-20 px-4 max-w-7xl mx-auto">
       <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px]">
         <AnimatedTextCharacter text="Wishes from the Ministers" />
       </h2>
 
-      <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {itemsToShow.map((item) => (
-          <div
-            key={item.id}
-            className="cursor-pointer rounded-lg overflow-hidden  hover:scale-105 transition-transform duration-300"
-            onClick={() => openModal(item.greetingsImageUrl)}
-          >
-            {/* Image */}
-            <img
-              src={item.coverImageUrl}
-              alt="Cover"
-              className="w-full object-cover rounded-lg aspect-[3/3]" // maintain square aspect
-            />
-
-            {/* Name & Position below the image */}
-            <div className="mt-2 text-center text-black">
-              <p className="font-semibold text-md">{item.name}</p>
-              <p className="text-sm">{item.position}</p>
+      {/* ✅ Mobile: Swiper */}
+      {isMobile ? (
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          spaceBetween={20}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          loop={true}
+          className="mt-8"
+        >
+          {greetings.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div
+                className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+                onClick={() => openModal(item.greetingsImageUrl)}
+              >
+                <img
+                  src={item.coverImageUrl}
+                  alt="Cover"
+                  className="w-full object-cover rounded-lg aspect-[3/3]"
+                />
+                <div className="mt-2 text-center text-black">
+                  <p className="font-semibold text-md">{item.name}</p>
+                  <p className="text-sm">{item.position}</p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      ) : (
+        // ✅ Desktop: Grid
+        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {greetings.map((item) => (
+            <div
+              key={item.id}
+              className="cursor-pointer rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+              onClick={() => openModal(item.greetingsImageUrl)}
+            >
+              <img
+                src={item.coverImageUrl}
+                alt="Cover"
+                className="w-full object-cover rounded-lg aspect-[3/3]"
+              />
+              <div className="mt-2 text-center text-black">
+                <p className="font-semibold text-md">{item.name}</p>
+                <p className="text-sm">{item.position}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-center mt-10">
         <Link href="/greetings">
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more</button>
+          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            View more
+          </button>
         </Link>
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
         {isModalOpen && currentImageUrl && (
           <motion.div
-            className="fixed  md:h-[90vh]  h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
+            className="fixed md:h-[90vh] h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
+            <motion.div
+              variants={backdropVariants}
+              className="fixed inset-0 bg-black/80 backdrop-blur-lg"
+              onClick={closeModal}
+            />
             <motion.div
               ref={containerRef}
               variants={modalVariants}
-              className="relative my-10 w-full md:h-[90vh]  h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
+              className="relative my-10 w-full md:h-[90vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8"
             >
               <motion.button
                 variants={contentVariants}
@@ -180,8 +218,15 @@ const SecondGreetingsSection: React.FC = () => {
                 <IconX className="text-white w-5 h-5" />
               </motion.button>
 
-              <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[90%] mt-2">
-                <img src={currentImageUrl} alt="Selected" className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg" />
+              <motion.div
+                variants={contentVariants}
+                className="flex items-center justify-center w-full h-[90%] mt-2"
+              >
+                <img
+                  src={currentImageUrl}
+                  alt="Selected"
+                  className="md:max-h-[75vh] max-h-[85vh] w-auto object-contain rounded-lg"
+                />
               </motion.div>
             </motion.div>
           </motion.div>
