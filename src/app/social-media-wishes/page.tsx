@@ -39,7 +39,7 @@ const InstagramReels: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  console.log(currentVideo,"cc");
+  
   
 
   // Fetch latest 8 reels from Firestore
@@ -50,7 +50,7 @@ const InstagramReels: React.FC = () => {
     const unsub = onSnapshot(q, (snapshot) => {
       const items: ReelItem[] = snapshot.docs.map((doc) => {
         const data = doc.data();
-        console.log(data,"data");
+      
         
         return {
           id: doc.id,
