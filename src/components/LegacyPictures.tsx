@@ -160,7 +160,7 @@ const images = [
   "/images/glimpses/83.jpg",
   "/images/glimpses/84.jpg",
   "/images/glimpses/85.jpg",
-  "/images/glimpses/86.jpg",
+  "/images/glimpses/86.png",
   "/images/glimpses/87.jpg",
   "/images/glimpses/88.jpg",
   "/images/glimpses/89.jpg",
@@ -240,7 +240,7 @@ const LegacyPictures = () => {
         </button>
       </div>
       <div
-        className="absolute  -right-0 xl:-right-0 bg-[#E85B25] p-4  2xl:-right-0 top-1/2 z-50 -translate-y-1/2 cursor-pointer"
+        className="absolute  -right-0 xl:-right-0 bg-[#E85B25] p-4  2xl:-right-0 top-1/2 z-50 -translate-y-1/2 cursor-pointer hidden lg:block"
         onClick={() => {
           swiper.slideNext();
         }}
@@ -260,7 +260,7 @@ const LegacyPictures = () => {
         onClick={() => {
           swiper.slidePrev();
         }}
-        className="absolute  -left-0 xl:-left-0 2xl:-left-0 bg-[#E85B25]   p-4  top-1/2 z-50 -translate-y-1/2 cursor-pointer"
+        className="absolute  -left-0 xl:-left-0 2xl:-left-0 bg-[#E85B25]   p-4  top-1/2 z-50 -translate-y-1/2 cursor-pointer hidden lg:block"
       >
         <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
           <mask id="mask0_10_633" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="29">
@@ -273,10 +273,11 @@ const LegacyPictures = () => {
 
       </div>
 
-      <div className="col-span-1 md:col-span-3 flex justify-center -mt-12">
+      <div className="flex justify-center ">
         <Link href="/glimpses-of-dr">
-          {" "}
-          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">View more </button>
+          <button className="uppercase border-[2px] border-[#F26C21] text-[#F26C21] px-8 py-3 font-helvetica font-bold">
+            View more
+          </button>
         </Link>
       </div>
     </section>
