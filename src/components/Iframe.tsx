@@ -1,106 +1,84 @@
 "use client"
-import React from "react"
-import HTMLFlipBook from "react-pageflip"
+import React, { useState } from "react"
 import AnimatedTextCharacter from "./AnimatedTextCharacter"
+import { motion, AnimatePresence } from "framer-motion"
+import { IconX } from "@tabler/icons-react"
 
 function Book() {
-  const pokemonData = [
-    {
-      id: "006",
-      name: "/images/flipImage/1.png",
-      types: ["Fire", "Flying"],
-      description:
-        "Flies in search of strong opponents. Breathes extremely hot fire that melts anything, but never uses it on weaker foes.",
-    },
-    {
-      id: "025",
-      name: "/images/flipImage/2.png",
-      types: ["Electric"],
-      description:
-        "When Pikachu meet, they touch tails to exchange electricity as a greeting.",
-    },
-    {
-      id: "125",
-      name: "/images/flipImage/1.png",
-      types: ["Electric"],
-      description:
-        "Often kept at power plants to regulate electricity. Competes with others to attract lightning during storms.",
-    },
-    {
-      id: "185",
-      name: "/images/flipImage/2.png",
-      types: ["Rock"],
-      description:
-        "Despite looking like a tree, its body is more like rock. Hates water and hides when it rains.",
-    },
-  ]
+  const [open, setOpen] = useState(false)
 
   return (
-    <section className="container mx-auto py-20 px-5 lg:px-0">
-       <h2 className="font-helvetica text-center hidden lg:block font-medium leading-none text-[32px] lg:text-[64px]">
-        <AnimatedTextCharacter text="A Journey of Vision & Leadership" />
-      </h2>
+    <> 
+      <section className="container mx-auto py-20 px-5 lg:px-0">
+        <h2 className="font-helvetica text-center hidden lg:block font-medium leading-none text-[32px] lg:text-[64px]">
+          <AnimatedTextCharacter text="A Journey of Vision & Leadership" />
+        </h2>
         <h2 className="font-helvetica lg:hidden text-center mb-3 font-medium leading-none text-[32px] lg:text-[64px]">
-        <AnimatedTextCharacter text="A Journey of " />
-      </h2>
+          <AnimatedTextCharacter text="A Journey of " />
+        </h2>
         <h2 className="font-helvetica text-center lg:hidden font-medium leading-none text-[32px] lg:text-[64px]">
-        <AnimatedTextCharacter text="Vision & Leadership" />
-      </h2>
-    <div className="w-full h-[60vh] lg:h-[70vh] flex justify-center items-center ">
-      <HTMLFlipBook
-        width={600}
-        height={400}
-        maxShadowOpacity={0.5}
-        drawShadow={true}
-        showCover={true}
-        size="fixed"
-        startPage={1}
-      >
-        {/* Cover Page */}
-        <div className="page" style={{ background: "transparent" }}>
-          <div className="page-content cover">
-            <img
-              src={"/images/flipImage/1.png"}
-              alt="Pokémon Logo"
-              className="pokemon-logo"
-            />
-          </div>
+          <AnimatedTextCharacter text="Vision & Leadership" />
+        </h2>
+
+        {/* Closed Books Display */}
+        <div className="flex flex-col lg:flex-row lg:justify-evenly gap-12 mt-12">
+          <img
+            src="/images/flipImage/3.png"
+            alt="Book Cover 1"
+            className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"
+            onClick={() => setOpen(true)}
+          />
+          <img
+            src="/images/flipImage/3.png"
+            alt="Book Cover 2"
+            className="w-96 h-72 object-cover shadow-xl cursor-pointer hover:scale-105 transition"
+            onClick={() => setOpen(true)}
+          />
         </div>
 
-        {/* Data Pages */}
-        {pokemonData.map((pokemon) => (
-          <div className="page" key={pokemon.id}>
-            <div className="page-content">
-              <div className="pokemon-container ">
-                <img
-                  src={pokemon.name}
-                  alt={pokemon.name}
-                  className="h-full"
-                />
-                {/* <div className="pokemon-info">
-                  <h2 className="pokemon-name">{pokemon.name}</h2>
-                  <p className="pokemon-number">#{pokemon.id}</p>
-                  <div>
-                    {pokemon.types.map((type) => (
-                      <span
-                        key={type}
-                        className={`pokemon-type type-${type.toLowerCase()}`}
-                      >
-                        {type}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="pokemon-description">{pokemon.description}</p>
-                </div> */}
-              </div>
-            </div>
-          </div>
-        ))}
-      </HTMLFlipBook>
-    </div>
-      <p className="text-black font-helvetica text-center px-10 text-lg">This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.</p>
+        <p className="text-black font-helvetica text-center px-10 mt-12 text-lg">
+          This flipbook honours Dr. Ramdas M Pai and his invaluable contributions,
+          highlighting remarkable milestones through archival photographs and
+          heartfelt reflections that showcase his passion, vision, and dedication
+          to building the modern Manipal.
+        </p>
+      </section>
 
-    </section>
+      {/* Modal */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative bg-white rounded-2xl  shadow-2xl w-[90vw] h-[90vh] max-w-[1200px] max-h-[800px]"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setOpen(false)}
+                className="absolute top-4 right-4 text-white bg-black p-2 rounded-full "
+              >
+                <IconX size={25} />
+              </button>
+
+              {/* Heyzine Flipbook Embed */}
+              <iframe
+                src="https://heyzine.com/flip-book/fc13ba6b09.html"
+                className="w-full h-full rounded-lg"
+                frameBorder="0"
+                allowFullScreen
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
