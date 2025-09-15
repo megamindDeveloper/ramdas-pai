@@ -48,9 +48,9 @@ export default function Home() {
       )}
       {/* The HeroSection now fills the main container */}
       <HeroSection />
-      <FirsrGreetingsSection/>
-      <SecondGreetingsSection/>
-      <WishCounterComponent/>
+      <FirsrGreetingsSection />
+      <SecondGreetingsSection />
+      <WishCounterComponent />
       <InstagramReels />
       <section
         style={{
@@ -59,9 +59,8 @@ export default function Home() {
       >
         {/* <TributeSection /> */}
         {/* <ImageGallery /> */}
-        
-                <LegacyPictures />
-     
+
+        <LegacyPictures />
 
         <TwitterSection />
 
@@ -72,9 +71,7 @@ export default function Home() {
         style={{
           backgroundImage: "url('/images/backgroundImage/bg1.png')",
         }}
-      >
-
-      </section>
+      ></section>
       <Awards />
       <Iframe />
 
