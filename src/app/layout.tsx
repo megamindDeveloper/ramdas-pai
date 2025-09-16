@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { arkitype, helvetica, bungee } from "../../styles/fonts";
 import { Toaster } from 'react-hot-toast'; 
+import Script from "next/script";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -66,6 +67,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${arkitype.variable} ${helvetica.variable} ${bungee.variable} antialiased`}
       >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-8QZJK8T6G0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-8QZJK8T6G0');
+          `}
+        </Script>
         {children}
         <Toaster position="top-center" reverseOrder={false} /> {/* Add this line */}
 
