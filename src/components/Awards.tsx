@@ -8,13 +8,10 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { motion, useInView } from "framer-motion";
 import "swiper/css";
 
-
 const awardsStatic = [
   { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.1.png" },
 
   { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.2.png" },
-
-
 ];
 
 const awards = [
@@ -52,12 +49,12 @@ const awards = [
 
   {
     id: 2,
-    title: "Seva Ratna Prashasti Award (1994)",
+    title: "Seva Ratna Prashasti Award ",
     date: "1994",
     subtitle: "Kanakuri Memorial Trust, South Canara",
     src: "/images/awards/2.3.png",
   },
-  { id: 2, title: "Suvarna Karnataka Award (2004)", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
+  { id: 2, title: "Suvarna Karnataka Award", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
   { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.1.png" },
 
   { id: 1, title: "Datuk Award ", date: "2011", subtitle: "Government of Melaka, Malaysia", src: "/images/awards/1.2.png" },
@@ -92,12 +89,12 @@ const awards = [
 
   {
     id: 2,
-    title: "Seva Ratna Prashasti Award (1994)",
+    title: "Seva Ratna Prashasti Award ",
     date: "1994",
     subtitle: "Kanakuri Memorial Trust, South Canara",
     src: "/images/awards/2.3.png",
   },
-  { id: 2, title: "Suvarna Karnataka Award (2004)", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
+  { id: 2, title: "Suvarna Karnataka Award ", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
 ];
 
 const mobImg = [
@@ -206,8 +203,7 @@ export default function Awards() {
     </div>
   );
 
-
-   const StaticCard = ({ award }: { award: { title: string; subtitle?: string; src?: string; date?: string; id?: number } }) => (
+  const StaticCard = ({ award }: { award: { title: string; subtitle?: string; src?: string; date?: string; id?: number } }) => (
     <div className="w-full ">
       <div
         className="px-20 py-10 hidden  text-start transition h-full w-full md:flex flex-col bg-cover bg-center "
@@ -225,24 +221,22 @@ export default function Awards() {
         </div>
 
         {/* Flexible space to push content to bottom */}
-        
 
         {/* Fixed positioning for date and subtitle at bottom */}
         <div className="mt-8">
           {award.date && <p className="text-2xl text-white/80 font-medium mb-1 font-sans">{award.date}</p>}
           {award.subtitle && (
-  <p className="text-2xl text-white/80 font-medium font-sans leading-[1.5]">
-    {award.subtitle.includes(" of ") ? (
-      <>
-        {award.subtitle.split(" of ")[0]} <br />
-        of {award.subtitle.split(" of ")[1]}
-      </>
-    ) : (
-      award.subtitle
-    )}
-  </p>
-)}
-
+            <p className="text-2xl text-white/80 font-medium font-sans leading-[1.5]">
+              {award.subtitle.includes(" of ") ? (
+                <>
+                  {award.subtitle.split(" of ")[0]} <br />
+                  of {award.subtitle.split(" of ")[1]}
+                </>
+              ) : (
+                award.subtitle
+              )}
+            </p>
+          )}
         </div>
       </div>
       <div
@@ -261,7 +255,6 @@ export default function Awards() {
         </div>
 
         {/* Flexible space to push content to bottom */}
-    
 
         {/* Fixed positioning for date and subtitle at bottom */}
         <div className="mb-4">
@@ -348,40 +341,38 @@ export default function Awards() {
 
       <div className="mt-8">
         {/* Awards: full rows in grid */}
-          {awardsStatic.length > 0 && (
+        {awardsStatic.length > 0 && (
           <div className="grid   grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 max-w-7xl lg:max-w-7xl mx-auto px-4 py-6 justify-items-center">
-            
             {awardsStatic.map((award, i) => (
               <StaticCard key={i} award={award} />
             ))}
           </div>
         )}
-      {awards.length > 0 && (
-  <div className="px-4 py-6 mx-auto max-w-7xl">
-    <Swiper
-      modules={[Autoplay, Pagination]}
-      autoplay={{
-        delay: 1500,
-        disableOnInteraction: false,
-      }}
-      loop={true}
-      spaceBetween={16}
-      breakpoints={{
-        320: { slidesPerView: 1 },   // mobile
-        640: { slidesPerView: 2 },   // sm
-        768: { slidesPerView: 3 },   // md
-        1024: { slidesPerView: 4 },  // lg+
-      }}
-    >
-      {awards.map((award, i) => (
-        <SwiperSlide key={i}>
-          <Card award={award} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  </div>
-)}
-
+        {awards.length > 0 && (
+          <div className="px-4 py-6 mx-auto max-w-7xl">
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              autoplay={{
+                delay: 1500,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              spaceBetween={16}
+              breakpoints={{
+                320: { slidesPerView: 1 }, // mobile
+                640: { slidesPerView: 2 }, // sm
+                768: { slidesPerView: 3 }, // md
+                1024: { slidesPerView: 4 }, // lg+
+              }}
+            >
+              {awards.map((award, i) => (
+                <SwiperSlide key={i}>
+                  <Card award={award} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        )}
 
         {/* <div className="md:hidden block px-4">
           <Swiper modules={[Autoplay]} autoplay={{ delay: 2000, disableOnInteraction: false }} loop={true} spaceBetween={16} slidesPerView={1}>

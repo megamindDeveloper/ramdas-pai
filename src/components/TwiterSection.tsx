@@ -48,9 +48,9 @@ type ScreenshotItem = {
 
 // Card for displaying the tweet screenshot
 const TweetCard = ({ item, onClick }: { item: ScreenshotItem; onClick: () => void }) => (
-  <div className="  text-black  flex flex-col cursor-pointer " onClick={onClick}>
-    <div className="flex-grow rounded-lg overflow-hidden">
-      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="w-full h-full object-contain" />
+  <div className="  text-black  flex flex-col cursor-pointer" onClick={onClick}>
+    <div className="flex-grow  overflow-hidden">
+      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="rounded-2xl w-full h-full object-contain" />
     </div>
   </div>
 );
@@ -247,64 +247,55 @@ const TwitterSection: React.FC = ({
         </div>
 
         {/* Swiper for Mobile */}
-    {isMobile && allScreenshots.length > 0 && (
-  <>
-    <Swiper
-      modules={[Autoplay, Pagination]}
-      spaceBetween={20}
-      slidesPerView={1}
-      loop={true}
-      autoplay={{
-        delay: 1500,
-        disableOnInteraction: false,
-      }}
-      onSwiper={setSwiperInstance}
-      observer={true}
-      observeParents={true}
-    >
-      {allScreenshots.map((item) => (
-        <SwiperSlide key={item.id}>
-          <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+        {isMobile && allScreenshots.length > 0 && (
+          <>
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              spaceBetween={20}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{
+                delay: 1500,
+                disableOnInteraction: false,
+              }}
+              onSwiper={setSwiperInstance}
+              observer={true}
+              observeParents={true}
+            >
+              {allScreenshots.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-    {swiperInstance && (
-      <CustomBulletPagination
-        swiper={swiperInstance}
-        total={allScreenshots.length}
-      />
-    )}
-  </>
-)}
-        
-        
-        {!isMobile&& (
+            {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allScreenshots.length} />}
+          </>
+        )}
+
+        {!isMobile && (
           // Grid for Desktop
-       
 
-
- <Swiper
-  modules={[Autoplay, Pagination]}
-  spaceBetween={20}
-  breakpoints={{
-    768: { slidesPerView: 2 },
-    1024: { slidesPerView: 3 },
-  }}
-  autoplay={{
-    delay: 2500,
-    disableOnInteraction: false,
-  }}
-  loop={true}
-
-  className="mt-8 lg:mt-12 !pb-10"
->
-  {allScreenshots.map((item) => (
-    <SwiperSlide key={item.id}>
-      <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
-    </SwiperSlide>
-  ))}
-</Swiper>
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={20}
+            breakpoints={{
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            className="mt-8 lg:mt-12 !pb-10"
+          >
+            {allScreenshots.map((item) => (
+              <SwiperSlide key={item.id}>
+                <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
 
         <div className="md:flex hidden  mt-10">
@@ -478,9 +469,7 @@ const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swip
         <button
           key={b.index}
           onClick={() => swiper.slideToLoop(b.index)}
-          className={`w-3 h-3 rounded-full transition-all ${
-            b.isActive ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"
-          }`}
+          className={`w-3 h-3 rounded-full transition-all ${b.isActive ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
         />
       ))}
     </div>
