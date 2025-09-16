@@ -11,90 +11,244 @@ import "swiper/css";
 const awardsStatic = [
   { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.1.png" },
 
-  { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.2.png" },
+  { id: 2, title: "Datuk Award ", date: "2011", subtitle: "Government of Melaka, Malaysia", src: "/images/awards/1.2.png" },
 ];
 
 const awards = [
-  { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.1.png" },
-
-  { id: 1, title: "Datuk Award ", date: "2011", subtitle: "Government of Melaka, Malaysia", src: "/images/awards/1.2.png" },
-
-  {
-    id: 2,
-
-    title: "World Konkani Convention Award ",
-    date: "1995",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/1.3.png",
-  },
-
-  {
-    id: 2,
-
-    title: "Golden Peacock Lifetime Achievement Award ",
-    date: "2011",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/1.4.png",
-  },
-
-  { id: 1, title: "Award of Philanthropy ", date: "1992", subtitle: "Bunt’s Sangha, Bombay", src: "/images/awards/2.1.png" },
-
   {
     id: 1,
-    title: "Chanakya Award",
-    date: "2002",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/2.2.png",
+    title: "Key to the City of Loma Linda",
+    date: "1982",
+    subtitle:
+      "City of Loma Linda, California, USA — recognition of fostering partnership between Manipal Group and Loma Linda University",
+    src: "/images/awards/1.1.png",
   },
-
   {
     id: 2,
-    title: "Seva Ratna Prashasti Award ",
-    date: "1994",
-    subtitle: "Kanakuri Memorial Trust, South Canara",
-    src: "/images/awards/2.3.png",
+    title: "Philanthropy Award",
+    date: "1992",
+    subtitle: "Bunts Sangha, Bombay",
+    src: "/images/awards/2.1.png",
   },
-  { id: 2, title: "Suvarna Karnataka Award", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
-  { id: 1, title: "Padma Bhushan ", date: "2011", subtitle: "Government of India", src: "/images/awards/1.1.png" },
-
-  { id: 1, title: "Datuk Award ", date: "2011", subtitle: "Government of Melaka, Malaysia", src: "/images/awards/1.2.png" },
-
-  {
-    id: 2,
-
-    title: "World Konkani Convention Award ",
-    date: "1995",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/1.3.png",
-  },
-
-  {
-    id: 2,
-
-    title: "Golden Peacock Lifetime Achievement Award ",
-    date: "2011",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/1.4.png",
-  },
-
-  { id: 1, title: "Award of Philanthropy ", date: "1992", subtitle: "Bunt’s Sangha, Bombay", src: "/images/awards/2.1.png" },
-
   {
     id: 1,
-    title: "Chanakya Award",
-    date: "2002",
-    subtitle: "National Awards for Achievers, Public Relations Council of India",
-    src: "/images/awards/2.2.png",
+    title: "National Professor of General Practice / Family Medicine",
+    date: "1992",
+    subtitle:
+      "Indian Medical Association (IMA) College of General Practitioners",
+    src: "/images/awards/1.2.png",
   },
-
   {
     id: 2,
-    title: "Seva Ratna Prashasti Award ",
+    title: "Phillips Medal",
+    date: "1993",
+    subtitle: "Ohio University, USA",
+    src: "/images/awards/1.3.png",
+  },
+  {
+    id: 1,
+    title: "Dr. B. C. Roy National Award for Community Health Work",
+    date: "1993",
+    subtitle:
+      "Medical Council of India, presented by President of India on National Doctors’ Day",
+    src: "/images/awards/1.4.png",
+  },
+  {
+    id: 2,
+    title: "Konkani Pratibha Award",
     date: "1994",
-    subtitle: "Kanakuri Memorial Trust, South Canara",
+    subtitle: "Konkani Bhasha Prachar Sabha (KBPS), Cochin",
+    src: "/images/awards/2.2.png",
+  },
+  {
+    id: 1,
+    title: "World Konkani Convention Award",
+    date: "1995",
+    subtitle: "Mangalore Convention Recognition",
+    src: "/images/awards/1.3.png",
+  },
+  {
+    id: 2,
+    title: "Honorary Doctorate",
+    date: "1996",
+    subtitle: "Milwaukee School of Engineering (MSOE), USA",
     src: "/images/awards/2.3.png",
   },
-  { id: 2, title: "Suvarna Karnataka Award ", subtitle: "Government of Karnataka Honour", src: "/images/awards/2.3.png" },
+  {
+    id: 1,
+    title: "Chikitsa Dhanwanthari Award",
+    date: "1996",
+    subtitle: "Paryaya Sri Sode Vadiraj Mutt Swamiji, Udupi",
+    src: "/images/awards/1.2.png",
+  },
+  {
+    id: 2,
+    title: "Great Son of Soil Award",
+    date: "1997",
+    subtitle: "All India Conference of Intellectuals",
+    src: "/images/awards/2.1.png",
+  },
+  {
+    id: 1,
+    title: "Honorary Doctorate",
+    date: "1998",
+    subtitle: "Andrews University, USA",
+    src: "/images/awards/1.4.png",
+  },
+  {
+    id: 2,
+    title: "Honorary Professor of International Health",
+    date: "1999",
+    subtitle: "University of Minnesota Medical School, USA",
+    src: "/images/awards/2.2.png",
+  },
+  {
+    id: 1,
+    title: "New Year Award",
+    date: "2000",
+    subtitle: "Academy of General Education (AGE), Syndicate Bank, Rotary Udupi-Manipal",
+    src: "/images/awards/1.1.png",
+  },
+  {
+    id: 2,
+    title: "Paryaya Award",
+    date: "2000",
+    subtitle: "Sri Vishvesha Thirtha Swamiji, Pejavar Mutt, Udupi",
+    src: "/images/awards/2.3.png",
+  },
+  {
+    id: 1,
+    title: "Lions Millennium Award",
+    date: "2001",
+    subtitle: "Lions District 324-D4",
+    src: "/images/awards/1.2.png",
+  },
+  {
+    id: 2,
+    title:
+      "Honorary Fellowship of the Faculty of General Dental Practitioners (FGDP)",
+    date: "2004",
+    subtitle: "Royal College of Surgeons of England, UK",
+    src: "/images/awards/2.1.png",
+  },
+  {
+    id: 1,
+    title: "Ernst & Young Entrepreneur of the Year",
+    date: "2004",
+    subtitle: "Ernst & Young (E&Y)",
+    src: "/images/awards/1.3.png",
+  },
+  {
+    id: 2,
+    title: "Deccan Herald HR Excellence Lifetime Achievement Award",
+    date: "2005",
+    subtitle: "Deccan Herald Avenues & Centre for Change Management",
+    src: "/images/awards/2.2.png",
+  },
+  {
+    id: 1,
+    title: "Udupi Ratna Award",
+    date: "2005",
+    subtitle: "Udupi Utsav Committee, Udupi",
+    src: "/images/awards/1.4.png",
+  },
+  {
+    id: 2,
+    title: "MMA – KVK Outstanding Manager Award",
+    date: "2005",
+    subtitle: "Mangalore Management Association, Mangalore",
+    src: "/images/awards/2.3.png",
+  },
+  {
+    id: 1,
+    title: "Suvarna Karnataka",
+    date: "2006",
+    subtitle: "Government of Karnataka (50th anniversary of formation)",
+    src: "/images/awards/1.1.png",
+  },
+  {
+    id: 2,
+    title: "Chanakya National Award for Achievers",
+    date: "2008",
+    subtitle: "Public Relations Council of India (PRCI), Bengaluru",
+    src: "/images/awards/2.1.png",
+  },
+  {
+    id: 1,
+    title: "Kanara Ratna Award",
+    date: "2008",
+    subtitle: "Kanara College Society, Kumta",
+    src: "/images/awards/1.2.png",
+  },
+  {
+    id: 2,
+    title: "Navaratna Puraskar Award",
+    date: "2009",
+    subtitle:
+      "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
+    src: "/images/awards/2.2.png",
+  },
+  {
+    id: 1,
+    title:
+      "Golden Peacock Lifetime Achievement Award for Educational and Healthcare Service",
+    date: "2011",
+    subtitle: "Institute of Directors (IOD), New Delhi",
+    src: "/images/awards/1.3.png",
+  },
+  {
+    id: 2,
+    title: "Padma Bhushan",
+    date: "2011",
+    subtitle: "President of India",
+    src: "/images/awards/1.1.png",
+  },
+  {
+    id: 1,
+    title: "Datuk Award",
+    date: "2011",
+    subtitle: "Government of Melaka, Malaysia",
+    src: "/images/awards/1.2.png",
+  },
+  {
+    id: 2,
+    title: "Antigua Honorary Consul General in India",
+    date: "2012",
+    subtitle: "Government of Antigua & Barbuda",
+    src: "/images/awards/2.1.png",
+  },
+  {
+    id: 1,
+    title: "Saraswat Ratna Award",
+    date: "2012",
+    subtitle:
+      "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
+    src: "/images/awards/1.4.png",
+  },
+  {
+    id: 2,
+    title:
+      "Education World Lifetime Achievement in Education Leadership Award",
+    date: "2015",
+    subtitle: "Education World, Bengaluru",
+    src: "/images/awards/2.3.png",
+  },
+  {
+    id: 1,
+    title: "Lifetime Achievement Award",
+    date: "2018",
+    subtitle:
+      "Federation of Indian Chambers of Commerce & Industry (FICCI), New Delhi",
+    src: "/images/awards/1.2.png",
+  },
+  {
+    id: 2,
+    title: "Lifetime Achievement Award",
+    date: "2024",
+    subtitle:
+      "American Association of Physicians of Indian Origin (AAPI), Illinois, USA",
+    src: "/images/awards/2.1.png",
+  },
 ];
 
 const mobImg = [
