@@ -15,7 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -134,6 +134,13 @@ const MinisterCardModel = ({ item, onClick }: { item: GreetingItem; onClick: () 
 };
 
 const SecondGreetingsSection: React.FC = () => {
+
+
+
+  const prevRef = useRef<HTMLDivElement | null>(null);
+  const nextRef = useRef<HTMLDivElement | null>(null);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
+
   const [greetings, setGreetings] = useState<GreetingItem[]>([]);
   const [allGreetings, setAllGreetings] = useState<GreetingItem[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -249,199 +256,256 @@ const SecondGreetingsSection: React.FC = () => {
   // The small cards show everyone *except* the featured one, limited to 5
   const otherMinisters = allGreetings.filter((_, index) => index !== activeIndex).slice(0, 5);
   return (
-    <div className="pb-10 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica font-medium leading-none text-[32px] lg:text-[44px]">
-        <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-        <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
-      </h2>
-
-      {/* Mobile: Swiper */}
-      {isMobile ? (
-        <Swiper
-          modules={[Autoplay]}
-          spaceBetween={20}
-          slidesPerView={1.2}
-          pagination={{ clickable: true }}
-          autoplay={{
-            delay: 1500, // 3s delay
-            disableOnInteraction: false, // keep autoplay after user swipes
-          }}
-          loop={true} // makes it infinite
-          className="mt-8 !pb-10"
-        >
-          {greetings.map((item) => (
-            <SwiperSlide key={item.id}>
-              <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      ) : (
-        // Desktop: Grid
-        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {greetings.map((item) => (
-            <MinisterCard key={item.id} item={item} onClick={() => openModal(item.greetingsImageUrl)} />
-          ))}
-        </div>
-      )}
-
-      <div className="md:flex hidden  mt-10">
-        {/* Reset activeIndex to 0 when opening the modal */}
-        <button
-          onClick={() => {
-            setIsViewMoreModalOpen(true);
-            setActiveIndex(0);
-          }}
-          className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]"
-        >
-          View more
-        </button>
+    <div className="relative">
+      <div ref={prevRef} className="absolute md:hidden left-1 top-1/2">
+        <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="#EF2700" />
+        </svg>
       </div>
+      <div ref={nextRef} className="absolute md:hidden right-1 top-1/2">
+        <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.50743 16.9811L10 8.96223L1.50743 0.943359L0 2.36671L6.98514 8.96223L0 15.5577L1.50743 16.9811Z" fill="#EF2700" />
+        </svg>
+      </div>
+      <div className="pb-10 px-5 max-w-7xl mx-auto">
+        <h2 className="font-helvetica font-medium leading-[1.2] lg:leading-none text-[34px] lg:text-[44px]">
+          <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+          <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+        </h2>
 
-      <div className="md:hidden flex ">
-        {/* Reset activeIndex to 0 when opening the modal */}
-        <Link href="/greetings">
-          <button className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]">
+        {/* Mobile: Swiper */}
+        {isMobile  ? (
+          <>
+           <Swiper
+                modules={[Navigation, Pagination,Autoplay]}
+                spaceBetween={20}
+                slidesPerView={1}
+                loop={true}
+                onSwiper={setSwiperInstance}
+                onInit={(swiper) => {
+                  // Attach custom navigation
+                  if (swiper.params.navigation) {
+                    const navigation = swiper.params.navigation as any;
+                    navigation.prevEl = prevRef.current;
+                    navigation.nextEl = nextRef.current;
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                  }
+                }}
+                
+  autoplay={{
+    delay: 1500,      // 3 seconds per slide
+    disableOnInteraction: false, // keeps autoplay even after user swipes
+  }}
+            className="mt-8 !pb-5"
+          >
+            {allGreetings.map((item) => (
+              <SwiperSlide key={item.id}>
+                <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allGreetings.length} />}
+          </>
+        ) : (
+          // Desktop: Grid
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={20}
+            slidesPerView={3} // show 3 cards in desktop
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            className="mt-8 lg:mt-12 !pb-10"
+          >
+            {allGreetings.map((item) => (
+              <SwiperSlide key={item.id}>
+                <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+
+        <div className="md:flex hidden  mt-10">
+          {/* Reset activeIndex to 0 when opening the modal */}
+          <button
+            onClick={() => {
+              setIsViewMoreModalOpen(true);
+              setActiveIndex(0);
+            }}
+            className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]"
+          >
             View more
           </button>
-        </Link>
-      </div>
+        </div>
 
-      {/* The NEW "View More" Modal */}
-      <AnimatePresence>
-        {isViewMoreModalOpen && (
-          <motion.div
-            className="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeViewMoreModal} />
+       
+
+        {/* The NEW "View More" Modal */}
+        <AnimatePresence>
+          {isViewMoreModalOpen && (
             <motion.div
-              ref={viewMoreModalRef}
-              variants={modalVariants}
-              className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
+              className="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
-              <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
-                  <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-                  <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
-                </h2>
+              <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeViewMoreModal} />
+              <motion.div
+                ref={viewMoreModalRef}
+                variants={modalVariants}
+                className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
+              >
+                <div className="flex justify-between items-center mb-4 flex-shrink-0">
+                  <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
+                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+                  </h2>
+                  <motion.button
+                    className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
+                    onClick={closeViewMoreModal}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <IconX className="text-white w-5 h-5" />
+                  </motion.button>
+                </div>
+
+                <motion.div variants={contentVariants} className="flex-grow overflow-hidden">
+                  <div className="grid grid-cols-12 grid-rows-3 gap-4 h-full">
+                    {/* Left Side: Featured Minister with Animation */}
+                    <div className="col-span-12 md:col-span-6 row-span-3">
+                      {/* --- CHANGE 5: AnimatePresence for smooth transitions --- */}
+                      <AnimatePresence mode="wait">
+                        {featuredMinister && (
+                          <motion.div
+                            key={activeIndex} // Key change triggers animation
+                            variants={cardTransitionVariants}
+                            initial="initial"
+                            animate="animate"
+                            exit="exit"
+                            className="w-full h-full"
+                          >
+                            <MinisterCardModel item={featuredMinister} onClick={() => handleGreetingClick(featuredMinister.greetingsImageUrl)} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Right Side: Other Ministers & Next Button */}
+                    <div className="hidden md:grid col-span-6 row-span-3 grid-cols-2 grid-rows-3 gap-4">
+                      {otherMinisters.map((item) => (
+                        <div
+                          key={item.id}
+                          className="cursor-pointer group overflow-hidden  shadow-md"
+                          onClick={() => handleGreetingClick(item.greetingsImageUrl)}
+                        >
+                          <Image
+                            src={item.coverImageUrl}
+                            alt={item.name}
+                            width={400}
+                            height={533}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                      {/* --- CHANGE 6: The "Next" Button in the last grid slot --- */}
+                      {allGreetings.length > 1 && (
+                        <div className="flex items-center justify-center  ">
+                          <button
+                            onClick={handleNext}
+                            className="flex flex-col pl-4 justify-end w-full h-full transition-colors duration-300 "
+                            aria-label="Next Minister"
+                          >
+                            <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M4.82378 -4.68472e-07L32 28L4.82378 56L-3.20993e-06 51.03L22.3524 28L8.16768e-07 4.97L4.82378 -4.68472e-07Z"
+                                fill="#EF2700"
+                              />
+                            </svg>
+
+                            {/* <span className="mt-2 font-semibold">NEXT</span> */}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Original Modal for single image view */}
+        <AnimatePresence>
+          {isModalOpen && currentImageUrl && (
+            <motion.div
+              className="fixed md:h-[90vh] h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
+              <motion.div
+                ref={singleImageModalRef}
+                variants={modalVariants}
+                className="relative my-10 w-full md:h-[80vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-14"
+              >
                 <motion.button
-                  className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
-                  onClick={closeViewMoreModal}
+                  variants={contentVariants}
+                  className="absolute top-4 right-4 h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
+                  onClick={closeModal}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
                   <IconX className="text-white w-5 h-5" />
                 </motion.button>
-              </div>
 
-              <motion.div variants={contentVariants} className="flex-grow overflow-hidden">
-                <div className="grid grid-cols-12 grid-rows-3 gap-4 h-full">
-                  {/* Left Side: Featured Minister with Animation */}
-                  <div className="col-span-12 md:col-span-6 row-span-3">
-                    {/* --- CHANGE 5: AnimatePresence for smooth transitions --- */}
-                    <AnimatePresence mode="wait">
-                      {featuredMinister && (
-                        <motion.div
-                          key={activeIndex} // Key change triggers animation
-                          variants={cardTransitionVariants}
-                          initial="initial"
-                          animate="animate"
-                          exit="exit"
-                          className="w-full h-full"
-                        >
-                          <MinisterCardModel item={featuredMinister} onClick={() => handleGreetingClick(featuredMinister.greetingsImageUrl)} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Right Side: Other Ministers & Next Button */}
-                  <div className="hidden md:grid col-span-6 row-span-3 grid-cols-2 grid-rows-3 gap-4">
-                    {otherMinisters.map((item) => (
-                      <div
-                        key={item.id}
-                        className="cursor-pointer group overflow-hidden  shadow-md"
-                        onClick={() => handleGreetingClick(item.greetingsImageUrl)}
-                      >
-                        <Image
-                          src={item.coverImageUrl}
-                          alt={item.name}
-                          width={400}
-                          height={533}
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </div>
-                    ))}
-                    {/* --- CHANGE 6: The "Next" Button in the last grid slot --- */}
-                    {allGreetings.length > 1 && (
-                      <div className="flex items-center justify-center  ">
-                        <button
-                          onClick={handleNext}
-                          className="flex flex-col pl-4 justify-end w-full h-full transition-colors duration-300 "
-                          aria-label="Next Minister"
-                        >
-                          <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M4.82378 -4.68472e-07L32 28L4.82378 56L-3.20993e-06 51.03L22.3524 28L8.16768e-07 4.97L4.82378 -4.68472e-07Z"
-                              fill="#EF2700"
-                            />
-                          </svg>
-
-                          {/* <span className="mt-2 font-semibold">NEXT</span> */}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[100%] ">
+                  <Image
+                    src={currentImageUrl}
+                    alt="Selected"
+                    className="md:h-full max-h-[85vh] w-full object-cover rounded-lg"
+                    height={1000}
+                    width={1000}
+                    loading="lazy"
+                  />
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Original Modal for single image view */}
-      <AnimatePresence>
-        {isModalOpen && currentImageUrl && (
-          <motion.div
-            className="fixed md:h-[90vh] h-[90%] my-10 inset-0 z-[9999] flex items-center justify-center overflow-auto"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80 backdrop-blur-lg" onClick={closeModal} />
-            <motion.div
-              ref={singleImageModalRef}
-              variants={modalVariants}
-              className="relative my-10 w-full md:h-[80vh] h-[90%] max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-14"
-            >
-              <motion.button
-                variants={contentVariants}
-                className="absolute top-4 right-4 h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
-                onClick={closeModal}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <IconX className="text-white w-5 h-5" />
-              </motion.button>
-
-              <motion.div variants={contentVariants} className="flex items-center justify-center w-full h-[100%] ">
-                <Image
-                  src={currentImageUrl}
-                  alt="Selected"
-                  className="md:h-full max-h-[85vh] w-full object-cover rounded-lg"
-                  height={1000}
-                  width={1000}
-                  loading="lazy"
-                />
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
 
 export default SecondGreetingsSection;
+
+
+const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!swiper) return;
+    const onSlideChange = () => setActiveIndex(swiper.realIndex);
+    swiper.on("slideChange", onSlideChange);
+    return () => {
+      swiper.off("slideChange", onSlideChange);
+    };
+  }, [swiper]);
+
+  return (
+    <div className="md:hidden flex justify-center gap-2 my-4">
+      {Array.from({ length: total }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
+          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+        />
+      ))}
+    </div>
+  );
+};

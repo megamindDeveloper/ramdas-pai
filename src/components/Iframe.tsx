@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AnimatedTextCharacter from "./AnimatedTextCharacter";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconX } from "@tabler/icons-react";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
 
 function Book() {
   const [open, setOpen] = useState(false);
+  const prevRef = useRef<HTMLDivElement | null>(null);
+  const nextRef = useRef<HTMLDivElement | null>(null);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
@@ -21,14 +27,18 @@ function Book() {
   return (
     <>
       <div className="relative">
-        <section className="mx-auto lg:max-w-7xl pt-10 pb-20 px-5 lg:px-0">
-          <h2  style={{ color: '#EF4123' }} className="text-[32px] leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-[#FF2400] mb-6 md:mb-8">
-          A Journey of <br/>  Vision & Leadership
+        <section className="mx-auto lg:max-w-7xl pt-10 md:pb-20 ">
+          <h2
+            style={{ color: "#EF4123" }}
+            className="text-[32px] px-5 lg:px-0 leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-[#FF2400] mb-6 md:mb-8"
+          >
+            A Journey of <br /> Vision & Leadership
           </h2>
-          <p className="text-lg text-black font-sans lg:max-w-xl mx-auto md:mx-0">
-          This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.
+          <p className="text-lg text-black font-sans lg:max-w-xl px-5 lg:px-0 mx-auto md:mx-0">
+            This flipbook honours Dr. Ramdas M Pai and his invaluable contributions, highlighting remarkable milestones through archival photographs
+            and heartfelt reflections that showcase his passion, vision, and dedication to building the modern Manipal.
           </p>
-          <div className="hidden lg:block relative">
+          <div className="hidden md:block relative">
             <div className="flex relative flex-col lg:flex-row gap-6 mt-12">
               <div className="w-[70%]">
                 <Image
@@ -54,41 +64,75 @@ function Book() {
               </div>
             </div>
           </div>
-          <div className="relative lg:hidden">
-            <div className="flex relative flex-col lg:flex-row gap-6 mt-12">
-              <div className="">
-                <Image
-                  loading="lazy"
-                  width={1000}
-                  height={1000}
-                  src="/images/flipImage/3.png"
-                  alt="Book Cover 1"
-                  className="w-full h-[40vh] object-cover shadow-xl cursor-pointer  transition"
-                  onClick={() => setOpen(true)}
-                />
-              </div>
-              <div>
-                <Image
-                  loading="lazy"
-                  width={1000}
-                  height={1000}
-                  src="/images/flipImage/4.png"
-                  alt="Book Cover 2"
-                  className="w-full h-[40vh] object-cover shadow-xl cursor-pointer  transition"
-                  onClick={() => setOpen(true)}
-                />
-              </div>
+          <div className="mt-12   relative md:hidden">
+            <div ref={prevRef} className="absolute md:hidden left-1 top-1/2">
+              <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="#EF2700" />
+              </svg>
             </div>
-          </div>
-          <div className="absolute hidden lg:block -z-10 -bottom-20 -right-[400px] xl:-right-[300px]">
-            <Image
-              src="/images/flipImage/6.png"
-              alt="Overlay"
-              width={1000}
-              height={1000}
-              className="object-cover  cursor-pointer  "
-              onClick={() => setOpen(true)}
-            />
+            <div ref={nextRef} className="absolute md:hidden right-1 top-1/2">
+              <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.50743 16.9811L10 8.96223L1.50743 0.943359L0 2.36671L6.98514 8.96223L0 15.5577L1.50743 16.9811Z" fill="#EF2700" />
+              </svg>
+            </div>
+            <div className="px-5 lg:px-0">
+              <Swiper
+                modules={[Navigation, Pagination,Autoplay]}
+                spaceBetween={20}
+                slidesPerView={1}
+                loop={true}
+                onSwiper={setSwiperInstance}
+                onInit={(swiper) => {
+                  // Attach custom navigation
+                  if (swiper.params.navigation) {
+                    const navigation = swiper.params.navigation as any;
+                    navigation.prevEl = prevRef.current;
+                    navigation.nextEl = nextRef.current;
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                  }
+                }}
+                  autoplay={{
+    delay: 1500,      // 3 seconds per slide
+    disableOnInteraction: false, // keeps autoplay even after user swipes
+  }}
+                className="w-full"
+              >
+                <SwiperSlide>
+                  <Image
+                    src="/images/flipImage/3.png"
+                    alt="Book Cover 1"
+                    width={1000}
+                    height={1000}
+                    className="w-full h-[40vh] lg:h-[500px] object-cover shadow-xl cursor-pointer rounded-lg"
+                    onClick={() => setOpen(true)}
+                  />
+                </SwiperSlide>
+
+                <SwiperSlide>
+                  <Image
+                    src="/images/flipImage/4.png"
+                    alt="Book Cover 2"
+                    width={1000}
+                    height={1000}
+                    className="w-full h-[40vh] lg:h-[500px] object-cover shadow-xl cursor-pointer rounded-lg"
+                    onClick={() => setOpen(true)}
+                  />
+                </SwiperSlide>
+              </Swiper>
+            </div>
+           
+            {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={2} />}
+            <div className="absolute hidden lg:block -z-10 -bottom-20 -right-[400px] xl:-right-[300px]">
+              <Image
+                src="/images/flipImage/6.png"
+                alt="Overlay"
+                width={1000}
+                height={1000}
+                className="object-cover  cursor-pointer  "
+                onClick={() => setOpen(true)}
+              />
+            </div>
           </div>
         </section>
       </div>
@@ -124,3 +168,28 @@ function Book() {
 }
 
 export default Book;
+
+const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!swiper) return;
+    const onSlideChange = () => setActiveIndex(swiper.realIndex);
+    swiper.on("slideChange", onSlideChange);
+    return () => {
+      swiper.off("slideChange", onSlideChange);
+    };
+  }, [swiper]);
+
+  return (
+    <div className="md:hidden flex justify-center gap-2 my-4">
+      {Array.from({ length: total }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
+          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+        />
+      ))}
+    </div>
+  );
+};

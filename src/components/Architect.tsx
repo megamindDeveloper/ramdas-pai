@@ -57,10 +57,12 @@ const Architect = () => {
       </div>
 
       <div className="">
-        <h2 className="font-helvetica text-black  t font-medium leading-none text-[32px]  lg:text-[44px]">
-          <AnimatedTextCharacter text="The Architect of Modern Manipal" className="font-sans" />
+        <h2 className="font-helvetica text-black   font-medium leading-[1.2] lg:leading-none text-[34px]  lg:text-[44px]">
+          <AnimatedTextCharacter text="The Architect of Modern Manipal" className="font-sans hidden md:block" />
+          <AnimatedTextCharacter text="The Architect of" className="font-sans md:hidden" />
+          <AnimatedTextCharacter text="Modern Manipal" className="font-sans md:hidden" />
         </h2>
-        <h2 className="font-helvetica text-black  tfont-medium leading-none text-[32px]  lg:text-[44px] my-4">
+        <h2 className="font-helvetica text-black  tfont-medium leading-none text-[34px]  lg:text-[44px] my-4">
           <AnimatedTextCharacter text="Dr. Ramdas M. Pai" className="text-[#EF4123] font-serif" />
         </h2>
         <p

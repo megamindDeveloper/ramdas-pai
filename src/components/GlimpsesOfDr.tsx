@@ -99,7 +99,7 @@ const GlimpsesOfDr = () => {
   return (
   <div className="py-20 px-4 max-w-7xl mx-auto">
         <h2 className="font-helvetica text-center font-medium leading-none text-[32px] lg:text-[44px] pb-14">
-          <AnimatedTextCharacter text="Glimpses Of Dr.Ramdas Pai" />
+          <AnimatedTextCharacter text="Glimpses Of Dr. Ramdas M. Pai" />
         </h2>
 
            <div className="w-full max-w-7xl xl:max-w-9xl  mx-auto p-4">
