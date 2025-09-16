@@ -321,9 +321,9 @@ const TwitterSection: React.FC = ({
                 className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
               >
                 <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                  <h2 className="font-helvetica text-center font-medium leading-none text-[32px]  lg:text-[44px]">
-                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+                  <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
+                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Greetings from " />
+                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Wellwishers" />
                   </h2>
                   <motion.button
                     className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
