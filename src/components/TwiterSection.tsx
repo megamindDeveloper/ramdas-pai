@@ -241,8 +241,8 @@ const TwitterSection: React.FC = ({
           <AnimatedTextCharacter text="Greetings from Wellwishers" className="text-white mb-2 font-semibold font-sans" />
         </h2>
 
-        <div className="flex flex-col md:flex-row lg:items-center  gap-6 md:gap-10 my-6  md:text-left">
-          <div className="font-bold text-7xl lg:text-8xl font-sans "> {count.toFixed(0).toLocaleString()}</div>
+        <div className="flex flex-col md:flex-row lg:items-center  gap-3 md:gap-10 mb-6 md:my-6  md:text-left">
+          <div className="font-bold text-[56px] lg:text-8xl font-sans "> {count.toFixed(0).toLocaleString()}</div>
           <div className="max-w-xl flex">
             <p className="font-light text-[16px]">Countless warm wishes have already made this celebration special!</p>
             <p className="m font-light">

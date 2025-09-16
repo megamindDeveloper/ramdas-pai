@@ -1,7 +1,7 @@
 
 import Image from 'next/image'
 import React from 'react'
-import img from "../../public/images/backgroundImage/bgdesk.png"
+import img from "../../public/images/backgroundImage/banner.webp"
 import Mobileimg from "../../public/images/backgroundImage/mobile.png"
 
 const HeroSection = () => {

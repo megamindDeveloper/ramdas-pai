@@ -165,7 +165,7 @@ export default function Awards() {
 
   return (
     <>
-      <section className="lg:pt-[3rem] relative py-16  bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023]  flex flex-col justify-between">
+      <section className="lg:pt-[3rem] relative py-16 md:pt-16 md:pb-0  bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023]  flex flex-col justify-between">
         <div ref={prevRef}  className="absolute md:hidden left-1 top-1/2">
           <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="white" />

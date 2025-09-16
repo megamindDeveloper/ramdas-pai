@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const images = ["/images/legacy/4.jpg", "/images/legacy/2.png", "/images/legacy/3.png"];
+const images = ["/images/legacy/4.jpg", "/images/legacy/2.png", "/images/legacy/10.png"];
 
 export default function LegacySection() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -85,7 +85,17 @@ export default function LegacySection() {
         </div>
 
         {/* Right Images (Desktop) */}
-        <div className="flex  h-[70vh] md:gap-4 lg:col-span-8">
+        <div className="hidden md:flex  h-[70vh] md:gap-4 lg:col-span-8">
+          <div className="w-[100%] md:w-[50%]">
+            <Image src={reorderedImages[0] === "/images/legacy/2.png" ? "/images/legacy/11.png" : reorderedImages[0]} alt="legacy main" width={1200} height={400} className="w-full h-[70vh] object-cover rounded" />
+          </div>
+          {reorderedImages.slice(1).map((img, i) => (
+            <div key={i} className="flex-1">
+              <Image src={img} alt={`legacy ${i}`} width={300} height={400} className="w-full hidden md:block h-[70vh] object-cover rounded" />
+            </div>
+          ))}
+        </div>
+             <div className="flex md:hidden  h-[70vh] md:gap-4 lg:col-span-8">
           <div className="w-[100%] md:w-[50%]">
             <Image src={reorderedImages[0]} alt="legacy main" width={300} height={400} className="w-full h-[70vh] object-cover rounded" />
           </div>
