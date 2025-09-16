@@ -248,7 +248,7 @@ const TwitterSection: React.FC = ({
         {/* Swiper for Mobile */}
         {isMobile ? (
           <Swiper /* ... */>
-            {screenshots.map((item) => (
+            {allScreenshots.map((item) => (
               <SwiperSlide key={item.id}>
                 <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
               </SwiperSlide>
@@ -256,11 +256,30 @@ const TwitterSection: React.FC = ({
           </Swiper>
         ) : (
           // Grid for Desktop
-          <div className="grid grid-cols-1 mt-8 lg:mt-12 md:grid-cols-3 gap-8">
-            {screenshots.map((item) => (
-              <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
-            ))}
-          </div>
+       
+
+
+ <Swiper
+  modules={[Autoplay, Pagination]}
+  spaceBetween={20}
+  breakpoints={{
+    768: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 },
+  }}
+  autoplay={{
+    delay: 2500,
+    disableOnInteraction: false,
+  }}
+  loop={true}
+
+  className="mt-8 lg:mt-12 !pb-10"
+>
+  {allScreenshots.map((item) => (
+    <SwiperSlide key={item.id}>
+      <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
+    </SwiperSlide>
+  ))}
+</Swiper>
         )}
 
         <div className="md:flex hidden  mt-10">
