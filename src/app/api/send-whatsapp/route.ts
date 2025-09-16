@@ -1,6 +1,8 @@
 // File: app/api/send-whatsapp/route.ts
 
-import { NextResponse } from 'next/server';
+import { db } from "@/app/lib/firebase";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { NextResponse } from "next/server";
 
 // --- Configuration from Environment Variables ---
 const sfmc = {
@@ -24,22 +26,22 @@ async function getAccessToken(): Promise<string> {
   }
 
   const response = await fetch(sfmc.authUrl!, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      grant_type: 'client_credentials',
+      grant_type: "client_credentials",
       client_id: sfmc.clientId!,
       client_secret: sfmc.clientSecret!,
     }),
   });
 
   if (!response.ok) {
-    throw new Error('Could not authenticate with Marketing Cloud.');
+    throw new Error("Could not authenticate with Marketing Cloud.");
   }
 
   const data = await response.json();
   tokenCache.token = data.access_token;
-  tokenCache.expiresAt = Date.now() + (data.expires_in * 1000);
+  tokenCache.expiresAt = Date.now() + data.expires_in * 1000;
 
   return tokenCache.token!;
 }
@@ -47,19 +49,19 @@ async function getAccessToken(): Promise<string> {
 // --- Main API Handler ---
 export async function POST(request: Request) {
   try {
-    const { phoneNumber } = await request.json();
+    const { phoneNumber, name } = await request.json();
 
     if (!phoneNumber) {
-      return NextResponse.json(
-        { success: false, error: "Phone number is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Phone number is required." }, { status: 400 });
     }
+    await addDoc(collection(db, "wishes"), {
+      name,
+      phoneNumber,
+      createdAt: serverTimestamp(),
+    });
 
     const accessToken = await getAccessToken();
-    const formattedPhoneNumber = phoneNumber.startsWith('91')
-      ? phoneNumber
-      : `91${phoneNumber}`;
+    const formattedPhoneNumber = phoneNumber.startsWith("91") ? phoneNumber : `91${phoneNumber}`;
     // const formattedPhoneNumber = "917012257903"; // as string
 
     const payload = {
@@ -74,10 +76,10 @@ export async function POST(request: Request) {
 
     // Send the message using the Trigger API
     const sendMessageResponse = await fetch(sfmc.restUrl!, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
@@ -89,7 +91,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Failed to send message via Marketing Cloud.',
+          error: "Failed to send message via Marketing Cloud.",
           details: result,
         },
         { status: sendMessageResponse.status }
@@ -99,15 +101,11 @@ export async function POST(request: Request) {
     // ✅ Return SFMC's actual response for debugging
     return NextResponse.json({
       success: true,
-      message: 'Request accepted by SFMC.',
+      message: "Request accepted by SFMC.",
       sfmcResponse: result,
     });
-
   } catch (error: any) {
-    console.error('An error occurred:', error);
-    return NextResponse.json(
-      { success: false, error: error.message || 'Internal server error.' },
-      { status: 500 }
-    );
+    console.error("An error occurred:", error);
+    return NextResponse.json({ success: false, error: error.message || "Internal server error." }, { status: 500 });
   }
 }

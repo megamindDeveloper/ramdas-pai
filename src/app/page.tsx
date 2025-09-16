@@ -13,7 +13,7 @@ import LegacySection from "@/components/LegacyPics";
 import LegacyPictures from "@/components/LegacyPictures";
 import SecondGreetingsSection from "@/components/SecondGreetingsSection";
 import TwitterSection from "@/components/TwiterSection";
-import WishCounterComponent from "@/components/WishCounterComponent";
+
 import Image from "next/image";
 
 import { useEffect, useState } from "react";
