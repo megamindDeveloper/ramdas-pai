@@ -110,32 +110,34 @@ const InstagramReels: React.FC = () => {
   const viewMoreModalRef = useRef<HTMLDivElement>(null);
 
   // Fetch latest 3 reels for the main page
-useEffect(() => {
-  const colRef = collection(db, "Reels");
-  const q = query(colRef, orderBy("order", "asc")); // Firestore sort by 'order'
-
-  const unsub = onSnapshot(q, (snapshot) => {
-    let items: ReelItem[] = snapshot.docs.map((doc) => {
-      const data = doc.data() as any;
-      return {
-        id: doc.id,
-        ...data,
-        order: data.order ?? 0, // fallback if order missing
-      } as ReelItem;
+  useEffect(() => {
+    const colRef = collection(db, "Reels");
+    const q = query(colRef, orderBy("order", "asc")); // Firestore base sort
+  
+    const unsub = onSnapshot(q, (snapshot) => {
+      let items: ReelItem[] = snapshot.docs.map((doc) => {
+        const data = doc.data() as any;
+        return {
+          id: doc.id,
+          ...data,
+          order: data.order ?? 0, // fallback to 0 if missing
+        } as ReelItem;
+      });
+  
+      // ✅ Globally sort so numbers like 1,2,3 stay in order
+      const sortedItems = items
+        .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity)) // global sort
+        .map((item, index) => ({
+          ...item,
+          effectiveOrder: index + 1, // optional: assign a stable order index
+        }));
+  
+      setAllReels(sortedItems);
     });
-
-    // Move items with order 0 or invalid to the end
-    const sortedItems = [
-      ...items.filter((item) => item.order && item.order > 0),
-      ...items.filter((item) => !item.order || item.order <= 0),
-    ];
-
-    setAllReels(sortedItems);
-  });
-
-  return () => unsub();
-}, []);
-
+  
+    return () => unsub();
+  }, []);
+  
   
 
   // Fetch ALL reels for the "View More" modal

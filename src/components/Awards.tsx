@@ -19,8 +19,7 @@ const awards = [
     id: 1,
     title: "Key to the City of Loma Linda",
     date: "1982",
-    subtitle:
-      "City of Loma Linda, California, USA — recognition of fostering partnership between Manipal Group and Loma Linda University",
+    subtitle: "City of Loma Linda, California, USA — recognition of fostering partnership between Manipal Group and Loma Linda University",
     src: "/images/awards/1.1.png",
   },
   {
@@ -34,8 +33,7 @@ const awards = [
     id: 1,
     title: "National Professor of General Practice / Family Medicine",
     date: "1992",
-    subtitle:
-      "Indian Medical Association (IMA) College of General Practitioners",
+    subtitle: "Indian Medical Association (IMA) College of General Practitioners",
     src: "/images/awards/1.2.png",
   },
   {
@@ -49,8 +47,7 @@ const awards = [
     id: 1,
     title: "Dr. B. C. Roy National Award for Community Health Work",
     date: "1993",
-    subtitle:
-      "Medical Council of India, presented by President of India on National Doctors’ Day",
+    subtitle: "Medical Council of India, presented by President of India on National Doctors’ Day",
     src: "/images/awards/1.4.png",
   },
   {
@@ -125,8 +122,7 @@ const awards = [
   },
   {
     id: 2,
-    title:
-      "Honorary Fellowship of the Faculty of General Dental Practitioners (FGDP)",
+    title: "Honorary Fellowship of the Faculty of General Dental Practitioners (FGDP)",
     date: "2004",
     subtitle: "Royal College of Surgeons of England, UK",
     src: "/images/awards/2.1.png",
@@ -184,14 +180,12 @@ const awards = [
     id: 2,
     title: "Navaratna Puraskar Award",
     date: "2009",
-    subtitle:
-      "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
+    subtitle: "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
     src: "/images/awards/2.2.png",
   },
   {
     id: 1,
-    title:
-      "Golden Peacock Lifetime Achievement Award for Educational and Healthcare Service",
+    title: "Golden Peacock Lifetime Achievement Award for Educational and Healthcare Service",
     date: "2011",
     subtitle: "Institute of Directors (IOD), New Delhi",
     src: "/images/awards/1.3.png",
@@ -221,14 +215,12 @@ const awards = [
     id: 1,
     title: "Saraswat Ratna Award",
     date: "2012",
-    subtitle:
-      "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
+    subtitle: "His Holiness Srimad Vidyadhiraj Thirtha Swamiji, Sri Gokarn Parthagal Jeevotham Mutt, Goa",
     src: "/images/awards/1.4.png",
   },
   {
     id: 2,
-    title:
-      "Education World Lifetime Achievement in Education Leadership Award",
+    title: "Education World Lifetime Achievement in Education Leadership Award",
     date: "2015",
     subtitle: "Education World, Bengaluru",
     src: "/images/awards/2.3.png",
@@ -237,16 +229,14 @@ const awards = [
     id: 1,
     title: "Lifetime Achievement Award",
     date: "2018",
-    subtitle:
-      "Federation of Indian Chambers of Commerce & Industry (FICCI), New Delhi",
+    subtitle: "Federation of Indian Chambers of Commerce & Industry (FICCI), New Delhi",
     src: "/images/awards/1.2.png",
   },
   {
     id: 2,
     title: "Lifetime Achievement Award",
     date: "2024",
-    subtitle:
-      "American Association of Physicians of Indian Origin (AAPI), Illinois, USA",
+    subtitle: "American Association of Physicians of Indian Origin (AAPI), Illinois, USA",
     src: "/images/awards/2.1.png",
   },
 ];
@@ -306,57 +296,29 @@ export default function Awards() {
   const isInView2 = useInView(mobSwiperRef2, { once: true, amount: 0.8 });
 
   const Card = ({ award }: { award: { title: string; subtitle?: string; src?: string; date?: string; id?: number } }) => (
-    <div className="w-full max-w-sm xl:max-w-[95%]">
+    <div className="w-full h-full flex">
       <div
-        className="p-3 hidden  text-start transition h-[292px] w-full md:flex flex-col bg-cover bg-center "
+        className="p-3 text-start transition flex flex-col justify-between bg-cover bg-center w-full min-h-[292px] flex-1"
         style={{ backgroundImage: award.src ? `url(${award.src})` : "linear-gradient(to right, #FF671F, #FF3C00)" }}
       >
-        {/* Fixed positioning for title */}
-        <div className="md:mt-18">
-          <h3
-            className={`text-white font-bold text-xl md:text-[24px] leading-snug font-serif min-h-[3.5rem] flex items-start ${
-              award.id == 1 ? "w-[150px]" : ""
-            }`}
-          >
-            {award.title}
-          </h3>
-        </div>
-
-        {/* Flexible space to push content to bottom */}
-        <div className=" flex-1"></div>
-
-        {/* Fixed positioning for date and subtitle at bottom */}
-        <div className="mb-4">
+        {/* Title */}
+        <h3
+          className={`text-white font-bold text-xl md:text-[24px] leading-snug font-serif l${
+            award.id == 1 ? "w-[150px]" : ""
+          }`}
+        >
+          {award.title}
+        </h3>
+  
+        {/* Bottom section */}
+        <div className="mt-4">
           {award.date && <p className="text-md text-white/80 font-medium mb-1 font-sans">{award.date}</p>}
-          {award.subtitle && <p className="text-md text-white/80 font-medium font-sans leading-tight">{award.subtitle}</p>}
-        </div>
-      </div>
-      <div
-        className="p-3 md:hidden  text-start transition h-[292px] justify-evenly w-full flex flex-col bg-cover bg-center "
-        style={{ backgroundImage: award.src ? `url(${award.src})` : "linear-gradient(to right, #FF671F, #FF3C00)" }}
-      >
-        {/* Fixed positioning for title */}
-        <div className="md:mt-18">
-          <h3
-            className={`text-white font-bold text-xl md:text-[24px] leading-snug font-serif min-h-[3.5rem] flex items-start ${
-              award.id == 1 ? "w-[150px]" : ""
-            }`}
-          >
-            {award.title}
-          </h3>
-        </div>
-
-        {/* Flexible space to push content to bottom */}
-
-        {/* Fixed positioning for date and subtitle at bottom */}
-        <div className="mb-4">
-          {award.date && <p className="text-md text-white/80 font-medium mb-1 font-sans">{award.date}</p>}
-          {award.subtitle && <p className="text-md text-white/80 font-medium font-sans leading-tight">{award.subtitle}</p>}
+          {award.subtitle && <p className="text-md text-white/80 font-medium font-sans leading-tight line-clamp-2">{award.subtitle}</p>}
         </div>
       </div>
     </div>
   );
-
+  
   const StaticCard = ({ award }: { award: { title: string; subtitle?: string; src?: string; date?: string; id?: number } }) => (
     <div className="w-full ">
       <div

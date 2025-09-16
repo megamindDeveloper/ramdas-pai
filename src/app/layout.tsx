@@ -80,7 +80,44 @@ export default function RootLayout({
           `}
         </Script>
         {children}
-        <Toaster position="top-center" reverseOrder={false} /> {/* Add this line */}
+        <Toaster
+          position="top-center" // 🔥 Center position
+          toastOptions={{
+            style: {
+              background: "#fff3e0",
+              color: "#4a2e20",
+              borderRadius: "12px",
+              padding: "16px 20px",
+              fontSize: "16px",
+              fontWeight: 500,
+              border: "2px solid #a98e71",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+              transition: "all 0.3s ease-in-out",
+            },
+            success: {
+              iconTheme: {
+                primary: "#22c55e",
+                secondary: "#fff",
+              },
+              style: {
+                background: "#ecfdf5",
+                border: "2px solid #22c55e",
+                color: "#065f46",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#ef4444",
+                secondary: "#fff",
+              },
+              style: {
+                background: "#fef2f2",
+                border: "2px solid #ef4444",
+                color: "#7f1d1d",
+              },
+            },
+          }}
+        />
 
       </body>
     </html>
