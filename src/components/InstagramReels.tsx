@@ -13,6 +13,8 @@ import { db } from "@/app/lib/firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
+
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -223,18 +225,36 @@ const InstagramReels: React.FC = () => {
         loop={true} // makes it infinite
           className="mt-8 !pb-8"
         >
-          {reels.map((item) => (
+          {allReels.map((item) => (
             <SwiperSlide key={item.id}>
               <ReelCard item={item} onClick={() => openVideoModal(item.reelsUrl)} />
             </SwiperSlide>
           ))}
         </Swiper>
       ) : (
-        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {reels.map((item) => (
-            <ReelCard key={item.id} item={item} onClick={() => openVideoModal(item.reelsUrl)} />
-          ))}
-        </div>
+       
+       <Swiper
+  modules={[Autoplay, Pagination]}
+  spaceBetween={20}
+  breakpoints={{
+    768: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 },
+  }}
+  autoplay={{
+    delay: 2500,
+    disableOnInteraction: false,
+  }}
+  loop={true}
+
+  className="mt-8 lg:mt-12 !pb-10"
+>
+  {allReels.map((item) => (
+    <SwiperSlide key={item.id}>
+      <ReelCard item={item} onClick={() => openVideoModal(item.reelsUrl)} />
+    </SwiperSlide>
+  ))}
+</Swiper>
+
       )}
 
 <div className="md:flex hidden  mt-10">

@@ -269,7 +269,7 @@ const SecondGreetingsSection: React.FC = () => {
           loop={true} // makes it infinite
           className="mt-8 !pb-10"
         >
-          {greetings.map((item) => (
+          {allGreetings.map((item) => (
             <SwiperSlide key={item.id}>
               <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
             </SwiperSlide>
@@ -277,11 +277,27 @@ const SecondGreetingsSection: React.FC = () => {
         </Swiper>
       ) : (
         // Desktop: Grid
-        <div className="grid grid-cols-1 mt-8 lg:mt-12 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {greetings.map((item) => (
-            <MinisterCard key={item.id} item={item} onClick={() => openModal(item.greetingsImageUrl)} />
-          ))}
-        </div>
+    <Swiper
+  modules={[Autoplay, Pagination]}
+  spaceBetween={20}
+  slidesPerView={3} // show 3 cards in desktop
+  autoplay={{
+    delay: 2500,
+    disableOnInteraction: false,
+  }}
+  loop={true}
+
+  className="mt-8 lg:mt-12 !pb-10"
+>
+  {allGreetings.map((item) => (
+    <SwiperSlide key={item.id}>
+      <MinisterCard
+        item={item}
+        onClick={() => openModal(item.greetingsImageUrl)}
+      />
+    </SwiperSlide>
+  ))}
+</Swiper>
       )}
 
       <div className="md:flex hidden  mt-10">
