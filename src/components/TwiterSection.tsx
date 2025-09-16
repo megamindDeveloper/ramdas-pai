@@ -184,51 +184,41 @@ const TwitterSection: React.FC = ({
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isModalOpen, isViewMoreModalOpen]);
-  const [count, setCount] = useState<number>(base);
-  const rafRef = useRef<number | null>(null);
-  const startTimeRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true }); // triggers only once when in view
+  const [wishesCount, setWishesCount] = useState(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!isInView) return; // only start counting when visible
-
-    let finalValue = initial;
-
-    try {
-      const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (!Number.isNaN(parsed)) {
-          finalValue = parsed;
-        }
-      }
-    } catch (e) {}
-
-    const duration = 3000; // 5 seconds animation
-    const step = (now: number) => {
-      if (!startTimeRef.current) startTimeRef.current = now;
-      const elapsed = now - startTimeRef.current;
-      const t = Math.min(1, elapsed / duration);
-      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
-      const value = base + (finalValue - base) * eased;
+    const colRef = collection(db, "wishes");
+    const unsub = onSnapshot(colRef, (snapshot) => {
+      setWishesCount(snapshot.size); // snapshot.size gives total docs
+    });
+    return () => unsub();
+  }, []);
+  useEffect(() => {
+    if (!isInView || wishesCount === 0) return;
+  
+    let start = 0;
+    let end = wishesCount;
+    let duration = 2000; // 2s animation
+    let startTimestamp: number | null = null;
+  
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const value = Math.floor(progress * (end - start) + start);
       setCount(value);
-
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(step);
-      } else {
-        try {
-          localStorage.setItem(storageKey, String(finalValue));
-        } catch (e) {}
+  
+      if (progress < 1) {
+        requestAnimationFrame(step);
       }
     };
-
-    rafRef.current = requestAnimationFrame(step);
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [isInView]);
+  
+    requestAnimationFrame(step);
+  }, [isInView, wishesCount]);
+  
+  
   return (
     <div ref={containerRef} className="md:py-20 py-10 px-4 bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] text-white">
       <div className="max-w-7xl mx-auto">
@@ -237,7 +227,7 @@ const TwitterSection: React.FC = ({
         </h2>
 
         <div className="flex flex-col md:flex-row lg:items-center  gap-3 md:gap-10 mb-6 md:my-6  md:text-left">
-          <div className="font-bold text-[56px] lg:text-8xl font-sans "> 0</div>
+          <div className="font-bold text-[56px] lg:text-8xl font-sans ">  {count}</div>
           <div className="max-w-xl flex">
             <p className="font-light text-[16px]">Countless warm wishes have already made this celebration special!</p>
             <p className="m font-light">
