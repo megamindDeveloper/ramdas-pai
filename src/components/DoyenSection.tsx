@@ -27,7 +27,7 @@ const DoyenSection = () => {
               />
             </div>
           </div> */}
-          <p className="text-lg text-black  max-w-xl mx-auto md:mx-0 font-sans">
+          <p className="text-base md:text-lg text-black  max-w-xl mx-auto md:mx-0 font-sans">
             Dr. Pai championed the foundational principle of education as a right, not a privilege. He decisively contributed significantly to the
             landmark Supreme Court judgment in 2002 affirming the autonomy of private professional institutions. Under his leadership, MAHE became a
             premier deemed university in 1993 and expanded globally, establishing educational and healthcare campuses in Malaysia, Nepal, Antigua.

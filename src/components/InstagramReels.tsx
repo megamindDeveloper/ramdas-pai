@@ -64,8 +64,8 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
         isFeatured ? "bg-[#F37032]" : "bg-[#F37032] md:bg-[#919191] group-hover:bg-[#F37032]"
       }`}
     >
-      <p className={`font-bold font-sans leading-tight ${isFeatured ? "text-2xl" : "text-lg"}`}>{item.name}</p>
-      <div className={`font-light mt-4 ${isFeatured ? "text-sm" : "text-xs"}`}>
+      <p className={`font-bold font-sans leading-tight ${isFeatured ? "text-2xl" : "text-xl"}`}>{item.name}</p>
+      <div className={` mt-4 ${isFeatured ? "text-sm" : "text-base"}`}>
         <span>{item.designation}</span>
       </div>
     </div>
@@ -229,38 +229,44 @@ const InstagramReels: React.FC = () => {
       </h2>
 
       {/* Main page display */}
-      {isMobile ? (
-        <>
-         <Swiper
-                       modules={[Navigation, Pagination,Autoplay]}
+     {isMobile ? (
+               <>
+                 {allReels.length > 0 && (
+                   <>
+                     <Swiper
+                       modules={[Pagination, Autoplay, Navigation]}
                        spaceBetween={20}
                        slidesPerView={1}
                        loop={true}
-                       onSwiper={setSwiperInstance}
-                       onInit={(swiper) => {
-                         // Attach custom navigation
-                         if (swiper.params.navigation) {
+                       autoplay={{
+                         delay: 2000,
+                         disableOnInteraction: false,
+                         pauseOnMouseEnter: true,
+                       }}
+                       observer={true}
+                       observeParents={true}
+                       onBeforeInit={(swiper: any) => {
+                         // Attach custom navigation nodes BEFORE init
+                         if (typeof swiper.params.navigation !== "boolean") {
                            const navigation = swiper.params.navigation as any;
                            navigation.prevEl = prevRef.current;
                            navigation.nextEl = nextRef.current;
-                           swiper.navigation.init();
-                           swiper.navigation.update();
                          }
                        }}
-                         autoplay={{
-    delay: 1500,      // 3 seconds per slide
-    disableOnInteraction: false, // keeps autoplay even after user swipes
-  }}
-          className="mt-8 !pb-5"
-        >
-          {allReels.map((item) => (
+                       onSwiper={setSwiperInstance}
+                       className="mt-8 !pb-5"
+                     >
+                     {allReels.map((item) => (
             <SwiperSlide key={item.id}>
               <ReelCard item={item} onClick={() => openVideoModal(item.reelsUrl)} />
             </SwiperSlide>
           ))}
-        </Swiper>
-        {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allReels.length} />}
-        </>
+                     </Swiper>
+     
+                     {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allReels.length} />}
+                   </>
+                 )}
+               </>
       ) : (
        
        <Swiper
@@ -397,11 +403,11 @@ const InstagramReels: React.FC = () => {
       <AnimatePresence>
         {isVideoModalOpen && currentVideoUrl && (
           <motion.div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" initial="hidden" animate="visible" exit="exit">
-            <motion.div variants={backdropVariants} className="fixed inset-0 bg-black/80" onClick={closeVideoModal} />
+            <motion.div variants={backdropVariants} className="fixed  inset-0 bg-black/80" onClick={closeVideoModal} />
             <motion.div
               ref={videoModalRef}
               variants={modalVariants}
-              className="relative w-full max-w-lg bg-black rounded-2xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-lg h-[90vh]  p-10 bg-white rounded-2xl shadow-2xl overflow-hidden"
             >
               <motion.button
                 variants={contentVariants}
@@ -412,7 +418,7 @@ const InstagramReels: React.FC = () => {
               </motion.button>
               <div className="aspect-[9/16]">
                 <iframe
-                  className="w-full h-full"
+                  className="w-full  h-[80vh] rounded-2xl"
                   src={currentVideoUrl}
                   title="YouTube Video Player"
                   frameBorder="0"
@@ -433,6 +439,9 @@ export default InstagramReels;
 const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // number of bullets you want to show at a time
+  const visibleBullets = 3;
+
   useEffect(() => {
     if (!swiper) return;
     const onSlideChange = () => setActiveIndex(swiper.realIndex);
@@ -442,13 +451,22 @@ const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swip
     };
   }, [swiper]);
 
+  // Compute the "window" of bullets to show
+  const start = Math.floor(activeIndex / visibleBullets) * visibleBullets;
+  const bullets = Array.from({ length: visibleBullets }).map((_, i) => {
+    const index = (start + i) % total; // loop around total slides
+    return { index, isActive: index === activeIndex };
+  });
+
   return (
     <div className="md:hidden flex justify-center gap-2 my-4">
-      {Array.from({ length: total }).map((_, index) => (
+      {bullets.map((b) => (
         <button
-          key={index}
-          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
-          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+          key={b.index}
+          onClick={() => swiper.slideToLoop(b.index)}
+          className={`w-3 h-3 rounded-full transition-all ${
+            b.isActive ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"
+          }`}
         />
       ))}
     </div>
