@@ -11,7 +11,7 @@ import { db } from "@/app/lib/firebase";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 
 
@@ -95,6 +95,12 @@ const ReelCard1 = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCl
   </div>
 );
 const InstagramReels: React.FC = () => {
+
+
+  const prevRef = useRef<HTMLDivElement | null>(null);
+  const nextRef = useRef<HTMLDivElement | null>(null);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
+
   const [reels, setReels] = useState<ReelItem[]>([]);
   const [allReels, setAllReels] = useState<ReelItem[]>([]);
   const [isMobile, setIsMobile] = useState(false);
@@ -205,25 +211,47 @@ const InstagramReels: React.FC = () => {
   const otherReels = allReels.filter((_, index) => index !== activeIndex).slice(0, 5);
 
   return (
-    <div className="py-10 px-4 max-w-7xl mx-auto">
-      <h2 className="font-helvetica  font-medium leading-none text-[32px] lg:text-[44px] ">
+    <div className="relative">
+      <div ref={prevRef} className="absolute z-50 md:hidden left-1 top-1/2">
+        <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="#EF2700" />
+        </svg>
+      </div>
+      <div ref={nextRef} className="absolute z-50 md:hidden right-1 top-1/2">
+        <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.50743 16.9811L10 8.96223L1.50743 0.943359L0 2.36671L6.98514 8.96223L0 15.5577L1.50743 16.9811Z" fill="#EF2700" />
+        </svg>
+      </div>
+    <div className="py-10 px-5 max-w-7xl mx-auto">
+      <h2 className="font-helvetica font-medium leading-[1.2] lg:leading-none text-[34px] lg:text-[44px]">
         <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
         <AnimatedTextCharacter className="text-[#EF4123] font-serif mb-1 font-normal" text="MAHE Leadership" />
       </h2>
 
       {/* Main page display */}
       {isMobile ? (
-        <Swiper
-        modules={[ Autoplay]}
-        spaceBetween={20}
-        slidesPerView={1.2}
-        pagination={{ clickable: true }}
-        autoplay={{
-          delay: 1000, // 3s delay
-          disableOnInteraction: false, // keep autoplay after user swipes
-        }}
-        loop={true} // makes it infinite
-          className="mt-8 !pb-8"
+        <>
+         <Swiper
+                       modules={[Navigation, Pagination,Autoplay]}
+                       spaceBetween={20}
+                       slidesPerView={1}
+                       loop={true}
+                       onSwiper={setSwiperInstance}
+                       onInit={(swiper) => {
+                         // Attach custom navigation
+                         if (swiper.params.navigation) {
+                           const navigation = swiper.params.navigation as any;
+                           navigation.prevEl = prevRef.current;
+                           navigation.nextEl = nextRef.current;
+                           swiper.navigation.init();
+                           swiper.navigation.update();
+                         }
+                       }}
+                         autoplay={{
+    delay: 1500,      // 3 seconds per slide
+    disableOnInteraction: false, // keeps autoplay even after user swipes
+  }}
+          className="mt-8 !pb-5"
         >
           {allReels.map((item) => (
             <SwiperSlide key={item.id}>
@@ -231,6 +259,8 @@ const InstagramReels: React.FC = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+        {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allReels.length} />}
+        </>
       ) : (
        
        <Swiper
@@ -270,14 +300,7 @@ const InstagramReels: React.FC = () => {
         </button>
       </div>
 
-      <div className="md:hidden flex ">
-        {/* Reset activeIndex to 0 when opening the modal */}
-        <Link href="/social-media-wishes">
-          <button className="uppercase cursor-pointer border-[2px] bg-[#EF2700] text-white px-8 py-3 font-helvetica font-bold text-[16px]">
-            View more
-          </button>
-        </Link>
-      </div>
+     
 
       {/* "View More" Modal */}
       <AnimatePresence>
@@ -402,7 +425,32 @@ const InstagramReels: React.FC = () => {
         )}
       </AnimatePresence>
     </div>
+    </div>
   );
 };
 
 export default InstagramReels;
+const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!swiper) return;
+    const onSlideChange = () => setActiveIndex(swiper.realIndex);
+    swiper.on("slideChange", onSlideChange);
+    return () => {
+      swiper.off("slideChange", onSlideChange);
+    };
+  }, [swiper]);
+
+  return (
+    <div className="md:hidden flex justify-center gap-2 my-4">
+      {Array.from({ length: total }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
+          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+        />
+      ))}
+    </div>
+  );
+};

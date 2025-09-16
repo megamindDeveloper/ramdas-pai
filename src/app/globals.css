@@ -168,3 +168,17 @@ body {
   background: #fff;
   color: #000;
 }
+
+.custom-bullet {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: #ef2700; /* red */
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  display: inline-block;
+}
+
+.custom-bullet.swiper-pagination-bullet-active {
+  opacity: 1;
+}

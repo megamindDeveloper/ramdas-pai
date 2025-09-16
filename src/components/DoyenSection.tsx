@@ -9,10 +9,13 @@ const DoyenSection = () => {
         {/* Left Content Area */}
 
         <div className="md:text-left">
-        <h2 style={{ color: '#EF4123' }} className="text-[32px] font-sans leading-[1.1]  sm:text-3xl md:text-5xl lg:text-[44px] font-medium mb-6 md:mb-8">
+        <h2 style={{ color: '#EF4123' }} className="text-[34px] hidden md:block font-sans leading-[1.2] lg:leading-[1.1]  sm:text-3xl md:text-5xl lg:text-[44px] font-medium mb-6 md:mb-8">
           Doyen of Education & Healthcare in India
           </h2>
-          <div className=" mb-6 md:hidden justify-center md:justify-end">
+           <h2 style={{ color: '#EF4123' }} className="text-[34px] md:hidden font-sans leading-[1.3] lg:leading-[1.1]  sm:text-3xl md:text-5xl lg:text-[44px] font-medium mb-6 md:mb-8">
+          Doyen of Education <br /> & Healthcare in <br /> India
+          </h2>
+          {/* <div className=" mb-6 md:hidden justify-center md:justify-end">
             <div className="relative w-full max-w-md md:max-w-lg aspect-[3/4]">
               <Image
               loading="lazy"
@@ -23,7 +26,7 @@ const DoyenSection = () => {
                
               />
             </div>
-          </div>
+          </div> */}
           <p className="text-lg text-black  max-w-xl mx-auto md:mx-0 font-sans">
             Dr. Pai championed the foundational principle of education as a right, not a privilege. He decisively contributed significantly to the
             landmark Supreme Court judgment in 2002 affirming the autonomy of private professional institutions. Under his leadership, MAHE became a
@@ -33,7 +36,7 @@ const DoyenSection = () => {
 
         {/* Right Image Area */}
         {/* Right Image Area */}
-        <div className="hidden md:flex justify-center md:justify-end">
+        <div className="flex justify-center md:justify-end">
           <div className="relative w-full  h-[400px]">
             <Image
               src={src}

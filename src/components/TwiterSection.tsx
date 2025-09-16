@@ -11,7 +11,7 @@ import { db } from "@/app/lib/firebase";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import Image from "next/image";
@@ -81,6 +81,12 @@ const TwitterSection: React.FC = ({
   base?: number;
   storageKey?: string;
 }) => {
+
+
+
+
+
+    const [swiperInstance, setSwiperInstance] = useState<any>(null);
   // State for main page display
   const [screenshots, setScreenshots] = useState<ScreenshotItem[]>([]);
   const [isMobile, setIsMobile] = useState(false);
@@ -229,13 +235,13 @@ const TwitterSection: React.FC = ({
     };
   }, [isInView]);
   return (
-    <div ref={containerRef} className="py-20 px-4 bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] text-white">
+    <div ref={containerRef} className="md:py-20 py-10 px-4 bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023] text-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="font-helvetica  font-medium  leading-none text-[32px] lg:text-[44px]">
+        <h2 className="font-helvetica  font-medium leading-[1.2]  lg:leading-none text-[32px] lg:text-[44px]">
           <AnimatedTextCharacter text="Greetings from Wellwishers" className="text-white mb-2 font-semibold font-sans" />
         </h2>
 
-        <div className="flex flex-col md:flex-row items-center  gap-6 md:gap-10 my-6 text-center md:text-left">
+        <div className="flex flex-col md:flex-row lg:items-center  gap-6 md:gap-10 my-6  md:text-left">
           <div className="font-bold text-7xl lg:text-8xl font-sans "> {count.toFixed(0).toLocaleString()}</div>
           <div className="max-w-xl flex">
             <p className="font-light text-[16px]">Countless warm wishes have already made this celebration special!</p>
@@ -247,13 +253,36 @@ const TwitterSection: React.FC = ({
 
         {/* Swiper for Mobile */}
         {isMobile ? (
-          <Swiper /* ... */>
+          <>
+         <Swiper
+                modules={[Navigation, Pagination,Autoplay]}
+                spaceBetween={20}
+                slidesPerView={1}
+                loop={true}
+                onSwiper={setSwiperInstance}
+                onInit={(swiper) => {
+                  // Attach custom navigation
+                  if (swiper.params.navigation) {
+                    const navigation = swiper.params.navigation as any;
+                 
+                    swiper.navigation.init();
+                    swiper.navigation.update();
+                  }
+                }}
+                  autoplay={{
+    delay: 1500,      // 3 seconds per slide
+    disableOnInteraction: false, // keeps autoplay even after user swipes
+  }}
+                
+              >
             {allScreenshots.map((item) => (
               <SwiperSlide key={item.id}>
                 <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
               </SwiperSlide>
             ))}
           </Swiper>
+           {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allScreenshots.length} />}
+           </>
         ) : (
           // Grid for Desktop
        
@@ -281,7 +310,7 @@ const TwitterSection: React.FC = ({
   ))}
 </Swiper>
         )}
-
+ 
         <div className="md:flex hidden  mt-10">
           {/* Reset activeIndex to 0 when opening the modal */}
           <button
@@ -295,14 +324,7 @@ const TwitterSection: React.FC = ({
           </button>
         </div>
 
-        <div className="md:hidden flex mt-10">
-          {/* Reset activeIndex to 0 when opening the modal */}
-          <Link href="/tweets">
-            <button className="uppercase cursor-pointer border-2 border-white  text-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white">
-              View more
-            </button>
-          </Link>
-        </div>
+        
 
         {/* --- NEW: "View More" Modal --- */}
         {/* The NEW "View More" Modal */}
@@ -433,3 +455,29 @@ const TwitterSection: React.FC = ({
 };
 
 export default TwitterSection;
+
+
+const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!swiper) return;
+    const onSlideChange = () => setActiveIndex(swiper.realIndex);
+    swiper.on("slideChange", onSlideChange);
+    return () => {
+      swiper.off("slideChange", onSlideChange);
+    };
+  }, [swiper]);
+
+  return (
+    <div className="md:hidden flex justify-center gap-2 my-4">
+      {Array.from({ length: total }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
+          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+        />
+      ))}
+    </div>
+  );
+};
