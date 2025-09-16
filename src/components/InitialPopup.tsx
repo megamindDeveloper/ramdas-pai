@@ -3,6 +3,7 @@
 import { IconX } from "@tabler/icons-react";
 import Image from "next/image";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast"; // <-- 1. Import toast
 
 // --- Component ---
 interface BirthdayGreetingCardProps {
@@ -12,30 +13,51 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
   // State to manage the form inputs
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false); // <-- 2. Add loading state
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+    setLoading(true); // <-- Set loading to true on submit
+
     if (phoneNumber.length !== 10) {
       alert("Phone number must be exactly 10 digits");
+      setLoading(false);
       return;
     }
-  
-    const res = await fetch("/api/send-whatsapp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phoneNumber }),
-    });
-  
-    const data = await res.json();
-    console.log("WhatsApp API Response:", data);
-  
-    setName("");
-    setPhoneNumber("");
-    onClose();
+
+    // --- 3. Use try...catch to handle success and error ---
+    try {
+      const res = await fetch("/api/send-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phoneNumber }),
+      });
+
+      if (!res.ok) {
+        // If response is not OK (e.g., 400, 500 error), throw an error
+        throw new Error("Failed to send message. Please try again.");
+      }
+
+      const data = await res.json();
+      console.log("WhatsApp API Response:", data);
+
+      // --- 4. Show success toast ---
+      toast.success("Thank you! Your greetings have been sent successfully.");
+
+      // Reset form and close modal
+      setName("");
+      setPhoneNumber("");
+      onClose();
+    } catch (error) {
+      console.error("Submission Error:", error);
+      // --- 5. Show error toast ---
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false); // <-- Set loading to false after completion
+    }
   };
-  
 
   return (
     // Main container with background, border, and relative positioning for decorations
@@ -57,13 +79,8 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       <div className="absolute md:bottom-6 bottom-8 left-6 text-3xl text-[#002c5a] opacity-80 rotate-12">✦</div>
       <div className="absolute md:bottom-6 bottom-8 right-6 text-3xl text-[#9a2a3c] opacity-80 -rotate-12">✦</div>
 
-      {/* Faint background sparkles */}
-      {/* <div className="absolute top-1/3 left-1/4 text-gray-300 text-2xl">✧</div>
-      <div className="absolute top-1/2 right-1/4 text-gray-300 text-3xl">✧</div> */}
-
       {/* --- Header Section --- */}
       <header className="flex justify-center mb-6 z-10">
-        {/* The emblem is treated as a single image for simplicity */}
         <Image
           width={1000}
           height={1000}
@@ -94,28 +111,30 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
           onChange={(e) => setName(e.target.value)}
           className="w-full max-w-xs bg-[#f5e6c4] rounded-lg  md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
           required
+          disabled={loading} // <-- Disable input when loading
         />
         <input
-  type="tel"
-  placeholder="Phone Number"
-  value={phoneNumber}
-  onChange={(e) => {
-    // Allow only numbers
-    const value = e.target.value.replace(/\D/g, "");
-    setPhoneNumber(value);
-  }}
-  maxLength={10}
-  pattern="[0-9]{10}"
-  title="Please enter exactly 10 digits"
-  className="w-full max-w-xs bg-[#f5e6c4] rounded-lg md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
-  required
-/>
+          type="tel"
+          placeholder="Phone Number"
+          value={phoneNumber}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, "");
+            setPhoneNumber(value);
+          }}
+          maxLength={10}
+          pattern="[0-9]{10}"
+          title="Please enter exactly 10 digits"
+          className="w-full max-w-xs bg-[#f5e6c4] rounded-lg md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
+          required
+          disabled={loading} // <-- Disable input when loading
+        />
 
         <button
           type="submit"
-          className="bg-[#6d282c] text-white font-semibold md:px-12 md:py-3 py-2 px-12  mt-2 rounded-lg hover:bg-[#5a2124] transition-colors duration-300 shadow-md"
+          disabled={loading} // <-- Disable button when loading
+          className="bg-[#6d282c] cursor-pointer text-white font-semibold md:px-12 md:py-3 py-2 px-12 mt-2 rounded-lg hover:bg-[#5a2124] transition-colors duration-300 shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed" // <-- Add disabled styles
         >
-          Send your Greetings
+          {loading ? "Sending..." : "Send your Greetings"} {/* <-- Change button text while loading */}
         </button>
       </form>
     </div>

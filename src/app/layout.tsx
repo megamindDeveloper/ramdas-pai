@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { arkitype, helvetica, bungee } from "../../styles/fonts";
-
+import { Toaster } from 'react-hot-toast'; 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -67,6 +67,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${arkitype.variable} ${helvetica.variable} ${bungee.variable} antialiased`}
       >
         {children}
+        <Toaster position="top-center" reverseOrder={false} /> {/* Add this line */}
+
       </body>
     </html>
   );

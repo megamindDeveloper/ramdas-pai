@@ -19,12 +19,10 @@ let tokenCache = {
 
 // --- Function to Get a Valid Access Token ---
 async function getAccessToken(): Promise<string> {
-  // Use cached token if it's still valid (with a 60-second buffer)
   if (tokenCache.token && Date.now() < tokenCache.expiresAt - 60000) {
     return tokenCache.token;
   }
 
-  // Fetch a new token
   const response = await fetch(sfmc.authUrl!, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -40,10 +38,8 @@ async function getAccessToken(): Promise<string> {
   }
 
   const data = await response.json();
-  
-  // Update cache
   tokenCache.token = data.access_token;
-  tokenCache.expiresAt = Date.now() + (data.expires_in * 1000); 
+  tokenCache.expiresAt = Date.now() + (data.expires_in * 1000);
 
   return tokenCache.token!;
 }
@@ -54,13 +50,18 @@ export async function POST(request: Request) {
     const { phoneNumber } = await request.json();
 
     if (!phoneNumber) {
-      return NextResponse.json({ success: false, error: "Phone number is required." }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Phone number is required." },
+        { status: 400 }
+      );
     }
 
     const accessToken = await getAccessToken();
-    const formattedPhoneNumber = phoneNumber.startsWith('91') ? phoneNumber : `91${phoneNumber}`;
+    // const formattedPhoneNumber = phoneNumber.startsWith('91')
+    //   ? phoneNumber
+    //   : `91${phoneNumber}`;
+    const formattedPhoneNumber = "917012257903"; // as string
 
-    // Construct the payload to send the message
     const payload = {
       definitionKey: sfmc.definitionKey,
       recipients: [
@@ -70,26 +71,43 @@ export async function POST(request: Request) {
         },
       ],
     };
-    
+
     // Send the message using the Trigger API
     const sendMessageResponse = await fetch(sfmc.restUrl!, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     });
 
+    const result = await sendMessageResponse.json();
+    console.log("SFMC Trigger Send Response:", result);
+
     if (!sendMessageResponse.ok) {
-        console.error('SFMC API Error:', await sendMessageResponse.json());
-        throw new Error('Failed to send message via Marketing Cloud.');
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Failed to send message via Marketing Cloud.',
+          details: result,
+        },
+        { status: sendMessageResponse.status }
+      );
     }
 
-    return NextResponse.json({ success: true, message: 'Greeting sent successfully!' });
+    // ✅ Return SFMC's actual response for debugging
+    return NextResponse.json({
+      success: true,
+      message: 'Request accepted by SFMC.',
+      sfmcResponse: result,
+    });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('An error occurred:', error);
-    return NextResponse.json({ success: false, error: 'An internal server error occurred.' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message || 'Internal server error.' },
+      { status: 500 }
+    );
   }
 }
