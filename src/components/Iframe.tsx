@@ -151,7 +151,7 @@ function Book() {
           onClick={() => setmodaLopen(true)}
           className="uppercase cursor-pointer border-2 text-[#EF2700] border-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white"
         >
-          Wish now
+          Wish him happy birthday
         </button>
       </div>
       <AnimatePresence>
