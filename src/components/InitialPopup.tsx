@@ -28,19 +28,19 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
 
     // --- 3. Use try...catch to handle success and error ---
     try {
-      // const res = await fetch("/api/send-whatsapp", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ name, phoneNumber }),
-      // });
+      const res = await fetch("/api/send-whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phoneNumber }),
+      });
 
-      // if (!res.ok) {
-      //   // If response is not OK (e.g., 400, 500 error), throw an error
-      //   throw new Error("Failed to send message. Please try again.");
-      // }
+      if (!res.ok) {
+        // If response is not OK (e.g., 400, 500 error), throw an error
+        throw new Error("Failed to send message. Please try again.");
+      }
 
-      // const data = await res.json();
-      // console.log("WhatsApp API Response:", data);
+      const data = await res.json();
+      console.log("WhatsApp API Response:", data);
 
       // --- 4. Show success toast ---
       toast.success("Thank you! Your greetings have been sent successfully.");
