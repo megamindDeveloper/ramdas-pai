@@ -54,7 +54,7 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
     <Image
       src={item.thumbnailUrl}
       alt={`Thumbnail for ${item.name}`}
-      className="w-full h-full object-cover aspect-[2.8/4]"
+      className="w-full h-full object-cover aspect-[3/4]"
       width={800}
       height={isFeatured ? 1067 : 533}
       loading="lazy"

@@ -93,9 +93,9 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       {/* --- Message Section --- */}
       <main className="text-center mb-8 px-4 z-10">
         <p className="text-md md:text-xl leading-relaxed text-gray-800">
-          Wishing a very{" "}
+          Wishing a {" "}
           <strong>
-            {" "}
+            {" "}very
             happy 90<sup>th</sup> birthday
           </strong>{" "}
           to the visionary leader who placed Manipal on the global map. Thank you for your constant inspiration.

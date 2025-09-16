@@ -54,7 +54,7 @@ const awards = [
 const mobImg = [
   {
     id: 1,
-    src: "/images/awards/1.png",
+    src: "/images/awards/3.png",
     alt: "1",
   },
   {
@@ -64,20 +64,15 @@ const mobImg = [
   },
   {
     id: 3,
-    src: "/images/awards/3.png",
+    src: "/images/awards/1.png",
     alt: "3",
   },
 ];
 
 export default function Awards() {
-
-
-
-
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
-
 
   // columns: 1 (mobile), 2 (sm >= 640px), 3 (md >= 768px)
   const [cols, setCols] = useState<number>(() => {
@@ -152,7 +147,6 @@ export default function Awards() {
         </div>
 
         {/* Flexible space to push content to bottom */}
-    
 
         {/* Fixed positioning for date and subtitle at bottom */}
         <div className="mb-4">
@@ -166,7 +160,7 @@ export default function Awards() {
   return (
     <>
       <section className="lg:pt-[3rem] relative py-16 md:pt-16 md:pb-0  bg-gradient-to-r from-[#FF953E] via-[#F96E38] to-[#EE4023]  flex flex-col justify-between">
-        <div ref={prevRef}  className="absolute md:hidden left-1 top-1/2">
+        <div ref={prevRef} className="absolute md:hidden left-1 top-1/2">
           <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="white" />
           </svg>
@@ -187,40 +181,39 @@ export default function Awards() {
         <div className="w-full md:flex hidden justify-center items-end ">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-7xl px-6">
             <div className="flex justify-center items-end">
-              <Image src="/images/awards/1.png" alt="Award Left" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
+              <Image src="/images/awards/3.png" alt="Award Left" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
             </div>
             <div className="flex justify-center items-end">
               <Image src="/images/glimpses/73.webp" alt="Award Center" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
             </div>
             <div className="flex justify-center items-end">
-              <Image src="/images/awards/3.png" alt="Award Right" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
+              <Image src="/images/awards/1.png" alt="Award Right" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
             </div>
           </div>
         </div>
 
         <div className="md:hidden block px-5">
-           <Swiper
-                modules={[Navigation, Pagination,Autoplay]}
-                spaceBetween={20}
-                slidesPerView={1}
-                loop={true}
-                onSwiper={setSwiperInstance}
-                onInit={(swiper) => {
-                  // Attach custom navigation
-                  if (swiper.params.navigation) {
-                    const navigation = swiper.params.navigation as any;
-                    navigation.prevEl = prevRef.current;
-                    navigation.nextEl = nextRef.current;
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                  }
-                }}
-                  autoplay={{
-    delay: 1500,      // 3 seconds per slide
-    disableOnInteraction: false, // keeps autoplay even after user swipes
-  }}
-               
-              >
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={1}
+            loop={true}
+            onSwiper={setSwiperInstance}
+            onInit={(swiper) => {
+              // Attach custom navigation
+              if (swiper.params.navigation) {
+                const navigation = swiper.params.navigation as any;
+                navigation.prevEl = prevRef.current;
+                navigation.nextEl = nextRef.current;
+                swiper.navigation.init();
+                swiper.navigation.update();
+              }
+            }}
+            autoplay={{
+              delay: 1500, // 3 seconds per slide
+              disableOnInteraction: false, // keeps autoplay even after user swipes
+            }}
+          >
             {mobImg.map((img) => {
               const ref = useRef(null);
               const isInView = useInView(ref, { once: true, amount: 0.5 });
@@ -263,7 +256,6 @@ export default function Awards() {
     </>
   );
 }
-
 
 const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
   const [activeIndex, setActiveIndex] = useState(0);

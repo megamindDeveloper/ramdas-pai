@@ -269,8 +269,8 @@ const SecondGreetingsSection: React.FC = () => {
       </div>
       <div className="pb-10 px-5 max-w-7xl mx-auto">
         <h2 className="font-helvetica font-medium leading-[1.2] lg:leading-none text-[34px] lg:text-[44px]">
-          <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-          <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+          <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Greetings from" />
+          <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Eminent Dignitaries" />
         </h2>
 
         {/* Mobile: Swiper */}
@@ -360,8 +360,8 @@ const SecondGreetingsSection: React.FC = () => {
               >
                 <div className="flex justify-between items-center mb-4 flex-shrink-0">
                   <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
-                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
-                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Ministers" />
+                    <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Greetings from" />
+                    <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="Eminent Dignitaries." />
                   </h2>
                   <motion.button
                     className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"

@@ -7,12 +7,14 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
+import BirthdayGreetingCard from "./InitialPopup";
 
 function Book() {
   const [open, setOpen] = useState(false);
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
+  const [modaLopen, setmodaLopen] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
@@ -40,7 +42,7 @@ function Book() {
           </p>
           <div className="hidden md:block relative">
             <div className="flex relative flex-col lg:flex-row gap-6 mt-12">
-              <div className="w-[70%]">
+              <div className="w-[100%] ">
                 <Image
                   loading="lazy"
                   width={1000}
@@ -51,7 +53,7 @@ function Book() {
                   onClick={() => setOpen(true)}
                 />
               </div>
-              <div>
+              {/* <div>
                 <Image
                   loading="lazy"
                   width={1000}
@@ -61,11 +63,19 @@ function Book() {
                   className="w-full h-full object-cover shadow-xl cursor-pointer  transition"
                   onClick={() => setOpen(true)}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
-          <div className="mt-12   relative md:hidden">
-            <div ref={prevRef} className="absolute md:hidden left-1 top-1/2">
+          <div className="my-12  px-5 relative md:hidden">
+            <Image
+              src="/images/flipImage/3.png"
+              alt="Book Cover 1"
+              width={1000}
+              height={1000}
+              className="w-full h-[40vh] lg:h-[500px] object-cover shadow-xl cursor-pointer rounded-lg"
+              onClick={() => setOpen(true)}
+            />
+            {/* <div ref={prevRef} className="absolute md:hidden left-1 top-1/2">
               <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.49257 16.0377L0 8.01887L8.49257 0L10 1.42335L3.01486 8.01887L10 14.6144L8.49257 16.0377Z" fill="#EF2700" />
               </svg>
@@ -77,7 +87,7 @@ function Book() {
             </div>
             <div className="px-5 lg:px-0">
               <Swiper
-                modules={[Navigation, Pagination,Autoplay]}
+                modules={[Navigation, Pagination, Autoplay]}
                 spaceBetween={20}
                 slidesPerView={1}
                 loop={true}
@@ -92,10 +102,10 @@ function Book() {
                     swiper.navigation.update();
                   }
                 }}
-                  autoplay={{
-    delay: 1500,      // 3 seconds per slide
-    disableOnInteraction: false, // keeps autoplay even after user swipes
-  }}
+                autoplay={{
+                  delay: 1500, // 3 seconds per slide
+                  disableOnInteraction: false, // keeps autoplay even after user swipes
+                }}
                 className="w-full"
               >
                 <SwiperSlide>
@@ -121,7 +131,7 @@ function Book() {
                 </SwiperSlide>
               </Swiper>
             </div>
-           
+
             {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={2} />}
             <div className="absolute hidden lg:block -z-10 -bottom-20 -right-[400px] xl:-right-[300px]">
               <Image
@@ -132,10 +142,38 @@ function Book() {
                 className="object-cover  cursor-pointer  "
                 onClick={() => setOpen(true)}
               />
-            </div>
+            </div> */}
           </div>
         </section>
       </div>
+      <div className="flex justify-center my-8">
+        <button
+          onClick={() => setmodaLopen(true)}
+          className="uppercase cursor-pointer border-2 text-[#EF2700] border-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white"
+        >
+          Wish now
+        </button>
+      </div>
+      <AnimatePresence>
+        {modaLopen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative bg-transparent w-[95%] max-w-[800px] max-h-[95vh] overflow-y-auto rounded-lg"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+            >
+              {/* ✅ Load the Greeting Card */}
+              <BirthdayGreetingCard onClose={() => setmodaLopen(false)} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Modal */}
       <AnimatePresence>

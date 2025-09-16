@@ -70,8 +70,8 @@ const Architect = () => {
           className={`font-sans  text-lg  text-black  lg:text-[18px]  mx-auto text- max-w-7xl mt-4 ${text1InView ? "text-slide-in" : ""}`}
         >
           Dr. Ramdas M. Pai, Chancellor of Manipal Academy of Higher Education (MAHE) and recipient of the Padma Bhushan (2011), envisions a future
-          where Manipal stands among the world’s premier educational institutions. With his tireless dedication, Dr. Pai’s extraordinary leadership,
-          innovative thinking, and visionary approach have shaped generations of learners, thus transforming Manipal into a beacon of global education
+          where Manipal stands among the world’s premier educational institutions. Dr. Pai’s extraordinary leadership,
+          innovative thinking, and visionary approach have shaped generations of learners,  transforming Manipal into a beacon of global education
           with the noblest of ideals.
         </p>
       </div>

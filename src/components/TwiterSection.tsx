@@ -73,20 +73,15 @@ const MinisterCardModel = ({ item, onClick }: { item: GreetingItem; onClick: () 
 };
 
 const TwitterSection: React.FC = ({
-  initial = 9384, // target value
-  base = 9296, // starting value for animation
+  initial = 0, // target value
+  base = 0, // starting value for animation
   storageKey = "wish_counter_value",
 }: {
   initial?: number;
   base?: number;
   storageKey?: string;
 }) => {
-
-
-
-
-
-    const [swiperInstance, setSwiperInstance] = useState<any>(null);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
   // State for main page display
   const [screenshots, setScreenshots] = useState<ScreenshotItem[]>([]);
   const [isMobile, setIsMobile] = useState(false);
@@ -242,7 +237,7 @@ const TwitterSection: React.FC = ({
         </h2>
 
         <div className="flex flex-col md:flex-row lg:items-center  gap-3 md:gap-10 mb-6 md:my-6  md:text-left">
-          <div className="font-bold text-[56px] lg:text-8xl font-sans "> {count.toFixed(0).toLocaleString()}</div>
+          <div className="font-bold text-[56px] lg:text-8xl font-sans "> 0</div>
           <div className="max-w-xl flex">
             <p className="font-light text-[16px]">Countless warm wishes have already made this celebration special!</p>
             <p className="m font-light">
@@ -254,63 +249,59 @@ const TwitterSection: React.FC = ({
         {/* Swiper for Mobile */}
         {isMobile ? (
           <>
-         <Swiper
-                modules={[Navigation, Pagination,Autoplay]}
-                spaceBetween={20}
-                slidesPerView={1}
-                loop={true}
-                onSwiper={setSwiperInstance}
-                onInit={(swiper) => {
-                  // Attach custom navigation
-                  if (swiper.params.navigation) {
-                    const navigation = swiper.params.navigation as any;
-                 
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                  }
-                }}
-                  autoplay={{
-    delay: 1500,      // 3 seconds per slide
-    disableOnInteraction: false, // keeps autoplay even after user swipes
-  }}
-                
-              >
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={20}
+              slidesPerView={1}
+              loop={true}
+              onSwiper={setSwiperInstance}
+              onInit={(swiper) => {
+                // Attach custom navigation
+                if (swiper.params.navigation) {
+                  const navigation = swiper.params.navigation as any;
+
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                }
+              }}
+              autoplay={{
+                delay: 1500, // 3 seconds per slide
+                disableOnInteraction: false, // keeps autoplay even after user swipes
+              }}
+            >
+              {allScreenshots.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allScreenshots.length} />}
+          </>
+        ) : (
+          // Grid for Desktop
+
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={20}
+            breakpoints={{
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            className="mt-8 lg:mt-12 !pb-10"
+          >
             {allScreenshots.map((item) => (
               <SwiperSlide key={item.id}>
-                <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
+                <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
               </SwiperSlide>
             ))}
           </Swiper>
-           {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allScreenshots.length} />}
-           </>
-        ) : (
-          // Grid for Desktop
-       
-
-
- <Swiper
-  modules={[Autoplay, Pagination]}
-  spaceBetween={20}
-  breakpoints={{
-    768: { slidesPerView: 2 },
-    1024: { slidesPerView: 3 },
-  }}
-  autoplay={{
-    delay: 2500,
-    disableOnInteraction: false,
-  }}
-  loop={true}
-
-  className="mt-8 lg:mt-12 !pb-10"
->
-  {allScreenshots.map((item) => (
-    <SwiperSlide key={item.id}>
-      <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
-    </SwiperSlide>
-  ))}
-</Swiper>
         )}
- 
+
         <div className="md:flex hidden  mt-10">
           {/* Reset activeIndex to 0 when opening the modal */}
           <button
@@ -323,8 +314,6 @@ const TwitterSection: React.FC = ({
             View more
           </button>
         </div>
-
-        
 
         {/* --- NEW: "View More" Modal --- */}
         {/* The NEW "View More" Modal */}
@@ -455,7 +444,6 @@ const TwitterSection: React.FC = ({
 };
 
 export default TwitterSection;
-
 
 const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
   const [activeIndex, setActiveIndex] = useState(0);

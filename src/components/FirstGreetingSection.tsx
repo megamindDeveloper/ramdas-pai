@@ -61,7 +61,7 @@ const contentVariants = {
 // Example data
 const slider = [
   {
-    thumbNailImage: "/thumbnails/primeMinister.webp",
+    thumbNailImage: "/thumbnails/image.png",
     wishesImage: "/thumbnails/pmWishLetter.webp",
   },
   {

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // 1. Import useEffect and useCallback
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,10 +8,21 @@ const images = ["/images/legacy/4.jpg", "/images/legacy/2.png", "/images/legacy/
 export default function LegacySection() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Rotate images on right arrow click
-  const handleNext = () => {
+  // 2. Wrap handleNext in useCallback to prevent it from being recreated on every render.
+  // This makes it a stable dependency for our useEffect hook.
+  const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
+  }, []); // The dependency array is empty because `images.length` is constant.
+
+  // 3. Add the useEffect hook to create and clean up the interval.
+  useEffect(() => {
+    // Set up the interval to call handleNext every 2 seconds (2000 milliseconds)
+    const intervalId = setInterval(handleNext, 2000);
+
+    // This is the cleanup function.
+    // It runs when the component unmounts to prevent memory leaks.
+    return () => clearInterval(intervalId);
+  }, [handleNext]); // The effect depends on the handleNext function.
 
   // Reorder images so that the current image is first
   const reorderedImages = [images[currentIndex], ...images.slice(currentIndex + 1), ...images.slice(0, currentIndex)];
@@ -97,7 +108,7 @@ export default function LegacySection() {
         </div>
              <div className="flex md:hidden  h-[70vh] md:gap-4 lg:col-span-8">
           <div className="w-[100%] md:w-[50%]">
-            <Image src={reorderedImages[0]} alt="legacy main" width={300} height={400} className="w-full h-[70vh] object-cover rounded" />
+            <Image src={reorderedImages[0]} alt="legacy main" width={300} height={400} className="w-full h-[70vh] object-contain rounded" />
           </div>
           {reorderedImages.slice(1).map((img, i) => (
             <div key={i} className="flex-1">
