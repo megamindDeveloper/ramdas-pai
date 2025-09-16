@@ -247,59 +247,64 @@ const TwitterSection: React.FC = ({
         </div>
 
         {/* Swiper for Mobile */}
-        {isMobile ? (
-          <>
-            <Swiper
-              modules={[Navigation, Pagination, Autoplay]}
-              spaceBetween={20}
-              slidesPerView={1}
-              loop={true}
-              onSwiper={setSwiperInstance}
-              onInit={(swiper) => {
-                // Attach custom navigation
-                if (swiper.params.navigation) {
-                  const navigation = swiper.params.navigation as any;
+    {isMobile && allScreenshots.length > 0 && (
+  <>
+    <Swiper
+      modules={[Autoplay, Pagination]}
+      spaceBetween={20}
+      slidesPerView={1}
+      loop={true}
+      autoplay={{
+        delay: 1500,
+        disableOnInteraction: false,
+      }}
+      onSwiper={setSwiperInstance}
+      observer={true}
+      observeParents={true}
+    >
+      {allScreenshots.map((item) => (
+        <SwiperSlide key={item.id}>
+          <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
 
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                }
-              }}
-              autoplay={{
-                delay: 1500, // 3 seconds per slide
-                disableOnInteraction: false, // keeps autoplay even after user swipes
-              }}
-            >
-              {allScreenshots.map((item) => (
-                <SwiperSlide key={item.id}>
-                  <TweetCard item={item} onClick={() => openModal(item.screenshotUrl)} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allScreenshots.length} />}
-          </>
-        ) : (
+    {swiperInstance && (
+      <CustomBulletPagination
+        swiper={swiperInstance}
+        total={allScreenshots.length}
+      />
+    )}
+  </>
+)}
+        
+        
+        {!isMobile&& (
           // Grid for Desktop
+       
 
-          <Swiper
-            modules={[Autoplay, Pagination]}
-            spaceBetween={20}
-            breakpoints={{
-              768: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            className="mt-8 lg:mt-12 !pb-10"
-          >
-            {allScreenshots.map((item) => (
-              <SwiperSlide key={item.id}>
-                <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+
+ <Swiper
+  modules={[Autoplay, Pagination]}
+  spaceBetween={20}
+  breakpoints={{
+    768: { slidesPerView: 2 },
+    1024: { slidesPerView: 3 },
+  }}
+  autoplay={{
+    delay: 2500,
+    disableOnInteraction: false,
+  }}
+  loop={true}
+
+  className="mt-8 lg:mt-12 !pb-10"
+>
+  {allScreenshots.map((item) => (
+    <SwiperSlide key={item.id}>
+      <TweetCard key={item.id} item={item} onClick={() => openModal(item.screenshotUrl)} />
+    </SwiperSlide>
+  ))}
+</Swiper>
         )}
 
         <div className="md:flex hidden  mt-10">
@@ -372,7 +377,7 @@ const TwitterSection: React.FC = ({
                       {otherMinisters.map((item) => (
                         <div
                           key={item.id}
-                          className="cursor-pointer group overflow-hidden  shadow-md"
+                          className="cursor-pointer group overflow-hidden "
                           onClick={() => handleGreetingClick(item.greetingsImageUrl)}
                         >
                           <Image
@@ -380,7 +385,7 @@ const TwitterSection: React.FC = ({
                             alt={item.name}
                             width={400}
                             height={533}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                           />
                         </div>
                       ))}
@@ -389,7 +394,7 @@ const TwitterSection: React.FC = ({
                         <div className="flex items-center justify-center  ">
                           <button
                             onClick={handleNext}
-                            className="flex flex-col items-center justify-center w-full h-full transition-colors duration-300 "
+                            className="flex flex-col items-center cursor-pointer justify-center w-full h-full transition-colors duration-300 "
                             aria-label="Next Minister"
                           >
                             <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -448,6 +453,9 @@ export default TwitterSection;
 const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // number of bullets you want to show at a time
+  const visibleBullets = 3;
+
   useEffect(() => {
     if (!swiper) return;
     const onSlideChange = () => setActiveIndex(swiper.realIndex);
@@ -457,13 +465,22 @@ const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swip
     };
   }, [swiper]);
 
+  // Compute the "window" of bullets to show
+  const start = Math.floor(activeIndex / visibleBullets) * visibleBullets;
+  const bullets = Array.from({ length: visibleBullets }).map((_, i) => {
+    const index = (start + i) % total; // loop around total slides
+    return { index, isActive: index === activeIndex };
+  });
+
   return (
     <div className="md:hidden flex justify-center gap-2 my-4">
-      {Array.from({ length: total }).map((_, index) => (
+      {bullets.map((b) => (
         <button
-          key={index}
-          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
-          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+          key={b.index}
+          onClick={() => swiper.slideToLoop(b.index)}
+          className={`w-3 h-3 rounded-full transition-all ${
+            b.isActive ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"
+          }`}
         />
       ))}
     </div>

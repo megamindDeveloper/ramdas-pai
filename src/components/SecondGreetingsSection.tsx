@@ -76,9 +76,9 @@ const MinisterCard = ({ item, onClick }: { item: GreetingItem; onClick: () => vo
         className="absolute bottom-0 left-0 right-0 p-6  text-white 
                    group-hover:bg-[#F37032] bg-[#F37032] md:bg-[#919191] transition-colors duration-300 ease-in-out"
       >
-        <p className="font-bold font-sans text-2xl leading-tight">{item.name}</p>
+        <p className="font-bold font-sans text-xl leading-tight">{item.name}</p>
 
-        <div className="text-sm font-light mt-4">
+        <div className="text-base font-light mt-4">
           <span>{line1}</span>
           {line2 && (
             <>
@@ -134,9 +134,6 @@ const MinisterCardModel = ({ item, onClick }: { item: GreetingItem; onClick: () 
 };
 
 const SecondGreetingsSection: React.FC = () => {
-
-
-
   const prevRef = useRef<HTMLDivElement | null>(null);
   const nextRef = useRef<HTMLDivElement | null>(null);
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
@@ -274,38 +271,43 @@ const SecondGreetingsSection: React.FC = () => {
         </h2>
 
         {/* Mobile: Swiper */}
-        {isMobile  ? (
+        {isMobile ? (
           <>
-           <Swiper
-                modules={[Navigation, Pagination,Autoplay]}
-                spaceBetween={20}
-                slidesPerView={1}
-                loop={true}
-                onSwiper={setSwiperInstance}
-                onInit={(swiper) => {
-                  // Attach custom navigation
-                  if (swiper.params.navigation) {
-                    const navigation = swiper.params.navigation as any;
-                    navigation.prevEl = prevRef.current;
-                    navigation.nextEl = nextRef.current;
-                    swiper.navigation.init();
-                    swiper.navigation.update();
-                  }
-                }}
-                
-  autoplay={{
-    delay: 1500,      // 3 seconds per slide
-    disableOnInteraction: false, // keeps autoplay even after user swipes
-  }}
-            className="mt-8 !pb-5"
-          >
-            {allGreetings.map((item) => (
-              <SwiperSlide key={item.id}>
-                <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allGreetings.length} />}
+            {allGreetings.length > 0 && (
+              <>
+                <Swiper
+                  modules={[Pagination, Autoplay, Navigation]}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  loop={true}
+                  autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                  }}
+                  observer={true}
+                  observeParents={true}
+                  onBeforeInit={(swiper: any) => {
+                    // Attach custom navigation nodes BEFORE init
+                    if (typeof swiper.params.navigation !== "boolean") {
+                      const navigation = swiper.params.navigation as any;
+                      navigation.prevEl = prevRef.current;
+                      navigation.nextEl = nextRef.current;
+                    }
+                  }}
+                  onSwiper={setSwiperInstance}
+                  className="mt-8 !pb-5"
+                >
+                  {allGreetings.map((item) => (
+                    <SwiperSlide key={item.id}>
+                      <MinisterCard item={item} onClick={() => openModal(item.greetingsImageUrl)} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+
+                {swiperInstance && <CustomBulletPagination swiper={swiperInstance} total={allGreetings.length} />}
+              </>
+            )}
           </>
         ) : (
           // Desktop: Grid
@@ -318,6 +320,8 @@ const SecondGreetingsSection: React.FC = () => {
               disableOnInteraction: false,
             }}
             loop={true}
+            observer={true}
+            observeParents={true}
             className="mt-8 lg:mt-12 !pb-10"
           >
             {allGreetings.map((item) => (
@@ -340,8 +344,6 @@ const SecondGreetingsSection: React.FC = () => {
             View more
           </button>
         </div>
-
-       
 
         {/* The NEW "View More" Modal */}
         <AnimatePresence>
@@ -484,9 +486,11 @@ const SecondGreetingsSection: React.FC = () => {
 
 export default SecondGreetingsSection;
 
-
 const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swiper, total }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // number of bullets you want to show at a time
+  const visibleBullets = 3;
 
   useEffect(() => {
     if (!swiper) return;
@@ -497,13 +501,22 @@ const CustomBulletPagination: React.FC<{ swiper: any; total: number }> = ({ swip
     };
   }, [swiper]);
 
+  // Compute the "window" of bullets to show
+  const start = Math.floor(activeIndex / visibleBullets) * visibleBullets;
+  const bullets = Array.from({ length: visibleBullets }).map((_, i) => {
+    const index = (start + i) % total; // loop around total slides
+    return { index, isActive: index === activeIndex };
+  });
+
   return (
     <div className="md:hidden flex justify-center gap-2 my-4">
-      {Array.from({ length: total }).map((_, index) => (
+      {bullets.map((b) => (
         <button
-          key={index}
-          onClick={() => swiper.slideToLoop(index)} // ✅ navigate correctly
-          className={`w-3 h-3 rounded-full transition-all ${activeIndex === index ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"}`}
+          key={b.index}
+          onClick={() => swiper.slideToLoop(b.index)}
+          className={`w-3 h-3 rounded-full transition-all ${
+            b.isActive ? "bg-red-600 scale-125" : "bg-[#ebebeb] scale-100"
+          }`}
         />
       ))}
     </div>

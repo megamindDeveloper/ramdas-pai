@@ -68,7 +68,7 @@ export default function LegacySection() {
           <h2 className="text-[32px] leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-black mb-6 md:mb-8">
             A Legacy in <br /> Pictures
           </h2>
-          <p className="text-lg text-black font-sans lg:max-w-xl mx-auto md:mx-0">
+          <p className="text-sm text-black font-sans lg:max-w-xl mx-auto md:mx-0">
             Every picture tells a story, and every story echoes a vision. From nurturing Manipal into a global education hub to shaping lives across
             continents, Dr. Ramdas M. Pai’s journey is one of purpose, perseverance, and progress.
           </p>
@@ -106,13 +106,13 @@ export default function LegacySection() {
             </div>
           ))}
         </div>
-             <div className="flex md:hidden  h-[70vh] md:gap-4 lg:col-span-8">
+             <div className="flex md:hidden  h-[50vh] md:gap-4 lg:col-span-8">
           <div className="w-[100%] md:w-[50%]">
-            <Image src={reorderedImages[0]} alt="legacy main" width={300} height={400} className="w-full h-[70vh] object-contain rounded" />
+            <Image src={reorderedImages[0]} alt="legacy main" width={300} height={400} className="w-full h-[50vh] object-cover rounded" />
           </div>
           {reorderedImages.slice(1).map((img, i) => (
             <div key={i} className="flex-1">
-              <Image src={img} alt={`legacy ${i}`} width={300} height={400} className="w-full hidden md:block h-[70vh] object-cover rounded" />
+              <Image src={img} alt={`legacy ${i}`} width={300} height={400} className="w-full hidden md:block h-[50vh] object-cover rounded" />
             </div>
           ))}
         </div>
