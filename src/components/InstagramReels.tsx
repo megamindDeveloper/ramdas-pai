@@ -58,7 +58,7 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
       loading="lazy"
     />
     <div
-      className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out p-6 ${
+      className={`absolute bottom-0 left-0 right-0 text-white transition-colors duration-300 ease-in-out min-h-24 flex flex-col justify-center px-6 ${
         isFeatured ? "bg-[#F37032]" : "bg-[#F37032] md:bg-[#919191] group-hover:bg-[#F37032]"
       }`}
     >
@@ -71,13 +71,13 @@ const ReelCard = ({ item, onClick, isFeatured = false }: { item: ReelItem; onCli
 );
 
 const ReelCard1 = ({ item, onClick, isFeatured = false }: { item: ReelItem; onClick: () => void; isFeatured?: boolean }) => (
-  <div className="relative cursor-pointer overflow-hidden group shadow-md " onClick={onClick}>
+  <div className="relative cursor-pointer overflow-hidden group shadow-md h-[100%]   " onClick={onClick}>
      <Image
         src={item.thumbnailUrl}
         alt={`Portrait of ${item.name}`}
-        className="w-full h-full object-cover aspect-[3/4]"
+        className="w-full h-full object-cover "
         width={800}
-        height={1067}
+        height={1000}
         loading="lazy"
       />
     <div
@@ -272,11 +272,11 @@ const InstagramReels: React.FC = () => {
             <motion.div
               ref={viewMoreModalRef}
               variants={modalVariants}
-              className="relative w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
+              className="relative w-full max-w-4xl h-[90vh] bg-white rounded-xl shadow-2xl p-4 sm:p-6 lg:p-12 flex flex-col"
             >
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
                 <h2 className="font-helvetica  font-medium leading-none text-[32px]  lg:text-[44px]">
-                  <AnimatedTextCharacter className="text-black font-sans font-semibold" text="Wishes from" />
+                  <AnimatedTextCharacter className="text-black font-sans font-semibold lg:text-[47px]" text="Wishes from" />
                   <AnimatedTextCharacter className="text-[#EF4123] font-serif mt-1 font-normal" text="MAHE Leadership" />
                 </h2>
                 <motion.button
@@ -328,7 +328,7 @@ const InstagramReels: React.FC = () => {
                       <div className="flex items-center justify-center  ">
                         <button
                           onClick={handleNext}
-                          className="flex flex-col pl-4 justify-end w-full h-full transition-colors duration-300 "
+                          className="flex flex-col cursor-pointer pl-4 justify-end w-full h-full transition-colors duration-300 "
                           aria-label="Next Minister"
                         >
                           <svg width="32" height="56" viewBox="0 0 32 56" fill="none" xmlns="http://www.w3.org/2000/svg">
