@@ -47,7 +47,7 @@ const Architect = () => {
         ) : (
           <iframe
             className="w-full h-full cursor-pointer"
-            src="https://www.youtube.com/embed/DdbhszgyNzU?si=cztHFf8t0m32LCIR?autoplay=1&rel=0"
+            src="https://www.youtube.com/embed/DV8Eu3qgkxY?si=IQs2exCVPW4SvIlh?si=cztHFf8t0m32LCIR?autoplay=1&rel=0"
             title="GLC 2024 Experience"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -106,7 +106,7 @@ const Architect = () => {
         ) : (
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/DdbhszgyNzU?autoplay=1&rel=0"
+            src="https://www.youtube.com/embed/DV8Eu3qgkxY?si=IQs2exCVPW4SvIlh?autoplay=1&rel=0"
             title="GLC 2024 Experience"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
