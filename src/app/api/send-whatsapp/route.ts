@@ -61,15 +61,13 @@ export async function POST(request: Request) {
     });
 
     const accessToken = await getAccessToken();
-    const formattedPhoneNumber = phoneNumber.startsWith("91") ? phoneNumber : `91${phoneNumber}`;
-    // const formattedPhoneNumber = "917012257903"; // as string
-
+    const numberWithoutPlus = phoneNumber.replace("+", "");
     const payload = {
       definitionKey: sfmc.definitionKey,
       recipients: [
         {
-          contactKey: formattedPhoneNumber,
-          to: formattedPhoneNumber,
+          contactKey: numberWithoutPlus,
+          to: numberWithoutPlus,
         },
       ],
     };
