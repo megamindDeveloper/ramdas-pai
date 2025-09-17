@@ -37,7 +37,7 @@ const CustomToast: React.FC<CustomToastProps> = ({ message, visible, onClose }) 
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed w-full top-[40%] md:hidden flex justify-center items-center  z-[9999]"
+          className="fixed w-full  md:hidden flex justify-center items-center  z-[9999]"
         >
           <div className="relative font-sans bg-white text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm">
             <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
