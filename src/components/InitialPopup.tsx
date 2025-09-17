@@ -39,19 +39,20 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose, sh
     if (phoneNumber.length !== 10) {
       alert("Phone number must be exactly 10 digits");
       setLoading(false);
+
       return;
     }
 
-    // --- 3. Use try...catch to handle success and error ---
     try {
       const res = await fetch("/api/send-whatsapp", {
         method: "POST",
+
         headers: { "Content-Type": "application/json" },
+
         body: JSON.stringify({ name, phoneNumber }),
       });
 
       if (!res.ok) {
-        // If response is not OK (e.g., 400, 500 error), throw an error
         throw new Error("Failed to send message. Please try again.");
       }
 
@@ -62,12 +63,15 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose, sh
       // --- 4. Show success toast ---
 
       setName("");
-      setPhoneNumber("");
+
+      setPhoneNumber(undefined);
+
       onClose();
     } catch (error) {
       console.error("Submission Error:", error);
-      // --- 5. Show error toast ---
+
       const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+
       toast.error(errorMessage);
     } finally {
       setLoading(false); // <-- Set loading to false after completion
