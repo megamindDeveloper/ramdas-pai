@@ -19,9 +19,7 @@ const CustomSuccessToast: React.FC<{ message: string }> = ({ message }) => (
       alt="Happy 90th Birthday Dr. Ramdas M Pai"
       className="w-24 h-auto mb-4" // Smaller image for the toast
     />
-    <p className="text-md font-semibold leading-relaxed text-gray-800">
-      {message}
-    </p>
+    <p className="text-md font-semibold leading-relaxed text-gray-800">{message}</p>
     {/* Optional: Add a small star decoration */}
     <div className="absolute top-2 left-2 text-xl text-[#002c5a] opacity-80 rotate-6">✦</div>
     <div className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] opacity-80 -rotate-6">✦</div>
@@ -62,13 +60,7 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       console.log("WhatsApp API Response:", data);
 
       // --- 4. Show success toast ---
-      toast.custom(
-        (t) => (
-          <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />
-        ),
-        { duration: 3000 }
-      );
-
+      toast.custom((t) => <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />, { duration: 3000 });
 
       // Reset form and close modal
       setName("");
@@ -118,10 +110,10 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       {/* --- Message Section --- */}
       <main className="text-center mb-8 px-4 z-10">
         <p className="text-md md:text-xl leading-relaxed text-gray-800">
-          Wishing a {" "}
+          Wishing a{" "}
           <strong>
-            {" "}very
-            happy 90<sup>th</sup> birthday
+            {" "}
+            very happy 90<sup>th</sup> birthday
           </strong>{" "}
           to the visionary leader who placed Manipal on the global map. Thank you for your constant inspiration.
         </p>
@@ -140,18 +132,14 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
         />
         <input
           type="tel"
-          placeholder="Phone Number"
+          placeholder="Phone Number (with country code, e.g. +971XXXXXXXXX)"
           value={phoneNumber}
-          onChange={(e) => {
-            const value = e.target.value.replace(/\D/g, "");
-            setPhoneNumber(value);
-          }}
-          maxLength={10}
-          pattern="[0-9]{10}"
-          title="Please enter exactly 10 digits"
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          pattern="^\+[1-9]\d{6,15}$"
+          title="Enter a valid phone number with country code (e.g. +971XXXXXXXXX)"
           className="w-full max-w-xs bg-gray-200 rounded-lg md:px-4 md:py-3 py-2 px-4 placeholder-gray-500/80 text-[#4a2e20] border-none focus:ring-2 focus:ring-[#8a6c4d] focus:outline-none shadow-inner"
           required
-          disabled={loading} // <-- Disable input when loading
+          disabled={loading}
         />
 
         <button
