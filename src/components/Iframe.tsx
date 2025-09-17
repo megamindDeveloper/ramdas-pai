@@ -155,13 +155,13 @@ function Book() {
         </button>
       </div>
       <AnimatePresence>
-        {modaLopen && (
+       
           <>
               {/* ✅ Load the Greeting Card */}
               <BirthdayGreetingCard showPopup={modaLopen} onClose={() => setmodaLopen(false)} />
                 </>
       
-        )}
+   
       </AnimatePresence>
 
       {/* Modal */}
