@@ -54,11 +54,11 @@ export async function POST(request: Request) {
     if (!phoneNumber) {
       return NextResponse.json({ success: false, error: "Phone number is required." }, { status: 400 });
     }
-    // await addDoc(collection(db, "wishes"), {
-    //   name,
-    //   phoneNumber,
-    //   createdAt: serverTimestamp(),
-    // });
+    await addDoc(collection(db, "wishes"), {
+      name,
+      phoneNumber,
+      createdAt: serverTimestamp(),
+    });
 
     const accessToken = await getAccessToken();
     const formattedPhoneNumber = phoneNumber.startsWith("91") ? phoneNumber : `91${phoneNumber}`;
