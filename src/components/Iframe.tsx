@@ -29,7 +29,7 @@ function Book() {
   return (
     <>
       <div className="relative">
-        <section className="mx-auto lg:max-w-7xl pt-10 md:pb-20 ">
+        <section className="mx-auto lg:max-w-7xl pt-10 md:pb-8 ">
           <h2
             style={{ color: "#EF4123" }}
             className="text-[32px] px-5 lg:px-0 leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-[#FF2400] mb-6 md:mb-8"
@@ -49,7 +49,7 @@ function Book() {
                   height={1000}
                   src="/images/flipImage/3.png"
                   alt="Book Cover 1"
-                  className="w-full h-full object-cover shadow-xl cursor-pointer  transition"
+                  className="  object-cover w-[80%] h-[90vh] shadow-xl cursor-pointer  transition"
                   onClick={() => setOpen(true)}
                 />
               </div>
@@ -146,7 +146,7 @@ function Book() {
           </div>
         </section>
       </div>
-      <div className="flex justify-center my-8">
+      <div className="flex justify-center mb-16 mt-8">
         <button
           onClick={() => setmodaLopen(true)}
           className="uppercase cursor-pointer border-2 text-[#EF2700] border-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white"
@@ -155,24 +155,13 @@ function Book() {
         </button>
       </div>
       <AnimatePresence>
-        {modaLopen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="relative bg-transparent w-[95%] max-w-[800px] max-h-[95vh] overflow-y-auto rounded-lg"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-            >
+       
+          <>
               {/* ✅ Load the Greeting Card */}
-              <BirthdayGreetingCard onClose={() => setmodaLopen(false)} />
-            </motion.div>
-          </motion.div>
-        )}
+              <BirthdayGreetingCard showPopup={modaLopen} onClose={() => setmodaLopen(false)} />
+                </>
+      
+   
       </AnimatePresence>
 
       {/* Modal */}
@@ -191,7 +180,7 @@ function Book() {
               exit={{ scale: 0.8, opacity: 0 }}
             >
               {/* Close Button */}
-              <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-white bg-black p-2 rounded-full ">
+              <button onClick={() => setOpen(false)} className="absolute cursor-pointer top-4 right-4 text-white bg-black p-2 rounded-full ">
                 <IconX size={25} />
               </button>
 

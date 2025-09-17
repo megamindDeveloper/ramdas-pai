@@ -104,14 +104,15 @@ const Architect = () => {
             </div>
           </div>
         ) : (
-          <iframe
-            className="w-full h-full"
-            src="https://www.youtube.com/embed/DV8Eu3qgkxY?si=IQs2exCVPW4SvIlh?autoplay=1&rel=0"
-            title="GLC 2024 Experience"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
+        <iframe
+  className="w-full h-full cursor-pointer"
+  src="https://www.youtube.com/embed/DV8Eu3qgkxY?autoplay=1&rel=0&si=IQs2exCVPW4SvIlh"
+  title="GLC 2024 Experience"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowFullScreen
+></iframe>
+
         )}
       </div>
     </div>

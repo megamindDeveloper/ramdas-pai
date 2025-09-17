@@ -49,8 +49,8 @@ type ScreenshotItem = {
 // Card for displaying the tweet screenshot
 const TweetCard = ({ item, onClick }: { item: ScreenshotItem; onClick: () => void }) => (
   <div className="  text-black  flex flex-col cursor-pointer" onClick={onClick}>
-    <div className="flex-grow  overflow-hidden">
-      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="rounded-2xl w-full h-full object-contain" />
+    <div className="flex-grow  overflow-hidden h-[350px]">
+      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="rounded-2xl w-full h-full object-cover" />
     </div>
   </div>
 );
@@ -406,10 +406,16 @@ const TwitterSection: React.FC = ({
                 variants={modalVariants}
                 className="relative w-full max-w-md h-auto bg-white rounded-2xl shadow-2xl p-4"
               >
-                <motion.button onClick={closeModal} /* ... */>
-                  {" "}
-                  <IconX className="text-white w-5 h-5" />{" "}
-                </motion.button>
+                   <div className="flex justify-end">
+    <motion.button
+      className="h-9 w-9 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer"
+      onClick={closeModal}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+    >
+      <IconX className="text-white w-5 h-5" />
+    </motion.button>
+  </div>
                 <div className="mt-4">
                   <Image
                     loading="lazy"

@@ -40,12 +40,9 @@ export default function Home() {
         <Image src={"/images/latestHeader.svg"} alt="logo" width={320} height={48} className=" w-[49%] md:w-auto  block object-contain" />
       </header>
       {/* 4. Conditionally render the popup */}
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          {/* Pass the function to close the popup */}
-          <BirthdayGreetingCard onClose={() => setShowPopup(false)} />
-        </div>
-      )}
+
+      <BirthdayGreetingCard showPopup={showPopup} onClose={() => setShowPopup(false)} />
+
       {/* The HeroSection now fills the main container */}
       <HeroSection />
       {/* <FirsrGreetingsSection /> */}

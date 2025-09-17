@@ -1,16 +1,37 @@
 "use client";
 
 import { IconX } from "@tabler/icons-react";
-
 import Image from "next/image";
-
-import React, { useState } from "react";
-
-import { toast } from "react-hot-toast";
-
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast"; // <-- 1. Import toast
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
 import "react-phone-number-input/style.css"; // Base styles are still needed
+
+import { AnimatePresence, motion } from "framer-motion";
+import CustomToast from "./ToastComponent";
+
+const toastVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.9 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } },
+  exit: { opacity: 0, y: 50, scale: 0.9, transition: { duration: 0.3 } },
+};
+
+interface CustomToastProps {
+  message: string;
+  visible: boolean;
+  onClose: () => void;
+}
+// --- Component ---
+interface BirthdayGreetingCardProps {
+  onClose: () => void;
+  showPopup: boolean;
+}
+
+
+
+
+
 
 // --- 1. NEW: Component to inject CSS directly into the page ---
 
@@ -72,37 +93,15 @@ const PhoneInputStyles = () => (
   `}</style>
 );
 
-interface BirthdayGreetingCardProps {
-  onClose: () => void;
-}
-
-const CustomSuccessToast: React.FC<{ message: string }> = ({ message }) => (
-  <div className="relative font-sans bg-[#fdf3de] text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm mx-auto">
-    <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
-
-    <Image
-      width={150}
-      height={150}
-      src="/images/backgroundImage/popupImage.webp"
-      alt="Happy 90th Birthday Dr. Ramdas M Pai"
-      className="w-24 h-auto mb-4"
-    />
-
-    <p className="text-md font-semibold leading-relaxed text-gray-800">{message}</p>
-
-    <div className="absolute top-2 left-2 text-xl text-[#002c5a] opacity-80 rotate-6">✦</div>
-
-    <div className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] opacity-80 -rotate-6">✦</div>
-  </div>
-);
-
-const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) => {
+const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose, showPopup }) => {
+  // State to manage the form inputs
   const [name, setName] = useState<string>("");
-
-  const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
-
-  const [loading, setLoading] = useState<boolean>(false);
-
+   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
+  const [loading, setLoading] = useState<boolean>(false); // <-- 2. Add loading state
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -133,7 +132,9 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
 
       console.log("WhatsApp API Response:", data);
 
-      toast.custom((t) => <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />, { duration: 3000 });
+      setShowToast(true);
+      setToastMessage("Thank you! Your greetings have been sent successfully.");
+      // --- 4. Show success toast ---
 
       setName("");
 
@@ -147,15 +148,17 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
 
       toast.error(errorMessage);
     } finally {
-      setLoading(false);
+      setLoading(false); // <-- Set loading to false after completion
+      onClose();
     }
   };
 
   return (
+    // Main container with background, border, and relative positioning for decorations
     <>
-      {/* --- 2. RENDER the style component --- */}
-
-      <PhoneInputStyles />
+      {showPopup && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+         <PhoneInputStyles />
 
       <div className="relative font-sans bg-[#ffff] text-[#4a2e20] max-w-3xl  mx-auto my-8 p-8 pt-12 rounded-lg border-2 border-[#a98e71] shadow-2xl overflow-hidden">
         <div className="absolute inset-2 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
@@ -228,8 +231,16 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
           </button>
         </form>
       </div>
+        </div>
+      )}
+      {showToast && <CustomToast message={toastMessage} visible={showToast} onClose={() => setShowToast(false)} />}
     </>
   );
 };
 
 export default BirthdayGreetingCard;
+
+
+
+
+

@@ -249,7 +249,7 @@ const mobImg = [
   },
   {
     id: 2,
-    src: "/images/glimpses/73.webp",
+    src: "/images/awards/award.JPG",
     alt: "2",
   },
   {
@@ -408,7 +408,7 @@ export default function Awards() {
               <Image src="/images/awards/3.png" alt="Award Left" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
             </div>
             <div className="flex justify-center items-end">
-              <Image src="/images/glimpses/73.webp" alt="Award Center" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
+              <Image src="/images/awards/award.JPG" alt="Award Center" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
             </div>
             <div className="flex justify-center items-end">
               <Image src="/images/awards/1.png" alt="Award Right" width={400} height={400} className="shadow-lg object-cover h-[400px]" />
