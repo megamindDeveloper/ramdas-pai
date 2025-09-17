@@ -191,7 +191,7 @@ function Book() {
               exit={{ scale: 0.8, opacity: 0 }}
             >
               {/* Close Button */}
-              <button onClick={() => setOpen(false)} className="absolute top-4 right-4 text-white bg-black p-2 rounded-full ">
+              <button onClick={() => setOpen(false)} className="absolute cursor-pointer top-4 right-4 text-white bg-black p-2 rounded-full ">
                 <IconX size={25} />
               </button>
 

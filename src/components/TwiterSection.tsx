@@ -49,8 +49,8 @@ type ScreenshotItem = {
 // Card for displaying the tweet screenshot
 const TweetCard = ({ item, onClick }: { item: ScreenshotItem; onClick: () => void }) => (
   <div className="  text-black  flex flex-col cursor-pointer" onClick={onClick}>
-    <div className="flex-grow  overflow-hidden">
-      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="rounded-2xl w-full h-full object-contain" />
+    <div className="flex-grow  overflow-hidden h-[350px]">
+      <Image loading="lazy" height={800} width={800} src={item.screenshotUrl} alt="Tweet Screenshot" className="rounded-2xl w-full h-full object-cover" />
     </div>
   </div>
 );

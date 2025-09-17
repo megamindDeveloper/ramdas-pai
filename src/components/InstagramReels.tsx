@@ -213,6 +213,13 @@ const InstagramReels: React.FC = () => {
   const otherReels = allReels.filter((_, index) => index !== activeIndex).slice(0, 5);
   const sliderRef = useRef<HTMLDivElement>(null);
   const isSliderInView = useInView(sliderRef, { once: true }); // only trigger once
+
+    useEffect(() => {
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      handleResize();
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
   
   return (
     <div className="relative">
@@ -245,7 +252,7 @@ const InstagramReels: React.FC = () => {
                   autoplay={{
                     delay: 2000,
                     disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
+                    
                   }}
                   observer={true}
                   observeParents={true}
@@ -406,18 +413,18 @@ const InstagramReels: React.FC = () => {
               <motion.div
                 ref={videoModalRef}
                 variants={modalVariants}
-                className="relative w-full max-w-lg h-[90vh]  p-10 bg-white rounded-2xl shadow-2xl overflow-hidden"
+                className="relative w-full max-w-lg h-[90vh] pt-12 px-5 md:p-10 bg-white rounded-2xl shadow-2xl overflow-hidden"
               >
                 <motion.button
                   variants={contentVariants}
-                  className="absolute top-2 right-2 z-10 h-8 w-8 rounded-full bg-gray-800/60 flex items-center justify-center"
+                  className="absolute top-2 right-2 z-10 h-8 w-8 cursor-pointer rounded-full bg-gray-800/60 flex items-center justify-center"
                   onClick={closeVideoModal}
                 >
                   <IconX className="text-white w-5 h-5" />
                 </motion.button>
                 <div className="aspect-[9/16]">
                   <iframe
-                    className="w-full  h-[80vh] rounded-2xl"
+                    className="w-full h-[80vh] md:h-[80vh] rounded-2xl"
                     src={currentVideoUrl}
                     title="YouTube Video Player"
                     frameBorder="0"
