@@ -2,107 +2,101 @@
 
 import { IconX } from "@tabler/icons-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast"; // <-- 1. Import toast
 
-
-
-
-import { motion } from "framer-motion";
-
+import { AnimatePresence, motion } from "framer-motion";
 
 const toastVariants = {
-  hidden: { opacity: 0, x: 50, y: 50, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 250, damping: 20 },
-  },
-  exit: {
-    opacity: 0,
-    x: 50,
-    y: 50,
-    scale: 0.95,
-    transition: { duration: 0.3, ease: "easeInOut" },
-  },
+  hidden: { opacity: 0, y: 50, scale: 0.9 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4 } },
+  exit: { opacity: 0, y: 50, scale: 0.9, transition: { duration: 0.3 } },
 };
+
+interface CustomToastProps {
+  message: string;
+  visible: boolean;
+  onClose: () => void;
+}
 // --- Component ---
 interface BirthdayGreetingCardProps {
   onClose: () => void;
 }
-const CustomSuccessToast: React.FC<{ message: string }> = ({ message }) => {
+const CustomToast: React.FC<CustomToastProps> = ({ message, visible, onClose }) => {
+  // Auto close after 3s
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, onClose]);
+
   return (
-    <motion.div
-      variants={toastVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className="fixed inset-0 z-[9999] flex h-screen items-center justify-center" // <-- center on screen
-    >
-      <div className="relative font-sans bg-white text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm">
-        <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
-
-        {/* Toast image */}
+    <AnimatePresence mode="wait">
+      {visible && (
         <motion.div
-          initial={{ rotate: -8, opacity: 0 }}
-          animate={{ rotate: 0, opacity: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          key="custom-toast"
+          variants={toastVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999]"
         >
-          <Image
-            width={150}
-            height={150}
-            src="/images/backgroundImage/popupImage.webp"
-            alt="Happy 90th Birthday Dr. Ramdas M Pai"
-            className="w-24 h-auto mb-4"
-          />
-        </motion.div>
+          <div className="relative font-sans bg-white text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm">
+            <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
 
-        {/* Toast message */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-          className="text-md font-semibold leading-relaxed text-gray-800"
-        >
-          {message}
-        </motion.p>
+            {/* Toast image */}
+            <motion.div initial={{ rotate: -8, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
+              <Image width={150} height={150} src="/images/backgroundImage/popupImage.webp" alt="Toast Icon" className="w-24 h-auto mb-4" />
+            </motion.div>
 
-        {/* Decorations */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.8, scale: 1 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-          className="absolute top-2 left-2 text-xl text-[#002c5a] rotate-6"
-        >
-          ✦
+            {/* Toast message */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="text-md font-semibold leading-relaxed text-gray-800"
+            >
+              {message}
+            </motion.p>
+
+            {/* Decorations */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 0.8, scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              className="absolute top-2 left-2 text-xl text-[#002c5a] rotate-6"
+            >
+              ✦
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 0.8, scale: 1 }}
+              transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+              className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] -rotate-6"
+            >
+              ✦
+            </motion.div>
+          </div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.8, scale: 1 }}
-          transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-          className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] -rotate-6"
-        >
-          ✦
-        </motion.div>
-      </div>
-    </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
-
 
 const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) => {
   // State to manage the form inputs
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // <-- 2. Add loading state
-
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true); // <-- Set loading to true on submit
-
     if (phoneNumber.length !== 10) {
       alert("Phone number must be exactly 10 digits");
       setLoading(false);
@@ -123,21 +117,12 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       }
 
       const data = await res.json();
-      console.log("WhatsApp API Response:", data);
+     
 
       // --- 4. Show success toast ---
-       toast.custom(
-  (b) => (
-    <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />
-  ),
-  {
-    duration: 3000,
-    position: "top-center", // still needed for consistency
-    className: "!fixed !inset-0 !flex !items-center !justify-center", // <-- force center
-  }
-);
 
-
+      setToastMessage("Thank you! Your greetings have been sent successfully.");
+      setShowToast(true);
       // Reset form and close modal
       setName("");
       setPhoneNumber("");
@@ -186,11 +171,10 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       {/* --- Message Section --- */}
       <main className="text-center mb-8 px-4 z-10">
         <p className="text-md md:text-xl leading-relaxed text-gray-800">
-          Wishing a {" "}
-          <strong>
-            {" "}very
-            happy 90<sup>th</sup> birthday
-          </strong>{" "}
+          Wishing a{" "}
+          
+            very happy 90<sup>th</sup> birthday
+         
           to the visionary leader who placed Manipal on the global map. Thank you for your constant inspiration.
         </p>
       </main>
@@ -230,6 +214,7 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
           {loading ? "Sending..." : "Send your Greetings"} {/* <-- Change button text while loading */}
         </button>
       </form>
+      <CustomToast message={toastMessage} visible={showToast} onClose={() => setShowToast(false)} />
     </div>
   );
 };
