@@ -156,22 +156,11 @@ function Book() {
       </div>
       <AnimatePresence>
         {modaLopen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="relative bg-transparent w-[95%] max-w-[800px] max-h-[95vh] overflow-y-auto rounded-lg"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-            >
+          <>
               {/* ✅ Load the Greeting Card */}
-              <BirthdayGreetingCard onClose={() => setmodaLopen(false)} />
-            </motion.div>
-          </motion.div>
+              <BirthdayGreetingCard showPopup={modaLopen} onClose={() => setmodaLopen(false)} />
+                </>
+      
         )}
       </AnimatePresence>
 
