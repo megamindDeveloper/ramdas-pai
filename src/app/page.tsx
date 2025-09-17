@@ -11,6 +11,7 @@ import BirthdayGreetingCard from "@/components/InitialPopup";
 import InstagramReels from "@/components/InstagramReels";
 import LegacySection from "@/components/LegacyPics";
 import LegacyPictures from "@/components/LegacyPictures";
+import Minister from "@/components/Minister";
 import SecondGreetingsSection from "@/components/SecondGreetingsSection";
 import TwitterSection from "@/components/TwiterSection";
 
@@ -45,6 +46,7 @@ export default function Home() {
 
       {/* The HeroSection now fills the main container */}
       <HeroSection />
+      <Minister/>
       {/* <FirsrGreetingsSection /> */}
       {/* <SecondGreetingsSection /> */}
       {/* <WishCounterComponent /> */}
