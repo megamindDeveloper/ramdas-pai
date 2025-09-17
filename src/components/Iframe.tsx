@@ -29,7 +29,7 @@ function Book() {
   return (
     <>
       <div className="relative">
-        <section className="mx-auto lg:max-w-7xl pt-10 md:pb-20 ">
+        <section className="mx-auto lg:max-w-7xl pt-10 md:pb-8 ">
           <h2
             style={{ color: "#EF4123" }}
             className="text-[32px] px-5 lg:px-0 leading-[1.1] font-sans sm:text-3xl md:text-3xl lg:text-[44px] font-semibold text-[#FF2400] mb-6 md:mb-8"
@@ -49,7 +49,7 @@ function Book() {
                   height={1000}
                   src="/images/flipImage/3.png"
                   alt="Book Cover 1"
-                  className="w-full h-full object-cover shadow-xl cursor-pointer  transition"
+                  className="  object-cover w-[80%] h-[90vh] shadow-xl cursor-pointer  transition"
                   onClick={() => setOpen(true)}
                 />
               </div>
@@ -146,7 +146,7 @@ function Book() {
           </div>
         </section>
       </div>
-      <div className="flex justify-center my-8">
+      <div className="flex justify-center mb-16 mt-8">
         <button
           onClick={() => setmodaLopen(true)}
           className="uppercase cursor-pointer border-2 text-[#EF2700] border-[#EF2700] px-8 py-3 font-helvetica font-bold bg-white"
