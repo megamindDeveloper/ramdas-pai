@@ -5,28 +5,92 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast"; // <-- 1. Import toast
 
+
+
+
+import { motion } from "framer-motion";
+
+
+const toastVariants = {
+  hidden: { opacity: 0, x: 50, y: 50, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 250, damping: 20 },
+  },
+  exit: {
+    opacity: 0,
+    x: 50,
+    y: 50,
+    scale: 0.95,
+    transition: { duration: 0.3, ease: "easeInOut" },
+  },
+};
 // --- Component ---
 interface BirthdayGreetingCardProps {
   onClose: () => void;
 }
-const CustomSuccessToast: React.FC<{ message: string }> = ({ message }) => (
-  <div className="relative font-sans bg-[#fdf3de] text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm mx-auto">
-    <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
-    <Image
-      width={150} // Adjusted size for toast
-      height={150} // Adjusted size for toast
-      src="/images/backgroundImage/popupImage.webp"
-      alt="Happy 90th Birthday Dr. Ramdas M Pai"
-      className="w-24 h-auto mb-4" // Smaller image for the toast
-    />
-    <p className="text-md font-semibold leading-relaxed text-gray-800">
-      {message}
-    </p>
-    {/* Optional: Add a small star decoration */}
-    <div className="absolute top-2 left-2 text-xl text-[#002c5a] opacity-80 rotate-6">✦</div>
-    <div className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] opacity-80 -rotate-6">✦</div>
-  </div>
-);
+const CustomSuccessToast: React.FC<{ message: string }> = ({ message }) => {
+  return (
+    <motion.div
+      variants={toastVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="fixed inset-0 z-[9999] flex h-screen items-center justify-center" // <-- center on screen
+    >
+      <div className="relative font-sans bg-white text-[#4a2e20] p-6 rounded-lg border-2 border-[#a98e71] shadow-2xl flex flex-col items-center justify-center text-center max-w-sm">
+        <div className="absolute inset-1 border border-[#a98e71]/80 rounded-md pointer-events-none"></div>
+
+        {/* Toast image */}
+        <motion.div
+          initial={{ rotate: -8, opacity: 0 }}
+          animate={{ rotate: 0, opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <Image
+            width={150}
+            height={150}
+            src="/images/backgroundImage/popupImage.webp"
+            alt="Happy 90th Birthday Dr. Ramdas M Pai"
+            className="w-24 h-auto mb-4"
+          />
+        </motion.div>
+
+        {/* Toast message */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="text-md font-semibold leading-relaxed text-gray-800"
+        >
+          {message}
+        </motion.p>
+
+        {/* Decorations */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 0.8, scale: 1 }}
+          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+          className="absolute top-2 left-2 text-xl text-[#002c5a] rotate-6"
+        >
+          ✦
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 0.8, scale: 1 }}
+          transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+          className="absolute bottom-2 right-2 text-xl text-[#9a2a3c] -rotate-6"
+        >
+          ✦
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
 
 const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) => {
   // State to manage the form inputs
@@ -62,12 +126,16 @@ const BirthdayGreetingCard: React.FC<BirthdayGreetingCardProps> = ({ onClose }) 
       console.log("WhatsApp API Response:", data);
 
       // --- 4. Show success toast ---
-      toast.custom(
-        (t) => (
-          <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />
-        ),
-        { duration: 3000 }
-      );
+       toast.custom(
+  (b) => (
+    <CustomSuccessToast message="Thank you! Your greetings have been sent successfully." />
+  ),
+  {
+    duration: 3000,
+    position: "top-center", // still needed for consistency
+    className: "!fixed !inset-0 !flex !items-center !justify-center", // <-- force center
+  }
+);
 
 
       // Reset form and close modal
